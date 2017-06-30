@@ -83,6 +83,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
                     mSportDateTimeEdit.setText("");
                     mSportDetailsEdit.setText("");
                     mSportPeopleNeededEdit.setText("");
+                    finish();
                 }
 
 
