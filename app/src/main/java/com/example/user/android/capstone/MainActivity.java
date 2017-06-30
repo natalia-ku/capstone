@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-
         mEventsListTextView = (TextView) findViewById(R.id.events_list);
         mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
 
@@ -62,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 recyclerView.setAdapter(myAdapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(layoutManager);
-
-
             }
 
             @Override

@@ -3,13 +3,26 @@ package com.example.user.android.capstone;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateNewEventActivity extends AppCompatActivity {
     //    private String mForecast;
@@ -48,20 +61,24 @@ public class CreateNewEventActivity extends AppCompatActivity {
                 String sportPeopleNeeded = mSportPeopleNeededEdit.getText().toString();
                 String sportCreatorId = mSportCreatorIdEdit.getText().toString();
 
-                mEventsRef.push().setValue(new Event(sportType, sportAddress, sportDateTime, sportDetails, sportPeopleNeeded, sportCreatorId));
+
+                if (sportAddress.equals("") || sportAddress.equals("") || sportDateTime.equals("") ||
+                        sportDetails.equals("") || sportPeopleNeeded.equals("") || sportCreatorId.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
+                } else {
+                    mEventsRef.push().setValue(new Event(sportType, sportAddress, sportDateTime, sportDetails, sportPeopleNeeded, sportCreatorId));
+                    Toast.makeText(getApplicationContext(), "You successfully created new sport event", Toast.LENGTH_LONG).show();
+                    mSportTypeEdit.setText("");
+                    mSportAddressEdit.setText("");
+                    mSportCreatorIdEdit.setText("");
+                    mSportDateTimeEdit.setText("");
+                    mSportDetailsEdit.setText("");
+                    mSportPeopleNeededEdit.setText("");
+                }
+
 
             }
         });
 
-
-//        Intent intentThatStartedThisActivity = getIntent();
-
-
-//        if (intentThatStartedThisActivity != null) {
-//            if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
-//                mForecast = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
-//                mWeatherDisplay.setText(mForecast);
-//            }
-//        }
     }
 }
