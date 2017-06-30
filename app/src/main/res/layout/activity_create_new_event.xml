@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:orientation="vertical">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Enter details to create new event"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Sport Event Type:"/>
+
+    <EditText
+        android:id="@+id/et_sport_type"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Sport Event Address:"/>
+    <EditText
+        android:id="@+id/et_address"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Sport Event Date and Time:"/>
+    <EditText
+        android:id="@+id/et_data_time"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Sport Event Details:"/>
+    <EditText
+        android:id="@+id/et_details"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="How many people needed?"/>
+    <EditText
+        android:id="@+id/et_people_needed"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Sport Event Creator Id"/>
+    <EditText
+        android:id="@+id/et_creator_id"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_new_event_button"
+        android:text="Create new event" />
+</LinearLayout>
