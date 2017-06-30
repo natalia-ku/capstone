@@ -25,9 +25,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     Context context;
 
 
-
-
-
     public EventAdapter( Context context, List<Event> events) {
         this.events = events;
         this.context = context;
