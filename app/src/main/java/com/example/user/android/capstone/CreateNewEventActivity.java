@@ -33,6 +33,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private EditText mSportPeopleNeededEdit;
     private EditText mSportCreatorIdEdit; //in future, it will come from currently signed in user
     private Button mCreateNewEventButton;
+    private Button mGoBackToMainButton;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
@@ -41,6 +42,14 @@ public class CreateNewEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_event);
+
+        mGoBackToMainButton = (Button) findViewById(R.id.go_back_to_main_button);
+        mGoBackToMainButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                finish(); // go back to main activity
+            }
+        });
 
 
         mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
