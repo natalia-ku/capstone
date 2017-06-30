@@ -1,3 +1,4 @@
 ## WIREFRAMES
 
-![test image size](https://github.com/natalia-ku/Capstone/blob/master/wireframes/MainPage-ListOfAllEvents.png){:height="200px" width="200px"}
+<img src="https://github.com/natalia-ku/Capstone/blob/master/wireframes/MainPage-ListOfAllEvents.png" alt="Mainpage" width= "100px"/> 
+
