@@ -1,3 +1,3 @@
 ## WIREFRAMES
 
-![map](https://github.com/natalia-ku/Capstone/blob/master/wireframes/MainPage-ListOfAllEvents.png | width=100)
+![test image size](https://github.com/natalia-ku/Capstone/blob/master/wireframes/MainPage-ListOfAllEvents.png){:height="200px" width="200px"}
