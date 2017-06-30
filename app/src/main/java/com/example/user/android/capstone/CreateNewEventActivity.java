@@ -48,11 +48,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
                 String sportPeopleNeeded = mSportPeopleNeededEdit.getText().toString();
                 String sportCreatorId = mSportCreatorIdEdit.getText().toString();
 
-                System.out.println(sportType);
-                System.out.println(sportDateTime);
-                System.out.println(sportDetails);
-                System.out.println(sportCreatorId);
-//                System.out.println(sportType);
                 mEventsRef.push().setValue(new Event(sportType, sportAddress, sportDateTime, sportDetails, sportPeopleNeeded, sportCreatorId));
 
             }
