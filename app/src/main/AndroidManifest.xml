@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateNewEventActivity"></activity>
+        <activity android:name=".CreateNewEventActivity" />
+        <activity android:name=".EventInfoActivity"></activity>
     </application>
 
 </manifest>

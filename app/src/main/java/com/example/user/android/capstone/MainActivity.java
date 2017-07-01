@@ -45,13 +45,14 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Event> eventsListFromDatabase = new ArrayList<>();
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+//                    String id = (String) eventSnapshot.getValue();
                     String address = (String) eventSnapshot.child("address").getValue();
                     String creatorId = eventSnapshot.child("creatorId").getValue().toString();
                     String dataTime = (String) eventSnapshot.child("dataTime").getValue();
                     String details = (String) eventSnapshot.child("details").getValue();
                     String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                     String sportType = (String) eventSnapshot.child("sportType").getValue();
-                    Event e1 = new Event(sportType, address, dataTime, details, peopleNeeded, creatorId);
+                    Event e1 = new Event( sportType, address, dataTime, details, peopleNeeded, creatorId);
                     eventsListFromDatabase.add(e1);
                 }
 

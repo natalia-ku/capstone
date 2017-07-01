@@ -6,6 +6,7 @@ package com.example.user.android.capstone;
 
 public class Event {
 
+//    private final String id;
     private final String sportType;
     private final String address;
     private final String dataTime;
@@ -38,12 +39,28 @@ public class Event {
         return creatorId;
     }
 
-    public Event(String sportType, String address, String dataTime, String details, String peopleNeeded, String creatorId) {
+//    public String getId() {
+//        return id;
+//    }
+//
+//    public Event(String id, String sportType, String address, String dataTime, String details, String peopleNeeded, String creatorId) {
+//        this.id = id;
+//        this.sportType = sportType;
+//        this.address = address;
+//        this.dataTime = dataTime;
+//        this.details = details;
+//        this.peopleNeeded = peopleNeeded;
+//        this.creatorId = creatorId;
+//
+//    }
+
+    public Event( String sportType, String address, String dataTime, String details, String peopleNeeded, String creatorId) {
         this.sportType = sportType;
         this.address = address;
         this.dataTime = dataTime;
         this.details = details;
         this.peopleNeeded = peopleNeeded;
         this.creatorId = creatorId;
+
     }
 }
