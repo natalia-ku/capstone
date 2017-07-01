@@ -14,7 +14,9 @@ __Personal Learning Goals__:
  learn more about Google Maps API 
  
 
-__Problem Statement__: Help people create their own or find sporting activities events (football game, basketball game, tennis or hiking) that was organized by other people, but need more players.
+__Problem Statement__: 
+
+Help people create their own or find sporting activities events (football game, basketball game, tennis or hiking) that was organized by other people, but need more players.
 
 
 __Market Research__:
@@ -35,12 +37,19 @@ __Trello Board__:
  
  
  __Technology selections__:
+ 
   Android (using Java)
+  
  Firebase Realtime Database
+ 
  Firebase Auth
+ 
  Firebase Messanger 
+ 
  Google Maps API
+ 
  Deployment to Google Play Store
+ 
 
 
 ## WIREFRAMES
