@@ -2,11 +2,17 @@
 
 ## Product Plan Components
 1. __Personal Learning Goals__:
+
  _ improve knowledge of Java
+ 
  _ learn how to build app for mobile phones (android)
+ 
  _ improve knowledge in backend
+ 
  _ learn NoSQL Database (Firebase Realtime Database)
+ 
  _ learn more about Google Maps API 
+ 
 
 1. __Problem Statement__: Help people create their own or find sporting activities events (football game, basketball game, tennis or hiking) that was organized by other people, but need more players.
 
