@@ -3,22 +3,24 @@
 ## Product Plan Components
 1. __Personal Learning Goals__:
 
- _improve knowledge of Java
+ improve knowledge of Java
  
- _learn how to build app for mobile phones (android)
+ learn how to build app for mobile phones (android)
  
- _improve knowledge in backend
+ improve knowledge in backend
  
- _learn NoSQL Database (Firebase Realtime Database)
+ learn NoSQL Database (Firebase Realtime Database)
  
- _learn more about Google Maps API 
+ learn more about Google Maps API 
  
 
 1. __Problem Statement__: Help people create their own or find sporting activities events (football game, basketball game, tennis or hiking) that was organized by other people, but need more players.
 
+
 1. __Market Research__:
   
-  __Sports Buddy (IOS app)__ - this app is similar to mine, but it's available only for IPHONEs, not Android. It works only for Bay Area and it doesn't have any reviews. It is slow and have a bunch of ads banners
+  __Sports Buddy (IOS app)__ - this app is similar to mine, but it's available only for IPHONEs, not Android. It works only for Bay Area and it doesn't have any reviews. It is slow and have a bunch of ads banners.
+  
   __Bvddy (IOS)__ and __Buddy for Sports (Android)__ using matching algorithms that can find people with same sporting interest. That is not the same that my app is doing.
 
 
