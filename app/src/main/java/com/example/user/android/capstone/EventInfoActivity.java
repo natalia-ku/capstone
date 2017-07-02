@@ -29,9 +29,8 @@ public class EventInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_info);
         String eventId = getIntent().getStringExtra("id");
-        System.out.println("EVENT ID: " + eventId);
 
-        Query eventDetailsQuery = mEventsRef.orderByKey().equalTo("1");
+        Query eventDetailsQuery = mEventsRef.orderByKey().equalTo(eventId);
 
         eventDetailsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -61,9 +60,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
             }
         });
-
-//
-
+        
         mEventInfoSportType = (TextView) findViewById(R.id.event_sporttype_textview);
         mEventInfoAddress = (TextView) findViewById(R.id.event_address_textview);
         mEventInfoDateTime = (TextView) findViewById(R.id.event_date_time_textview);

@@ -48,7 +48,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             public void onClick(View view) {
                 Class destinationClass = EventInfoActivity.class;
                 Intent intentToStartEventInfoActivity = new Intent(context, destinationClass);
-                intentToStartEventInfoActivity.putExtra("id", events.get(position).getSportType());
+                intentToStartEventInfoActivity.putExtra("id", events.get(position).getId());
                 context.startActivity(intentToStartEventInfoActivity);
             }
         });
