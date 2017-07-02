@@ -1,4 +1,4 @@
-# Capstone Product Plan
+# Capstone Product Plan - SPORTMATE ANDROID APP
 
 ## Product Plan Components
 __Personal Learning Goals__:
