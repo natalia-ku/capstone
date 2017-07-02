@@ -60,7 +60,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
             }
         });
-        
+
         mEventInfoSportType = (TextView) findViewById(R.id.event_sporttype_textview);
         mEventInfoAddress = (TextView) findViewById(R.id.event_address_textview);
         mEventInfoDateTime = (TextView) findViewById(R.id.event_date_time_textview);
