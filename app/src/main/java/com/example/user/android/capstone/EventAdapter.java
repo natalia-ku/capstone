@@ -66,7 +66,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             super(itemView);
             eventSportTypeTextView = (TextView) itemView.findViewById(R.id.event_sport_type);
             eventLinearLayout = (LinearLayout) itemView.findViewById(R.id.layout_item);
-
         }
     }
 

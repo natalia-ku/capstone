@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateNewEventActivity extends AppCompatActivity {
-    //    private String mForecast;
     private EditText mSportTypeEdit;
     private EditText mSportAddressEdit;
     private EditText mSportDateTimeEdit;
@@ -42,15 +41,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_event);
-
-        mGoBackToMainButton = (Button) findViewById(R.id.go_back_to_main_button);
-        mGoBackToMainButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                finish(); // go back to main activity
-            }
-        });
-
 
         mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
 
