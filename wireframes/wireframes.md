@@ -27,9 +27,13 @@ __Market Research__:
 
 
 __User Personas__: 
+
 persona likes sport and outdoor activities
+
 persona can be any ages/gender
-persona likes play sporting games with a new people 
+
+persona likes play sporting games with a new people
+
 
 
 __Trello Board__:
