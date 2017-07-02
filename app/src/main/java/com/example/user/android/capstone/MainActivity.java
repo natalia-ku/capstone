@@ -83,13 +83,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Class destinationClass = SignInActivity.class;
-                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
-                startActivity(intentToStartCreateNewEventActivity);
-            }
-        });
+//        mSignInButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                Class destinationClass = SignInActivity.class;
+//                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
+//                startActivity(intentToStartCreateNewEventActivity);
+//            }
+//        });
 
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
