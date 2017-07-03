@@ -12,6 +12,12 @@
         android:text="Sign Out"
         android:visibility="invisible"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_profile_button"
+        android:text="Profile"
+        android:visibility="visible"/>
 
 
     <Button

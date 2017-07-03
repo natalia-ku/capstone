@@ -32,7 +32,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private EditText mSportPeopleNeededEdit;
     private EditText mSportCreatorIdEdit; //in future, it will come from currently signed in user
     private Button mCreateNewEventButton;
-    private Button mGoBackToMainButton;
+
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");

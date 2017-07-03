@@ -79,9 +79,7 @@ public class SignUpActivity extends AppCompatActivity implements
                     @Override
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             //CREATE NEW USER IN DATABASE:
-
                             mNameSignUpField = (EditText) findViewById(R.id.name_sign_up_form_editview);
                             mGenderSignUpField = (EditText) findViewById(R.id.gender_sign_up_form_editview);
                             mPhotoSignUpField = (EditText) findViewById(R.id.photo_sign_up_form_editview);
@@ -94,10 +92,7 @@ public class SignUpActivity extends AppCompatActivity implements
                             String userAge = mAgeSignUpField.getText().toString();
                             String userEmail = mEmailSignUpField.getText().toString();
 
-
                             mUserRef.push().setValue(new User(userEmail, userName, userGender, userPhoto, userAge));
-
-
 
 
                             FirebaseUser user = mAuth.getCurrentUser();

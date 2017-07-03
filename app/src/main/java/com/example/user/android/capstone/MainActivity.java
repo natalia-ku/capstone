@@ -33,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
     Button mCreateNewEventButton;
-
+    Button mUserProfileButton;
     Button mSignInUpButton;
-
     public static Button mSignOutMainButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
 
         mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
+        mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -55,10 +55,12 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser == null){
             mSignInUpButton.setVisibility(View.VISIBLE);
             mSignOutMainButton.setVisibility(View.GONE);
+            mUserProfileButton.setVisibility(View.GONE);
         }
         else {
             mSignInUpButton.setVisibility(View.GONE);
             mSignOutMainButton.setVisibility(View.VISIBLE);
+            mUserProfileButton.setVisibility(View.VISIBLE);
         }
 
 
@@ -70,9 +72,19 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
                 mSignInUpButton.setVisibility(View.VISIBLE);
                 mSignOutMainButton.setVisibility(View.GONE);
+                mUserProfileButton.setVisibility(View.GONE);
+
             }
         });
 
+        mUserProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Class destinationClass = UserProfileActivity.class;
+                Intent intentToUserProfileActivity = new Intent(getApplicationContext(), destinationClass);
+                startActivity(intentToUserProfileActivity);
+            }
+        });
 
 
         mEventsRef.addValueEventListener(new ValueEventListener() {
