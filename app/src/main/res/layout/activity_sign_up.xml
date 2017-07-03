@@ -5,12 +5,15 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/sign_out_button"-->
-        <!--android:text="Sign Out"-->
-        <!--android:visibility="invisible"/>-->
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/status"
@@ -54,8 +57,7 @@
         android:layout_height="wrap_content"
         android:text="Sign In" />
 
-
-
+<!--CREATE NEW ACCOUNT:-->
 
     <TextView
         android:id="@+id/sign_up_textview"
@@ -84,6 +86,50 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your name"
+        android:id="@+id/name_sign_up_form_textview"/>
+
+    <EditText
+        android:id="@+id/name_sign_up_form_editview"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your gender"
+        android:id="@+id/gender_sign_up_form_textview"/>
+
+    <EditText
+        android:id="@+id/gender_sign_up_form_editview"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your photo url"
+        android:id="@+id/photo_sign_up_form_textview"/>
+
+    <EditText
+        android:id="@+id/photo_sign_up_form_editview"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your age"
+        android:id="@+id/age_sign_up_form_textview"/>
+
+    <EditText
+        android:id="@+id/age_sign_up_form_editview"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
 
 
     <Button
@@ -91,5 +137,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Up" />
+
+    </LinearLayout>
+
+</ScrollView>
+
 
 </LinearLayout>

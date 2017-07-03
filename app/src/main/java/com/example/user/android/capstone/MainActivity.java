@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     eventsListFromDatabase.add(e1);
                 }
 
-                recyclerView =    (RecyclerView) findViewById(R.id.recycle_view);
+                recyclerView =  (RecyclerView) findViewById(R.id.recycle_view);
                 EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
                 recyclerView.setAdapter(myAdapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

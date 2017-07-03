@@ -75,8 +75,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
                     mSportPeopleNeededEdit.setText("");
                     finish();
                 }
-
-
             }
         });
 

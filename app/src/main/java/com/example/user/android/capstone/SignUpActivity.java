@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class SignUpActivity extends AppCompatActivity implements
@@ -29,6 +31,15 @@ public class SignUpActivity extends AppCompatActivity implements
     private EditText mPasswordSignUpField;
 
     private FirebaseAuth mAuth;
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mUserRef = mRootRef.child("users");
+
+    // TO CREATE NEW USER:
+    private EditText mNameSignUpField;
+    private EditText mGenderSignUpField;
+    private EditText mPhotoSignUpField;
+    private EditText mAgeSignUpField;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,8 +79,29 @@ public class SignUpActivity extends AppCompatActivity implements
                     @Override
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+
+                            //CREATE NEW USER IN DATABASE:
+
+                            mNameSignUpField = (EditText) findViewById(R.id.name_sign_up_form_editview);
+                            mGenderSignUpField = (EditText) findViewById(R.id.gender_sign_up_form_editview);
+                            mPhotoSignUpField = (EditText) findViewById(R.id.photo_sign_up_form_editview);
+                            mAgeSignUpField = (EditText) findViewById(R.id.age_sign_up_form_editview);
+                            mEmailSignUpField = (EditText) findViewById(R.id.signup_field_email);
+
+                            String userName = mNameSignUpField.getText().toString();
+                            String userGender = mGenderSignUpField.getText().toString();
+                            String userPhoto = mPhotoSignUpField.getText().toString();
+                            String userAge = mAgeSignUpField.getText().toString();
+                            String userEmail = mEmailSignUpField.getText().toString();
+
+
+                            mUserRef.push().setValue(new User(userEmail, userName, userGender, userPhoto, userAge));
+
+
+
+
                             FirebaseUser user = mAuth.getCurrentUser();
+
                             Toast.makeText(SignUpActivity.this, "You successfully created new account",
                                     Toast.LENGTH_SHORT).show();
                             Class destinationClass = MainActivity.class;
@@ -77,15 +109,14 @@ public class SignUpActivity extends AppCompatActivity implements
                             startActivity(intentToStartMainActivity);
                         } else {
                             String exceptionString = "com.google.firebase.auth.FirebaseAuthInvalidCredentialsException";
-                            if(task.getException().getClass().getName().equals(exceptionString)){
+                            if (task.getException().getClass().getName().equals(exceptionString)) {
                                 Toast.makeText(SignUpActivity.this, "The email address is badly formatted",
                                         Toast.LENGTH_SHORT).show();
                                 updateUI(null);
-                            }
-                            else {
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            } else {
+                                Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                                updateUI(null);
                             }
                         }
                     }
@@ -118,13 +149,10 @@ public class SignUpActivity extends AppCompatActivity implements
                                 Toast.makeText(SignUpActivity.this, "There is no user with given email and password." +
                                                 "Try again or press SIGN UP to create new account",
                                         Toast.LENGTH_SHORT).show();
-                            }
-                            else if (task.getException().getClass().getName().equals(exceptionBadEmailString))
-                            {
+                            } else if (task.getException().getClass().getName().equals(exceptionBadEmailString)) {
                                 Toast.makeText(SignUpActivity.this, "The email address is badly formatted",
                                         Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                         Toast.LENGTH_LONG).show();
                             }
@@ -189,7 +217,7 @@ public class SignUpActivity extends AppCompatActivity implements
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.sign_up_button  ) {
+        if (i == R.id.sign_up_button) {
             createAccount(mEmailSignUpField.getText().toString(), mPasswordSignUpField.getText().toString());
         } else if (i == R.id.sign_in_button) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
