@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mEventsRef = mRootRef.child("events");
     Button mCreateNewEventButton;
 
-    Button mSignInButton;
-    Button mSignUpButton;
+    Button mSignInUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         mEventsListTextView = (TextView) findViewById(R.id.events_list);
         mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
-        mSignInButton = (Button) findViewById(R.id.sign_in_button);
-        mSignUpButton = (Button) findViewById(R.id.sign_up_button);
+        mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
 
         mEventsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        mSignUpButton.setOnClickListener(new View.OnClickListener() {
+        mSignInUpButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Class destinationClass = SignUpActivity.class;
                 Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);

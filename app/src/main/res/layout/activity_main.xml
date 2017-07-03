@@ -9,8 +9,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sign_up_button"
-        android:text="Sign Up" />
+        android:id="@+id/sign_in_up_button"
+        android:text="Sign In/ Sign Up" />
 
     <Button
         android:layout_width="wrap_content"

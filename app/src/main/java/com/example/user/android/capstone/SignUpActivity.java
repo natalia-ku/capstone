@@ -27,16 +27,24 @@ public class SignUpActivity extends AppCompatActivity implements
     private EditText mPasswordField;
     private Button mSignOutButton;
 
+    private EditText mEmailSignUpField;
+    private EditText mPasswordSignUpField;
+
     private FirebaseAuth mAuth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
         mStatusTextView = (TextView) findViewById(R.id.status);
+
+        // SIGN IN:
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
+        // SIGN UP:
+        mEmailSignUpField = (EditText) findViewById(R.id.signup_field_email);
+        mPasswordSignUpField = (EditText) findViewById(R.id.signup_field_password);
+
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_up_button).setOnClickListener(this);
@@ -44,7 +52,6 @@ public class SignUpActivity extends AppCompatActivity implements
         mSignOutButton = (Button) findViewById(R.id.sign_out_button);
 
         mAuth = FirebaseAuth.getInstance();
-
 
         mSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,24 +71,29 @@ public class SignUpActivity extends AppCompatActivity implements
 
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
-        if (!validateForm()) {
+        if (!validateForm("signUp")) {
             return;
         }
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            String exceptionString = "com.google.firebase.auth.FirebaseAuthInvalidCredentialsException";
+                            if(task.getException().getClass().getName().equals(exceptionString)){
+                                Toast.makeText(SignUpActivity.this, "The email address is badly formatted",
+                                        Toast.LENGTH_SHORT).show();
+                                updateUI(null);
+                            }
+                            else {
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
+                            }
                         }
                     }
                 });
@@ -89,14 +101,13 @@ public class SignUpActivity extends AppCompatActivity implements
 
     private void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
-        if (!validateForm()) {
+        if (!validateForm("signIn")) {
             return;
         }
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete( Task<AuthResult> task) {
+                    public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
@@ -104,12 +115,26 @@ public class SignUpActivity extends AppCompatActivity implements
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            String exceptionBadEmailString = "com.google.firebase.auth.FirebaseAuthInvalidCredentialsException";
+                            String exceptionString = "com.google.firebase.auth.FirebaseAuthInvalidUserException";
+                            if (task.getException().getClass().getName().equals(exceptionString)) {
+                                Toast.makeText(SignUpActivity.this, "There is no user with given email and password." +
+                                                "Try again or press SIGN UP to create new account",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            }
+                            else if (task.getException().getClass().getName().equals(exceptionBadEmailString))
+                            {
+                                Toast.makeText(SignUpActivity.this, "The email address is badly formatted",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_LONG).show();
+                            }
                             updateUI(null);
                         }
-
                         if (!task.isSuccessful()) {
                             mStatusTextView.setText("Auth failed");
                         }
@@ -123,22 +148,40 @@ public class SignUpActivity extends AppCompatActivity implements
     }
 
 
-    private boolean validateForm() {
+    private boolean validateForm(String type) {
         boolean valid = true;
-        String email = mEmailField.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
-            valid = false;
-        } else {
-            mEmailField.setError(null);
-        }
+        if (type.equals("signIn")) {
+            String email = mEmailField.getText().toString();
+            if (TextUtils.isEmpty(email)) {
+                mEmailField.setError("Required.");
+                valid = false;
+            } else {
+                mEmailField.setError(null);
+            }
 
-        String password = mPasswordField.getText().toString();
-        if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
-            valid = false;
-        } else {
-            mPasswordField.setError(null);
+            String password = mPasswordField.getText().toString();
+            if (TextUtils.isEmpty(password)) {
+                mPasswordField.setError("Required.");
+                valid = false;
+            } else {
+                mPasswordField.setError(null);
+            }
+        } else if (type.equals("signUp")) {
+            String email = mEmailSignUpField.getText().toString();
+            if (TextUtils.isEmpty(email)) {
+                mEmailSignUpField.setError("Required.");
+                valid = false;
+            } else {
+                mEmailSignUpField.setError(null);
+            }
+
+            String password = mPasswordSignUpField.getText().toString();
+            if (TextUtils.isEmpty(password)) {
+                mPasswordSignUpField.setError("Required.");
+                valid = false;
+            } else {
+                mPasswordSignUpField.setError(null);
+            }
         }
 
         return valid;
@@ -155,8 +198,15 @@ public class SignUpActivity extends AppCompatActivity implements
             findViewById(R.id.enter_email_text_view).setVisibility(View.GONE);
             findViewById(R.id.sign_up_button).setVisibility(View.GONE);
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_in_textview).setVisibility(View.GONE);
 
-
+            findViewById(R.id.signup_field_email).setVisibility(View.GONE);
+            findViewById(R.id.signup_field_password).setVisibility(View.GONE);
+            findViewById(R.id.sign_up_textview).setVisibility(View.GONE);
+            findViewById(R.id.enter_email_text_view).setVisibility(View.GONE);
+            findViewById(R.id.enter_password_signup_text_view).setVisibility(View.GONE);
+            findViewById(R.id.enter_email_signup_text_view).setVisibility(View.GONE);
+            findViewById(R.id.sign_up_textview).setVisibility(View.GONE);
         } else {
             mStatusTextView.setText("signed out");
 
@@ -169,6 +219,19 @@ public class SignUpActivity extends AppCompatActivity implements
             findViewById(R.id.enter_password_text_view).setVisibility(View.VISIBLE);
             findViewById(R.id.enter_email_text_view).setVisibility(View.VISIBLE);
 
+            findViewById(R.id.sign_in_textview).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_up_textview).setVisibility(View.VISIBLE);
+            findViewById(R.id.signup_field_email).setVisibility(View.VISIBLE);
+            findViewById(R.id.signup_field_password).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_up_textview).setVisibility(View.VISIBLE);
+            findViewById(R.id.enter_email_text_view).setVisibility(View.VISIBLE);
+            findViewById(R.id.enter_password_signup_text_view).setVisibility(View.VISIBLE);
+            findViewById(R.id.enter_email_signup_text_view).setVisibility(View.VISIBLE);
+            mEmailField.setText("");
+            mPasswordField.setText("");
+            mPasswordSignUpField.setText("");
+            mEmailSignUpField.setText("");
+
         }
     }
 
@@ -176,7 +239,7 @@ public class SignUpActivity extends AppCompatActivity implements
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.sign_up_button) {
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            createAccount(mEmailSignUpField.getText().toString(), mPasswordSignUpField.getText().toString());
         } else if (i == R.id.sign_in_button) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
         }
