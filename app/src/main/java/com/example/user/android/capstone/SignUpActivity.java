@@ -104,11 +104,20 @@ public class SignUpActivity extends AppCompatActivity implements
                             startActivity(intentToStartMainActivity);
                         } else {
                             String exceptionString = "com.google.firebase.auth.FirebaseAuthInvalidCredentialsException";
+                            String exceptionEmailCollisionString = "com.google.firebase.auth.FirebaseAuthUserCollisionException";
                             if (task.getException().getClass().getName().equals(exceptionString)) {
                                 Toast.makeText(SignUpActivity.this, "The email address is badly formatted",
                                         Toast.LENGTH_SHORT).show();
                                 updateUI(null);
-                            } else {
+                            }
+
+                            else if (task.getException().getClass().getName().equals(exceptionEmailCollisionString)) {
+                                Toast.makeText(SignUpActivity.this, "User with this email already exists",
+                                        Toast.LENGTH_SHORT).show();
+                                updateUI(null);
+                            }
+
+                            else {
                                 Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                                 updateUI(null);
