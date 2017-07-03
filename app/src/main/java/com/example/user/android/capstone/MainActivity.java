@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
 
     private TextView mEventsListTextView;
     private RecyclerView recyclerView;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button mSignInUpButton;
 
+    public static Button mSignOutMainButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,26 @@ public class MainActivity extends AppCompatActivity {
         mEventsListTextView = (TextView) findViewById(R.id.events_list);
         mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
         mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
+
+        mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
+
+
+//        mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Class destinationClass = SignUpActivity.class;
+//                Intent intentToSignUpActivity = new Intent(getApplicationContext(), destinationClass);
+//                startActivity(intentToSignUpActivity);
+//            }
+//        });
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser !=null){
+//            mSignInUpButton.setVisibility(View.GONE);
+            mSignOutMainButton.setVisibility(View.VISIBLE);
+        }
+
 
         mEventsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,14 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentToStartCreateNewEventActivity);
             }
         });
-
-//        mSignInButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                Class destinationClass = SignInActivity.class;
-//                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
-//                startActivity(intentToStartCreateNewEventActivity);
-//            }
-//        });
 
         mSignInUpButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

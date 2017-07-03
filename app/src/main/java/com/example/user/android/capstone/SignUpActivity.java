@@ -27,6 +27,7 @@ public class SignUpActivity extends AppCompatActivity implements
     private EditText mPasswordField;
     private Button mSignOutButton;
 
+
     private EditText mEmailSignUpField;
     private EditText mPasswordSignUpField;
 
@@ -38,6 +39,8 @@ public class SignUpActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_sign_up);
         mStatusTextView = (TextView) findViewById(R.id.status);
 
+
+
         // SIGN IN:
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
@@ -48,7 +51,6 @@ public class SignUpActivity extends AppCompatActivity implements
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_up_button).setOnClickListener(this);
-//        findViewById(R.id.sign_out_button).setOnClickListener(this);
         mSignOutButton = (Button) findViewById(R.id.sign_out_button);
 
         mAuth = FirebaseAuth.getInstance();
@@ -59,6 +61,15 @@ public class SignUpActivity extends AppCompatActivity implements
                 signOut();
             }
         });
+
+//        MainActivity.mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                signOut();
+//            }
+//        });
+
+
     }
 
     @Override
@@ -209,6 +220,10 @@ public class SignUpActivity extends AppCompatActivity implements
             findViewById(R.id.enter_password_signup_text_view).setVisibility(View.GONE);
             findViewById(R.id.enter_email_signup_text_view).setVisibility(View.GONE);
             findViewById(R.id.sign_up_textview).setVisibility(View.GONE);
+
+
+//            MainActivity.mSignOutMainButton.setVisibility(View.VISIBLE);
+
         } else {
             mStatusTextView.setText("signed out");
 
@@ -234,7 +249,6 @@ public class SignUpActivity extends AppCompatActivity implements
             mPasswordSignUpField.setText("");
             mEmailSignUpField.setText("");
 
-            
 
         }
     }
@@ -242,7 +256,7 @@ public class SignUpActivity extends AppCompatActivity implements
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.sign_up_button) {
+        if (i == R.id.sign_up_button  ) {
             createAccount(mEmailSignUpField.getText().toString(), mPasswordSignUpField.getText().toString());
         } else if (i == R.id.sign_in_button) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
