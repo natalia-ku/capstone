@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +50,29 @@ public class MainActivity extends AppCompatActivity {
         mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
 
 
-//        mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Class destinationClass = SignUpActivity.class;
-//                Intent intentToSignUpActivity = new Intent(getApplicationContext(), destinationClass);
-//                startActivity(intentToSignUpActivity);
-//            }
-//        });
-
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser !=null){
-//            mSignInUpButton.setVisibility(View.GONE);
+        if (currentUser == null){
+            mSignInUpButton.setVisibility(View.VISIBLE);
+            mSignOutMainButton.setVisibility(View.GONE);
+        }
+        else {
+            mSignInUpButton.setVisibility(View.GONE);
             mSignOutMainButton.setVisibility(View.VISIBLE);
         }
+
+
+        mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    mAuth.signOut();
+                Toast.makeText(MainActivity.this, "You successfully signed out",
+                        Toast.LENGTH_LONG).show();
+                mSignInUpButton.setVisibility(View.VISIBLE);
+                mSignOutMainButton.setVisibility(View.GONE);
+            }
+        });
+
 
 
         mEventsRef.addValueEventListener(new ValueEventListener() {

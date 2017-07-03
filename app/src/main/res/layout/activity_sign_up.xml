@@ -5,12 +5,12 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sign_out_button"
-        android:text="Sign Out"
-        android:visibility="invisible"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/sign_out_button"-->
+        <!--android:text="Sign Out"-->
+        <!--android:visibility="invisible"/>-->
 
     <TextView
         android:id="@+id/status"
