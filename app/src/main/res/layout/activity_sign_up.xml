@@ -11,6 +11,7 @@
         android:id="@+id/sign_out_button"
         android:text="Sign Out"
         android:visibility="invisible"/>
+
     <TextView
         android:id="@+id/status"
         android:layout_width="wrap_content"

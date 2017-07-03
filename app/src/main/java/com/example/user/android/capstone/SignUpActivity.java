@@ -81,6 +81,8 @@ public class SignUpActivity extends AppCompatActivity implements
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(SignUpActivity.this, "You successfully created new account",
+                                    Toast.LENGTH_SHORT).show();
                             updateUI(user);
                         } else {
                             String exceptionString = "com.google.firebase.auth.FirebaseAuthInvalidCredentialsException";
@@ -231,6 +233,8 @@ public class SignUpActivity extends AppCompatActivity implements
             mPasswordField.setText("");
             mPasswordSignUpField.setText("");
             mEmailSignUpField.setText("");
+
+            
 
         }
     }
