@@ -44,7 +44,9 @@ public class EventInfoActivity extends AppCompatActivity {
                         String details = (String) eventSnapshot.child("details").getValue();
                         String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                         String sportType = (String) eventSnapshot.child("sportType").getValue();
+
                         Event e1 = new Event(sportType, address, dataTime, details, peopleNeeded, creatorId);
+
                         mEventInfoSportType.setText(e1.getSportType());
                         mEventInfoAddress.setText(e1.getAddress());
                         mEventInfoDateTime.setText(e1.getDataTime());

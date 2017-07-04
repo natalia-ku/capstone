@@ -52,7 +52,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
         mSportPeopleNeededEdit = (EditText) findViewById(R.id.et_people_needed);
         mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
 
-
         mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mAuth = FirebaseAuth.getInstance();
