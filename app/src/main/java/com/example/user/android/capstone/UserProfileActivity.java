@@ -2,6 +2,8 @@ package com.example.user.android.capstone;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,9 +15,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserProfileActivity extends AppCompatActivity {
 
-
+    private RecyclerView recyclerView;
     TextView mUserName;
     TextView mUserEmail;
     TextView mUserAge;
@@ -25,6 +30,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mUserRef = mRootRef.child("users");
+    DatabaseReference mEventRef = mRootRef.child("events");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class UserProfileActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         String currentUserEmail = currentUser.getEmail();
 
+        String currentUserId;
         Query userProfileQuery = mUserRef.orderByChild("email").equalTo(currentUserEmail);
                userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
@@ -58,6 +65,10 @@ public class UserProfileActivity extends AppCompatActivity {
                                mUserAge.setText(age);
                                mUserGender.setText(gender);
                                mUserPhoto.setText(photo);
+
+                               // TO FIND EVENTS CREATED BY USER:
+                               String currentUserId = (String) eventSnapshot.getKey();
+                               findCreatedByUserEvents(currentUserId);
                            }
                        }
                    }
@@ -66,7 +77,43 @@ public class UserProfileActivity extends AppCompatActivity {
 
                    }
                });
+    }
 
+
+    private void findCreatedByUserEvents(String currentUserId){
+        final List<Event> userEvents = new ArrayList<>();
+        //TO GET EVENTS USER CREATED
+        Query createdByUserEventsQuery = mEventRef.orderByChild("creatorId").equalTo(currentUserId);
+        createdByUserEventsQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        String id =  eventSnapshot.getKey();
+                        String address = (String) eventSnapshot.child("address").getValue();
+                        String dataTime = (String) eventSnapshot.child("dataTime").getValue();
+                        String creatorId = eventSnapshot.child("creatorId").getValue().toString();
+                        String details = (String) eventSnapshot.child("details").getValue();
+                        String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
+                        String sportType = (String) eventSnapshot.child("sportType").getValue();
+
+                        Event e1 = new Event(id, sportType, address, dataTime, details, peopleNeeded, creatorId);
+                        userEvents.add(e1);
+                    }
+                }
+// SET UP LAYOUT FOR SHOWING USE EVENTS:
+                recyclerView =  (RecyclerView) findViewById(R.id.recycle_view_events_created_by_user);
+                EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents);
+                recyclerView.setAdapter(myAdapter);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(layoutManager);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }

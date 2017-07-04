@@ -32,16 +32,17 @@
         android:layout_height="wrap_content"
         android:textSize="22sp" />
 
-    <TextView
+
+
+    <Button
+        android:text="Choose date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Sport Event Date and Time:" />
-
-    <EditText
-        android:id="@+id/et_data_time"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        android:id="@+id/select_date_button"/>
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+   android:id="@+id/show_date"/>
 
     <TextView
         android:layout_width="wrap_content"

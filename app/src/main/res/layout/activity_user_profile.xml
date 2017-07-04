@@ -69,6 +69,15 @@
                 android:layout_height="wrap_content"
                 android:text="EVENTS, USER CREATED:" />
 
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle_view_events_created_by_user"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+            </android.support.v7.widget.RecyclerView>
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

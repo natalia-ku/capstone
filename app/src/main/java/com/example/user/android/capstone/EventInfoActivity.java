@@ -29,7 +29,8 @@ public class EventInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_info);
         String eventId = getIntent().getStringExtra("id");
-
+        System.out.println("IN EVENT ACTIVITY");
+        System.out.println(eventId);
         Query eventDetailsQuery = mEventsRef.orderByKey().equalTo(eventId);
 
         eventDetailsQuery.addListenerForSingleValueEvent(new ValueEventListener() {

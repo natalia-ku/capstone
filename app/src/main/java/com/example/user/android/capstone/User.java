@@ -37,8 +37,6 @@ public class User {
     private final String photo;
     private final String age;
 
-
-
     public User(String id, String email, String name, String gender, String photo, String age) {
         this.id = id;
         this.email = email;
