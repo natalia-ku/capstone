@@ -16,7 +16,8 @@ public class EventInfoActivity extends AppCompatActivity {
 
     TextView mEventInfoSportType;
     TextView mEventInfoAddress;
-    TextView mEventInfoDateTime;
+    TextView mEventInfoDate;
+    TextView mEventInfoTime;
     TextView mEventInfoDetails;
     TextView mEventInfoPeopleNeeded;
     TextView mEventInfoCreatorId;
@@ -29,8 +30,6 @@ public class EventInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_info);
         String eventId = getIntent().getStringExtra("id");
-        System.out.println("IN EVENT ACTIVITY");
-        System.out.println(eventId);
         Query eventDetailsQuery = mEventsRef.orderByKey().equalTo(eventId);
 
         eventDetailsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -40,17 +39,20 @@ public class EventInfoActivity extends AppCompatActivity {
 
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         String address = (String) eventSnapshot.child("address").getValue();
-                        String dataTime = (String) eventSnapshot.child("dataTime").getValue();
+
+                        String date = (String) eventSnapshot.child("dataTime").getValue();
+                        String time = (String) eventSnapshot.child("time").getValue();
+
                         String creatorId = eventSnapshot.child("creatorId").getValue().toString();
                         String details = (String) eventSnapshot.child("details").getValue();
                         String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                         String sportType = (String) eventSnapshot.child("sportType").getValue();
 
-                        Event e1 = new Event(sportType, address, dataTime, details, peopleNeeded, creatorId);
+                        Event e1 = new Event(sportType, address, date, time, details, peopleNeeded, creatorId);
 
                         mEventInfoSportType.setText(e1.getSportType());
                         mEventInfoAddress.setText(e1.getAddress());
-                        mEventInfoDateTime.setText(e1.getDataTime());
+                        mEventInfoDate.setText(e1.getDataTime());
                         mEventInfoDetails.setText(e1.getDetails());
                         mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
                         mEventInfoCreatorId.setText(e1.getCreatorId());
@@ -66,7 +68,8 @@ public class EventInfoActivity extends AppCompatActivity {
 
         mEventInfoSportType = (TextView) findViewById(R.id.event_sporttype_textview);
         mEventInfoAddress = (TextView) findViewById(R.id.event_address_textview);
-        mEventInfoDateTime = (TextView) findViewById(R.id.event_date_time_textview);
+        mEventInfoDate = (TextView) findViewById(R.id.event_date_textview);
+        mEventInfoTime = (TextView) findViewById(R.id.event_time_textview);
         mEventInfoDetails = (TextView) findViewById(R.id.event_details_textview);
         mEventInfoPeopleNeeded = (TextView) findViewById(R.id.event_people_needed_textview);
         mEventInfoCreatorId = (TextView) findViewById(R.id.event_creator_id_textview);

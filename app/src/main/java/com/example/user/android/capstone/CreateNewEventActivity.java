@@ -43,6 +43,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private EditText mSportPeopleNeededEdit;
     private Button mCreateNewEventButton;
     private TextView showDateTextView;
+
     private Button selectDateButton;
     private Button selectTimeButton;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -86,8 +87,8 @@ public class CreateNewEventActivity extends AppCompatActivity {
 
                                 String sportType = mSportTypeEdit.getText().toString();
                                 String sportAddress = mSportAddressEdit.getText().toString();
-//
                                 String sportDate = monthString + "/" + dayString + "/" + yearString;
+                                String sportTime = hoursString + " : " +  minutesString;
                                 String sportDetails = mSportDetailsEdit.getText().toString();
                                 String sportPeopleNeeded = mSportPeopleNeededEdit.getText().toString();
 
@@ -95,7 +96,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                         sportDetails.equals("") || sportPeopleNeeded.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
-                                    mEventsRef.push().setValue(new Event(sportType, sportAddress, sportDate, sportDetails, sportPeopleNeeded, sportCreatorId));
+                                    mEventsRef.push().setValue(new Event(sportType, sportAddress, sportDate, sportTime, sportDetails, sportPeopleNeeded, sportCreatorId));
                                     Toast.makeText(getApplicationContext(), "You successfully created new sport event", Toast.LENGTH_LONG).show();
                                     clearForm();
                                     finish();
@@ -159,6 +160,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getFragmentManager(), "timePicker");
+
             }
         });
 
@@ -180,12 +182,5 @@ public class CreateNewEventActivity extends AppCompatActivity {
             minutesString = String.valueOf(minute);
         }
     }
-
-
-//    public void showTimePickerDialog(View v) {
-//        DialogFragment newFragment = new TimePickerFragment();
-//        newFragment.show(getFragmentManager(), "timePicker");
-//
-//    }
 
 }

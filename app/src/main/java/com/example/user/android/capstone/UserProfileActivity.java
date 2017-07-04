@@ -91,13 +91,14 @@ public class UserProfileActivity extends AppCompatActivity {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         String id =  eventSnapshot.getKey();
                         String address = (String) eventSnapshot.child("address").getValue();
-                        String dataTime = (String) eventSnapshot.child("dataTime").getValue();
+                        String date = (String) eventSnapshot.child("dataTime").getValue();
+                        String time = (String) eventSnapshot.child("time").getValue();
                         String creatorId = eventSnapshot.child("creatorId").getValue().toString();
                         String details = (String) eventSnapshot.child("details").getValue();
                         String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                         String sportType = (String) eventSnapshot.child("sportType").getValue();
 
-                        Event e1 = new Event(id, sportType, address, dataTime, details, peopleNeeded, creatorId);
+                        Event e1 = new Event(id, sportType, address, date, time, details, peopleNeeded, creatorId);
                         userEvents.add(e1);
                     }
                 }

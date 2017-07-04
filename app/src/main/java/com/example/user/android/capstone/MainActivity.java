@@ -94,10 +94,11 @@ public class MainActivity extends AppCompatActivity {
                     String address = (String) eventSnapshot.child("address").getValue();
                     String creatorId = eventSnapshot.child("creatorId").getValue().toString();
                     String dataTime = (String) eventSnapshot.child("dataTime").getValue();
+                    String time = (String) eventSnapshot.child("time").getValue();
                     String details = (String) eventSnapshot.child("details").getValue();
                     String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                     String sportType = (String) eventSnapshot.child("sportType").getValue();
-                    Event e1 = new Event(id, sportType, address, dataTime, details, peopleNeeded, creatorId);
+                    Event e1 = new Event(id, sportType, address, dataTime, time, details, peopleNeeded, creatorId);
                     eventsListFromDatabase.add(e1);
                 }
                 recyclerView =  (RecyclerView) findViewById(R.id.recycle_view);

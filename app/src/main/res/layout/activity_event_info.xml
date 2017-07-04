@@ -16,7 +16,12 @@
         android:layout_height="wrap_content"
         android:textSize="22sp" />
     <TextView
-        android:id="@+id/event_date_time_textview"
+        android:id="@+id/event_date_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:id="@+id/event_time_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp" />
