@@ -27,8 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-
-    private TextView mEventsListTextView;
     private RecyclerView recyclerView;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
@@ -41,28 +39,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        mEventsListTextView = (TextView) findViewById(R.id.events_list);
         mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
         mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
 
         mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
         mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
 
-
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null){
-            mSignInUpButton.setVisibility(View.VISIBLE);
-            mSignOutMainButton.setVisibility(View.GONE);
-            mUserProfileButton.setVisibility(View.GONE);
-        }
-        else {
-            mSignInUpButton.setVisibility(View.GONE);
-            mSignOutMainButton.setVisibility(View.VISIBLE);
-            mUserProfileButton.setVisibility(View.VISIBLE);
-        }
-
+        updateUI(currentUser);
 
         mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,10 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     mAuth.signOut();
                 Toast.makeText(MainActivity.this, "You successfully signed out",
                         Toast.LENGTH_LONG).show();
-                mSignInUpButton.setVisibility(View.VISIBLE);
-                mSignOutMainButton.setVisibility(View.GONE);
-                mUserProfileButton.setVisibility(View.GONE);
-
+                updateUI(null);
             }
         });
 
@@ -83,6 +65,22 @@ public class MainActivity extends AppCompatActivity {
                 Class destinationClass = UserProfileActivity.class;
                 Intent intentToUserProfileActivity = new Intent(getApplicationContext(), destinationClass);
                 startActivity(intentToUserProfileActivity);
+            }
+        });
+
+        mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Class destinationClass = CreateNewEventActivity.class;
+                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
+                startActivity(intentToStartCreateNewEventActivity);
+            }
+        });
+
+        mSignInUpButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Class destinationClass = SignUpActivity.class;
+                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
+                startActivity(intentToStartCreateNewEventActivity);
             }
         });
 
@@ -102,38 +100,30 @@ public class MainActivity extends AppCompatActivity {
                     Event e1 = new Event(id, sportType, address, dataTime, details, peopleNeeded, creatorId);
                     eventsListFromDatabase.add(e1);
                 }
-
                 recyclerView =  (RecyclerView) findViewById(R.id.recycle_view);
                 EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
                 recyclerView.setAdapter(myAdapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(layoutManager);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
-
         });
+    } // end onCreate
 
-
-        mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Class destinationClass = CreateNewEventActivity.class;
-                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
-                startActivity(intentToStartCreateNewEventActivity);
-            }
-        });
-
-        mSignInUpButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Class destinationClass = SignUpActivity.class;
-                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
-                startActivity(intentToStartCreateNewEventActivity);
-            }
-        });
-
+    private void updateUI (FirebaseUser currentUser){
+        if (currentUser == null) {
+            mSignInUpButton.setVisibility(View.VISIBLE);
+            mSignOutMainButton.setVisibility(View.GONE);
+            mUserProfileButton.setVisibility(View.GONE);
+            mCreateNewEventButton.setVisibility(View.GONE);
+        } else {
+            mSignInUpButton.setVisibility(View.GONE);
+            mSignOutMainButton.setVisibility(View.VISIBLE);
+            mUserProfileButton.setVisibility(View.VISIBLE);
+        }
     }
 
 

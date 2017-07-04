@@ -94,14 +94,12 @@ public class SignUpActivity extends AppCompatActivity implements
 
                             mUserRef.push().setValue(new User(userEmail, userName, userGender, userPhoto, userAge));
 
-
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             Toast.makeText(SignUpActivity.this, "You successfully created new account",
                                     Toast.LENGTH_SHORT).show();
-                            Class destinationClass = MainActivity.class;
-                            Intent intentToStartMainActivity = new Intent(getApplicationContext(), destinationClass);
-                            startActivity(intentToStartMainActivity);
+
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
                             String exceptionString = "com.google.firebase.auth.FirebaseAuthInvalidCredentialsException";
                             String exceptionEmailCollisionString = "com.google.firebase.auth.FirebaseAuthUserCollisionException";
@@ -142,9 +140,8 @@ public class SignUpActivity extends AppCompatActivity implements
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(SignUpActivity.this, "You successfully signed in",
                                     Toast.LENGTH_SHORT).show();
-                            Class destinationClass = MainActivity.class;
-                            Intent intentToStartMainActivity = new Intent(getApplicationContext(), destinationClass);
-                            startActivity(intentToStartMainActivity);
+
+                            startActivity( new Intent(getApplicationContext(), MainActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
                             String exceptionBadEmailString = "com.google.firebase.auth.FirebaseAuthInvalidCredentialsException";

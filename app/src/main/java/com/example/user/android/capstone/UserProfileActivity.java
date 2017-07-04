@@ -43,7 +43,6 @@ public class UserProfileActivity extends AppCompatActivity {
                            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                                mUserName = (TextView) findViewById(R.id.name_profile_info);
                                mUserEmail = (TextView) findViewById(R.id.email_profile_info);
-
                                mUserAge = (TextView) findViewById(R.id.age_profile_info);
                                mUserGender = (TextView) findViewById(R.id.gender_profile_info);
                                mUserPhoto = (TextView) findViewById(R.id.photo_profile_info);
@@ -53,13 +52,13 @@ public class UserProfileActivity extends AppCompatActivity {
                                String age = (String) eventSnapshot.child("age").getValue();
                                String gender = (String) eventSnapshot.child("gender").getValue();
                                String photo = (String) eventSnapshot.child("photo").getValue();
+
                                mUserEmail.setText(name);
                                mUserName.setText(email);
                                mUserAge.setText(age);
                                mUserGender.setText(gender);
                                mUserPhoto.setText(photo);
                            }
-
                        }
                    }
                    @Override
