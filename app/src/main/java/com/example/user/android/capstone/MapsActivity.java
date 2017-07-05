@@ -9,6 +9,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -36,12 +37,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         List<Event> eventsList;
         eventsList = getIntent().getParcelableArrayListExtra("eventList");
-        System.out.println(eventsList);
         for (Event event:eventsList){
             String addressString =  event.getAddress();
             LatLng address = getLocationFromAddress(addressString);
             if (address != null) {
-                mMap.addMarker(new MarkerOptions().position(address).title(event.getSportType()));
+                mMap.addMarker(new MarkerOptions().position(address)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                        .title(event.getSportType()));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(address));
             }
         }
@@ -56,8 +58,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng p1 = null;
         try {
             address = coder.getFromLocationName(strAddress,5);
-            System.out.println("ADDRESS");
-            System.out.println(address);
             if (address==null || address.size() == 0 ) {
                 return null;
             }
