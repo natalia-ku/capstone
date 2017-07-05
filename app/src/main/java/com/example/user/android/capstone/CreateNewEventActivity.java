@@ -74,7 +74,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
         mSportDetailsEdit = (EditText) findViewById(R.id.et_details);
         mSportPeopleNeededEdit = (EditText) findViewById(R.id.et_people_needed);
         mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
-
         // set up ADDRESS using Place autocomplete fragment:
         getAddress();
         createNewEvent();
@@ -128,7 +127,11 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                         sportDetails.equals("") || sportPeopleNeeded.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
-                                    mEventsRef.push().setValue(new Event(sportType, sportAddress, sportDate, sportTime, sportDetails, sportPeopleNeeded, sportCreatorId));
+                                    DatabaseReference newEventRef = mEventsRef.push();
+                                    newEventRef.setValue(new Event(sportType, sportAddress, sportDate, sportTime, sportDetails, sportPeopleNeeded, sportCreatorId));
+                                    // USER THAT CREATED EVENT AUTOMATICALLY ATTENDS IT:
+                                    newEventRef.child("attendees").child(sportCreatorId).setValue("true");
+
                                     Toast.makeText(getApplicationContext(), "You successfully created new sport event", Toast.LENGTH_LONG).show();
                                     clearForm();
                                     finish();
@@ -152,13 +155,12 @@ public class CreateNewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int year = 2017;
-                int month = 1;
+                int month = 7;
                 int day = 1;
 
                 DatePickerDialog picker = new DatePickerDialog(CreateNewEventActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        Toast.makeText(getApplicationContext(), i + " " + i1 + " " + i2, Toast.LENGTH_LONG).show();
                         yearString = String.valueOf(i);
                         monthString = String.valueOf(i1);
                         dayString = String.valueOf(i2);
@@ -182,10 +184,8 @@ public class CreateNewEventActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getFragmentManager(), "timePicker");
-
             }
         });
-
     }
 
 
