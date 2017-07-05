@@ -32,6 +32,13 @@
         android:id="@+id/create_event_button"
         android:text="Create new event" />
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/events_map_button"
+        android:text="Events on map" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
@@ -39,26 +46,6 @@
         android:visibility="visible">
     </android.support.v7.widget.RecyclerView>
 
-    <FrameLayout android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
-
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/events_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Make a search!"
-                android:textSize="18sp" />
-        </ScrollView>
-
-
-    </FrameLayout>
 
 
 </LinearLayout>

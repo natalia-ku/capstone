@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     Button mUserProfileButton;
     Button mSignInUpButton;
     public static Button mSignOutMainButton;
+    Button mEventsOnMapButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
         mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
+
+        mEventsOnMapButton = (Button) findViewById(R.id.events_map_button);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -81,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
                 Class destinationClass = SignUpActivity.class;
                 Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
                 startActivity(intentToStartCreateNewEventActivity);
+            }
+        });
+
+
+        mEventsOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
             }
         });
 
