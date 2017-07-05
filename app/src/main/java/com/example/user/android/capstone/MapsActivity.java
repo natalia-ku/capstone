@@ -51,7 +51,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
     public LatLng getLocationFromAddress(String strAddress){
         Geocoder coder = new Geocoder(this);
         List<android.location.Address> address;
