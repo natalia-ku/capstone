@@ -30,6 +30,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
+    DatabaseReference mUserRef = mRootRef.child("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,33 @@ public class EventInfoActivity extends AppCompatActivity {
                     System.out.println("Couldn't call " + geoLocation.toString()
                             + ", no receiving apps installed!");
                 }
+            }
+        });
+
+        mEventInfoCreatorId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userId  = mEventInfoCreatorId.getText().toString();
+                Query findUserEmailQuery = mUserRef.orderByKey().equalTo(userId);
+                findUserEmailQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                                String userEmail = eventSnapshot.child("email").getValue().toString();
+                                Intent intentToSeeUserProfile = new Intent(getApplicationContext(), UserProfileActivity.class);
+                                intentToSeeUserProfile.putExtra("userEmail", userEmail);
+                                startActivity(intentToSeeUserProfile);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
             }
         });
 

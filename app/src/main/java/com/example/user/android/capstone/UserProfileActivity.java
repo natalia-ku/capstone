@@ -36,12 +36,18 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        String userEmail;
+        userEmail = getIntent().getStringExtra("userEmail");
 
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        String currentUserEmail = currentUser.getEmail();
+        if (userEmail == null){
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            userEmail = currentUser.getEmail();
+        }
 
-        Query userProfileQuery = mUserRef.orderByChild("email").equalTo(currentUserEmail);
+
+
+        Query userProfileQuery = mUserRef.orderByChild("email").equalTo(userEmail);
                userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
                    public void onDataChange(DataSnapshot dataSnapshot) {

@@ -6,7 +6,17 @@
     android:orientation="vertical">
 
     <TextView
+        android:text="TITLE:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
         android:id="@+id/event_sporttype_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:text="ADDRESS:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp" />
@@ -31,12 +41,27 @@
         android:layout_height="wrap_content"
         android:textSize="22sp" />
     <TextView
+        android:text="DETAILS:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
         android:id="@+id/event_details_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp" />
     <TextView
+        android:text="PEOPLE NEEDED:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
         android:id="@+id/event_people_needed_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:text="CREATOR:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp" />
