@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp">
+
+
+
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,11 +31,20 @@
         android:layout_height="wrap_content"
         android:text="Enter Sport Event Address:" />
 
-    <EditText
-        android:id="@+id/et_address"
-        android:layout_width="200dp"
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        />
+
+
+
+    <!--<EditText-->
+        <!--android:id="@+id/et_address"-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="22sp" />-->
 
 
     <Button
@@ -49,11 +63,6 @@
         android:layout_height="wrap_content"
         android:text="Select time"
         android:id="@+id/show_time_picker_button" />
-
-    <!--<TextView-->
-        <!--android:id="@+id/show_time"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
 
 
     <TextView
@@ -84,3 +93,4 @@
         android:layout_height="wrap_content"
         android:text="Create new event" />
 </LinearLayout>
+

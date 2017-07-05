@@ -9,12 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.user.android.capstone.Event;
-import com.example.user.android.capstone.R;
-
 import java.util.List;
-
-import static android.support.v4.content.ContextCompat.startActivity;
 
 
 /**

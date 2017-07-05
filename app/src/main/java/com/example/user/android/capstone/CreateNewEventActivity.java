@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -38,7 +43,6 @@ import java.util.List;
 public class CreateNewEventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText mSportTypeEdit;
-    private EditText mSportAddressEdit;
     private EditText mSportDetailsEdit;
     private EditText mSportPeopleNeededEdit;
     private Button mCreateNewEventButton;
@@ -53,8 +57,10 @@ public class CreateNewEventActivity extends AppCompatActivity {
     public String dayString;
     public String yearString;
     public String monthString;
-    public static  String hoursString;
+    public static String hoursString;
     public static String minutesString;
+
+    public String placeAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +71,37 @@ public class CreateNewEventActivity extends AppCompatActivity {
         setUpDate();
 
         mSportTypeEdit = (EditText) findViewById(R.id.et_sport_type);
-        mSportAddressEdit = (EditText) findViewById(R.id.et_address);
         mSportDetailsEdit = (EditText) findViewById(R.id.et_details);
         mSportPeopleNeededEdit = (EditText) findViewById(R.id.et_people_needed);
         mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
 
+        // set up ADDRESS using Place autocomplete fragment:
+        getAddress();
+        createNewEvent();
+    }
+
+    private void clearForm() {
+        mSportTypeEdit.setText("");
+        mSportDetailsEdit.setText("");
+        mSportPeopleNeededEdit.setText("");
+    }
+
+    private void getAddress() {
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                placeAddress = place.getAddress().toString();
+            }
+            @Override
+            public void onError(Status status) {
+                System.out.println("An error occurred: " + status);
+            }
+        });
+    }
+
+    private void createNewEvent() {
         mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mAuth = FirebaseAuth.getInstance();
@@ -86,13 +118,13 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                 String sportCreatorId = eventSnapshot.getKey();// find user's id to create event
 
                                 String sportType = mSportTypeEdit.getText().toString();
-                                String sportAddress = mSportAddressEdit.getText().toString();
+                                String sportAddress = placeAddress;
                                 String sportDate = monthString + "/" + dayString + "/" + yearString;
-                                String sportTime = hoursString + " : " +  minutesString;
+                                String sportTime = hoursString + " : " + minutesString;
                                 String sportDetails = mSportDetailsEdit.getText().toString();
                                 String sportPeopleNeeded = mSportPeopleNeededEdit.getText().toString();
 
-                                if (sportAddress.equals("") || sportAddress.equals("")  ||
+                                if (sportAddress.equals("") || sportAddress.equals("") ||
                                         sportDetails.equals("") || sportPeopleNeeded.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
@@ -109,21 +141,12 @@ public class CreateNewEventActivity extends AppCompatActivity {
 
                     }
                 });
-
             }
         });
-
-    }
-
-    private void clearForm() {
-        mSportTypeEdit.setText("");
-        mSportAddressEdit.setText("");
-        mSportDetailsEdit.setText("");
-        mSportPeopleNeededEdit.setText("");
     }
 
 
-    private void setUpDate(){
+    private void setUpDate() {
         selectDateButton = (Button) findViewById(R.id.select_date_button);
         selectDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,8 +175,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
     }
 
 
-
-    private void setUpTime(){
+    private void setUpTime() {
         selectTimeButton = (Button) findViewById(R.id.show_time_picker_button);
         selectTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,6 +199,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
+
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             hoursString = String.valueOf(hourOfDay);
             minutesString = String.valueOf(minute);

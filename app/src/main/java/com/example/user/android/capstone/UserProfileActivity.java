@@ -41,7 +41,6 @@ public class UserProfileActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         String currentUserEmail = currentUser.getEmail();
 
-        String currentUserId;
         Query userProfileQuery = mUserRef.orderByChild("email").equalTo(currentUserEmail);
                userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
@@ -115,6 +114,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
-
     }
+
+
+
 }
