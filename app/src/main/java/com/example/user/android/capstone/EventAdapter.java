@@ -40,8 +40,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.eventLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 Class destinationClass = EventInfoActivity.class;
                 Intent intentToStartEventInfoActivity = new Intent(context, destinationClass);
                 intentToStartEventInfoActivity.putExtra("id", events.get(position).getId());

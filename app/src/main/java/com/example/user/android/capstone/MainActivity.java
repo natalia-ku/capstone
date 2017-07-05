@@ -2,6 +2,7 @@ package com.example.user.android.capstone;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
+    private List<Event> eventsListFromDatabase = new ArrayList<>();
 
     private FirebaseAuth mAuth;
     private RecyclerView recyclerView;
@@ -91,7 +93,9 @@ public class MainActivity extends AppCompatActivity {
         mEventsOnMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putParcelableArrayListExtra("eventList", (ArrayList<? extends Parcelable>) eventsListFromDatabase);
+                startActivity(intent);
             }
         });
 
@@ -99,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         mEventsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Event> eventsListFromDatabase = new ArrayList<>();
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     String id = (String) eventSnapshot.getKey();
                     String address = (String) eventSnapshot.child("address").getValue();

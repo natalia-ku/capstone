@@ -1,31 +1,37 @@
 package com.example.user.android.capstone;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by nataliakuleniuk on 6/28/17.
  */
 
-public class Event {
+public class Event  implements Parcelable{
 
-    private final String id;
-    private final String sportType;
-    private final String address;
-    private final String date;
+    private  String id;
+    private String sportType;
+    private  String address;
+    private  String date;
 
-    private final String time;
-    private final String details;
-    private final String peopleNeeded;
-    private final String creatorId;
+    private  String time;
+    private  String details;
+    private  String peopleNeeded;
+    private  String creatorId;
 
 
     public String getDate() {
         return date;
     }
+
     public String getTime() {
         return time;
     }
+
     public String getSportType() {
         return sportType;
     }
+
     public String getAddress() {
         return address;
     }
@@ -61,7 +67,7 @@ public class Event {
         this.creatorId = creatorId;
     }
 
-    public Event( String sportType, String address, String date,String time, String details, String peopleNeeded, String creatorId) {
+    public Event(String sportType, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
         this.id = null;
         this.sportType = sportType;
         this.address = address;
@@ -73,4 +79,70 @@ public class Event {
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    // PARCELABLE:
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(sportType);
+        parcel.writeString(address);
+        parcel.writeString(date);
+        parcel.writeString(time);
+        parcel.writeString(details);
+        parcel.writeString(peopleNeeded);
+        parcel.writeString(creatorId);
+    }
+
+    public void readFromParcel(Parcel in) {
+        id = in.readString();
+        sportType = in.readString();
+        address = in.readString();
+        date = in.readString();
+        time = in.readString();
+        details = in.readString();
+        peopleNeeded = in.readString();
+        creatorId = in.readString();
+    }
+
+
+    protected Event(Parcel in) {
+        id = in.readString();
+        sportType = in.readString();
+        address = in.readString();
+        date = in.readString();
+        time = in.readString();
+        details = in.readString();
+        peopleNeeded = in.readString();
+        creatorId = in.readString();
+    }
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
 }
