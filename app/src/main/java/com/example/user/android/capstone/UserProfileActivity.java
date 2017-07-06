@@ -46,7 +46,6 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
 
-
         Query userProfileQuery = mUserRef.orderByChild("email").equalTo(userEmail);
                userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
@@ -65,8 +64,8 @@ public class UserProfileActivity extends AppCompatActivity {
                                String gender = (String) eventSnapshot.child("gender").getValue();
                                String photo = (String) eventSnapshot.child("photo").getValue();
 
-                               mUserEmail.setText(name);
-                               mUserName.setText(email);
+                               mUserEmail.setText(email);
+                               mUserName.setText(name);
                                mUserAge.setText(age);
                                mUserGender.setText(gender);
                                mUserPhoto.setText(photo);
@@ -107,7 +106,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         userEvents.add(e1);
                     }
                 }
-// SET UP LAYOUT FOR SHOWING USE EVENTS:
+            // SET UP LAYOUT FOR SHOWING USER EVENTS:
                 recyclerView =  (RecyclerView) findViewById(R.id.recycle_view_events_created_by_user);
                 EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents);
                 recyclerView.setAdapter(myAdapter);

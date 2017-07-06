@@ -26,7 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    private List<Event> eventsListFromDatabase = new ArrayList<>();
+    public List<Event> eventsListFromDatabase = new ArrayList<>();
 
     private FirebaseAuth mAuth;
     private RecyclerView recyclerView;

@@ -123,7 +123,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                 String sportDetails = mSportDetailsEdit.getText().toString();
                                 String sportPeopleNeeded = mSportPeopleNeededEdit.getText().toString();
 
-                                if (sportAddress.equals("") || sportAddress.equals("") ||
+                                if (sportType.equals("") ||
                                         sportDetails.equals("") || sportPeopleNeeded.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
