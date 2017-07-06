@@ -53,11 +53,8 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                        mUserName = (TextView) findViewById(R.id.name_profile_info);
-                        mUserEmail = (TextView) findViewById(R.id.email_profile_info);
-                        mUserAge = (TextView) findViewById(R.id.age_profile_info);
-                        mUserGender = (TextView) findViewById(R.id.gender_profile_info);
-                        mUserPhoto = (TextView) findViewById(R.id.photo_profile_info);
+
+                        findTextViews();
 
                         String name = (String) eventSnapshot.child("name").getValue();
                         String email = (String) eventSnapshot.child("email").getValue();
@@ -65,11 +62,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         String gender = (String) eventSnapshot.child("gender").getValue();
                         String photo = (String) eventSnapshot.child("photo").getValue();
 
-                        mUserEmail.setText(email);
-                        mUserName.setText(name);
-                        mUserAge.setText(age);
-                        mUserGender.setText(gender);
-                        mUserPhoto.setText(photo);
+                        setTextToViews(email, name, age, gender, photo);
 
                         String currentUserId = (String) eventSnapshot.getKey();
                         // TO FIND EVENTS CREATED BY USER:
@@ -100,6 +93,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     getEventsUserParticipatedIn(eventIdsList);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -108,11 +102,9 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
 
-    private void getEventsUserParticipatedIn(List <String> eventIdsList) {
+    private void getEventsUserParticipatedIn(List<String> eventIdsList) {
         //TO GET EVENTS USER PARTICIPATED IN:
         final List<Event> userEvents = new ArrayList<>();
-        System.out.println("EVENTS IDS:");
-        System.out.println(eventIdsList.size());
         for (String eventID : eventIdsList) {
             System.out.println(eventID);
             Query eventsUserAttendsQuery = mEventRef.orderByKey().equalTo(eventID);
@@ -122,20 +114,13 @@ public class UserProfileActivity extends AppCompatActivity {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                             String id = eventSnapshot.getKey();
-                            System.out.println("USER EVENT INFO:");
                             String address = (String) eventSnapshot.child("address").getValue();
-                            System.out.println(address);
                             String date = (String) eventSnapshot.child("dataTime").getValue();
-                            System.out.println(date);
                             String time = (String) eventSnapshot.child("time").getValue();
-                            System.out.println(time);
                             String creatorId = eventSnapshot.child("creatorId").getValue().toString();
-                            System.out.println(creatorId);
                             String details = (String) eventSnapshot.child("details").getValue();
-                            System.out.println(details);
                             String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                             String sportType = (String) eventSnapshot.child("sportType").getValue();
-                            System.out.println(sportType);
 
                             Event e1 = new Event(id, sportType, address, date, time, details, peopleNeeded, creatorId);
                             userEvents.add(e1);
@@ -147,7 +132,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         recyclerView.setLayoutManager(layoutManager);
                     } else {
-                        System.out.println("NO DATA FOUND!!!");
+                        System.out.println("Error: no data was found");
                     }
                 }
 
@@ -157,13 +142,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             });
         }
-
-
     }
-
-
-
-
 
 
     private void findCreatedByUserEvents(String currentUserId) {
@@ -201,6 +180,23 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void findTextViews() {
+        mUserName = (TextView) findViewById(R.id.name_profile_info);
+        mUserEmail = (TextView) findViewById(R.id.email_profile_info);
+        mUserAge = (TextView) findViewById(R.id.age_profile_info);
+        mUserGender = (TextView) findViewById(R.id.gender_profile_info);
+        mUserPhoto = (TextView) findViewById(R.id.photo_profile_info);
+    }
+
+    private void setTextToViews(String email,String name, String age, String gender, String photo) {
+        mUserEmail.setText(email);
+        mUserName.setText(name);
+        mUserAge.setText(age);
+        mUserGender.setText(gender);
+        mUserPhoto.setText(photo);
     }
 
 
