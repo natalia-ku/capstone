@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     Button mCreateNewEventButton;
     Button mUserProfileButton;
     Button mSignInUpButton;
-    public static Button mSignOutMainButton;
+    public Button mSignOutMainButton;
     Button mEventsOnMapButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

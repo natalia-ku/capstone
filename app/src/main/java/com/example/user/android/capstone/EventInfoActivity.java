@@ -31,6 +31,7 @@ public class EventInfoActivity extends AppCompatActivity {
     TextView mEventInfoCreatorId;
     Button mGetDirectionsButton;
     Button mParticipateInEventButton;
+    Button mCancelParticipationButton;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
@@ -43,7 +44,126 @@ public class EventInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_info);
+        initializeTextViews();
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        eventId = getIntent().getStringExtra("id");
+
+        // Find USER ID FOR SIGNED-IN user:
+        if (currentUser != null) {
+            findUserIdForSignedInUser(currentUser);
+        } else {
+            mParticipateInEventButton.setVisibility(View.GONE);
+            mCancelParticipationButton.setVisibility(View.GONE);
+        }
+
+        getEventInfo(eventId);
+        setUpGetDirections();
+        setUpCreatorIdEvent();
+        setUpParticipateInEventButton();
+
+        setUpParticipateInEventButton();
+        cancelParticipationEvent();
+    } // end of onCreate method
+
+
+    private void addAttendeeToEvent(String eventId, String userId) {
+        mEventsRef.child(eventId).child("attendees").child(userId).setValue("true");
+    }
+
+    private void addEventToUserEventsList(String eventId, String userId) {
+        mUserRef.child(userId).child("userEvents").child(eventId).setValue("true");
+    }
+
+    private void removeAttendeeFromEvent(String eventId, String userId) {
+        mEventsRef.child(eventId).child("attendees").child(userId).removeValue();
+
+    }
+
+    private void removeEventFromUserEventList(String eventId, String userId) {
+        mUserRef.child(userId).child("userEvents").child(eventId).removeValue();
+    }
+
+
+    private void setUpParticipateInEventButton() {
+        mParticipateInEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addAttendeeToEvent(eventId, userId);
+                addEventToUserEventsList(eventId, userId);
+                mParticipateInEventButton.setVisibility(View.GONE);
+                mCancelParticipationButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void cancelParticipationEvent() {
+        mCancelParticipationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeAttendeeFromEvent(eventId, userId);
+                removeEventFromUserEventList(eventId, userId);
+                mParticipateInEventButton.setVisibility(View.VISIBLE);
+                mCancelParticipationButton.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+    private void findUserIdForSignedInUser(FirebaseUser currentUser) {
+        Query findUserQuery = mUserRef.orderByChild("email").equalTo(currentUser.getEmail());
+        findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        userId = eventSnapshot.getKey();
+                    }
+                    checkIfUserAlreadyAttendee();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("ERROR");
+            }
+        });
+    }
+
+    private void checkIfUserAlreadyAttendee() {
+        // CHECK if user already in attendees list:
+        Query checkIfUserAttendsEventQuery = mEventsRef.child(eventId).child("attendees");
+        checkIfUserAttendsEventQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean userAlreadyInList = false;
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        if (eventSnapshot.getKey().equals(userId)) {
+                            userAlreadyInList = true;
+                        }
+                    }
+                }
+                if (userAlreadyInList) {
+                    mCancelParticipationButton.setVisibility(View.VISIBLE);
+                    mParticipateInEventButton.setVisibility(View.GONE);
+                } else {
+                    mCancelParticipationButton.setVisibility(View.GONE);
+                    mParticipateInEventButton.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    private void initializeTextViews() {
         mEventInfoSportType = (TextView) findViewById(R.id.event_sporttype_textview);
         mEventInfoAddress = (TextView) findViewById(R.id.event_address_textview);
         mEventInfoDate = (TextView) findViewById(R.id.event_date_textview);
@@ -53,36 +173,10 @@ public class EventInfoActivity extends AppCompatActivity {
         mEventInfoCreatorId = (TextView) findViewById(R.id.event_creator_id_textview);
         mGetDirectionsButton = (Button) findViewById(R.id.get_directions_button);
         mParticipateInEventButton = (Button) findViewById(R.id.paticipate_in_event_button);
+        mCancelParticipationButton = (Button) findViewById(R.id.cancel_participation_in_event_button);
+    }
 
-
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        eventId = getIntent().getStringExtra("id");
-
-        // Find signed in user id:
-        if (currentUser != null) {
-            Query findUserQuery = mUserRef.orderByChild("email").equalTo(currentUser.getEmail());
-            findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                           userId = eventSnapshot.getKey();
-                        }
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("ERROR");
-                }
-            });
-            mParticipateInEventButton.setVisibility(View.VISIBLE);
-        } else {
-            mParticipateInEventButton.setVisibility(View.GONE);
-        }
-
-        getEventInfo(eventId);
-
+    private void setUpGetDirections() {
         mGetDirectionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,7 +192,10 @@ public class EventInfoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+
+    private void setUpCreatorIdEvent() {
         mEventInfoCreatorId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,17 +222,6 @@ public class EventInfoActivity extends AppCompatActivity {
                 });
             }
         });
-
-        mParticipateInEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("ON CLICK:");
-                System.out.println(userId);
-                addAttendeeToEvent(eventId, userId);
-                addEventToUserEventsList(eventId, userId);
-            }
-        });
-
     }
 
 
@@ -171,15 +257,6 @@ public class EventInfoActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void addAttendeeToEvent(String eventId, String userId) {
-        mEventsRef.child(eventId).child("attendees").child(userId).setValue("true");
-    }
-
-
-    private void addEventToUserEventsList(String eventId, String userId) {
-        mUserRef.child(userId).child("userEvents").child(eventId).setValue("true");
     }
 
 
