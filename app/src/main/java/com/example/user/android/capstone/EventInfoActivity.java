@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +21,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class EventInfoActivity extends AppCompatActivity {
+    private RecyclerView recyclerView;
     private FirebaseAuth mAuth;
     TextView mEventInfoSportType;
     TextView mEventInfoAddress;
@@ -60,6 +66,9 @@ public class EventInfoActivity extends AppCompatActivity {
         }
 
         getEventInfo(eventId);
+
+        getEventParticipants(eventId);
+
         setUpGetDirections();
         setUpCreatorIdEvent();
         setUpParticipateInEventButton();
@@ -67,6 +76,69 @@ public class EventInfoActivity extends AppCompatActivity {
         setUpParticipateInEventButton();
         cancelParticipationEvent();
     } // end of onCreate method
+
+
+    private void getEventParticipants(String currentEventId) {
+        // GET list of user event IDs:
+        final List<String> userIdsList = new ArrayList<>();
+        Query getEventUserIdsQuery = mEventsRef.child(currentEventId).child("attendees");
+        getEventUserIdsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        userIdsList.add(eventSnapshot.getKey());
+                    }
+                    getEventAttendees(userIdsList);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    private void getEventAttendees(List<String> userIdsList) {
+        //TO GET EVENTS USER PARTICIPATED IN:
+        final List<User> eventUsers = new ArrayList<>();
+        for (String userID : userIdsList) {
+            Query eventUsersQuery = mUserRef.orderByKey().equalTo(userID);
+            eventUsersQuery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                            String id = eventSnapshot.getKey();
+                            String email = (String) eventSnapshot.child("email").getValue();
+                            String name = (String) eventSnapshot.child("name").getValue();
+                            String gender = (String) eventSnapshot.child("gender").getValue();
+                            String photo = (String) eventSnapshot.child("photo").getValue();
+                            String age = (String) eventSnapshot.child("age").getValue();
+
+                            User u1 = new User(id, email, name, gender, photo, age);
+                            eventUsers.add(u1);
+                        }
+                        // SET UP LAYOUT FOR SHOWING USERS:
+                        recyclerView = (RecyclerView) findViewById(R.id.recycle_view_event_attendees);
+                        UserAdapter myAdapter = new UserAdapter(getApplicationContext(), eventUsers);
+                        recyclerView.setAdapter(myAdapter);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                        recyclerView.setLayoutManager(layoutManager);
+                    } else {
+                        System.out.println("Error: no data was found");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
 
 
     private void addAttendeeToEvent(String eventId, String userId) {
@@ -93,6 +165,7 @@ public class EventInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 addAttendeeToEvent(eventId, userId);
                 addEventToUserEventsList(eventId, userId);
+                //getEventParticipants(eventId);
                 mParticipateInEventButton.setVisibility(View.GONE);
                 mCancelParticipationButton.setVisibility(View.VISIBLE);
             }
@@ -105,6 +178,7 @@ public class EventInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 removeAttendeeFromEvent(eventId, userId);
                 removeEventFromUserEventList(eventId, userId);
+                //getEventParticipants(eventId);
                 mParticipateInEventButton.setVisibility(View.VISIBLE);
                 mCancelParticipationButton.setVisibility(View.GONE);
             }

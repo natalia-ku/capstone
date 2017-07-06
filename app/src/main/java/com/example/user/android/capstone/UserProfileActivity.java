@@ -106,7 +106,6 @@ public class UserProfileActivity extends AppCompatActivity {
         //TO GET EVENTS USER PARTICIPATED IN:
         final List<Event> userEvents = new ArrayList<>();
         for (String eventID : eventIdsList) {
-            System.out.println(eventID);
             Query eventsUserAttendsQuery = mEventRef.orderByKey().equalTo(eventID);
             eventsUserAttendsQuery.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -126,11 +125,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             userEvents.add(e1);
                         }
                         // SET UP LAYOUT FOR SHOWING USER EVENTS:
-                        recyclerView = (RecyclerView) findViewById(R.id.recycle_view_events_user_participated_in);
-                        EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents);
-                        recyclerView.setAdapter(myAdapter);
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                        recyclerView.setLayoutManager(layoutManager);
+                        setUpRecycleView(userEvents, false);
                     } else {
                         System.out.println("Error: no data was found");
                     }
@@ -168,11 +163,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     }
                 }
                 // SET UP LAYOUT FOR SHOWING USER EVENTS:
-                recyclerView = (RecyclerView) findViewById(R.id.recycle_view_events_created_by_user);
-                EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents);
-                recyclerView.setAdapter(myAdapter);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(layoutManager);
+                setUpRecycleView(userEvents, true);
             }
 
             @Override
@@ -191,7 +182,7 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserPhoto = (TextView) findViewById(R.id.photo_profile_info);
     }
 
-    private void setTextToViews(String email,String name, String age, String gender, String photo) {
+    private void setTextToViews(String email, String name, String age, String gender, String photo) {
         mUserEmail.setText(email);
         mUserName.setText(name);
         mUserAge.setText(age);
@@ -199,5 +190,16 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserPhoto.setText(photo);
     }
 
+    private void setUpRecycleView(List<Event> userEvents, boolean eventsCreatedByUser) {
+        if (eventsCreatedByUser) {
+            recyclerView = (RecyclerView) findViewById(R.id.recycle_view_events_created_by_user);
+        } else {
+            recyclerView = (RecyclerView) findViewById(R.id.recycle_view_events_user_participated_in);
+        }
+        EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents);
+        recyclerView.setAdapter(myAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+    }
 
 }
