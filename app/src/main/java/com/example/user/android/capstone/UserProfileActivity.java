@@ -36,55 +36,137 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        String userEmail;
-        userEmail = getIntent().getStringExtra("userEmail");
+        String userEmail = getIntent().getStringExtra("userEmail"); // when clicked on other user profile
 
-        if (userEmail == null){
+        if (userEmail == null) { // to see  signed in user own profile
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = mAuth.getCurrentUser();
             userEmail = currentUser.getEmail();
         }
+        setUpProfileInfo(userEmail);
+    } // END of OnCreate
 
-
+    private void setUpProfileInfo(String userEmail) {
         Query userProfileQuery = mUserRef.orderByChild("email").equalTo(userEmail);
-               userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(DataSnapshot dataSnapshot) {
-                       if (dataSnapshot.exists()) {
-                           for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                               mUserName = (TextView) findViewById(R.id.name_profile_info);
-                               mUserEmail = (TextView) findViewById(R.id.email_profile_info);
-                               mUserAge = (TextView) findViewById(R.id.age_profile_info);
-                               mUserGender = (TextView) findViewById(R.id.gender_profile_info);
-                               mUserPhoto = (TextView) findViewById(R.id.photo_profile_info);
+        userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        mUserName = (TextView) findViewById(R.id.name_profile_info);
+                        mUserEmail = (TextView) findViewById(R.id.email_profile_info);
+                        mUserAge = (TextView) findViewById(R.id.age_profile_info);
+                        mUserGender = (TextView) findViewById(R.id.gender_profile_info);
+                        mUserPhoto = (TextView) findViewById(R.id.photo_profile_info);
 
-                               String name = (String) eventSnapshot.child("name").getValue();
-                               String email = (String) eventSnapshot.child("email").getValue();
-                               String age = (String) eventSnapshot.child("age").getValue();
-                               String gender = (String) eventSnapshot.child("gender").getValue();
-                               String photo = (String) eventSnapshot.child("photo").getValue();
+                        String name = (String) eventSnapshot.child("name").getValue();
+                        String email = (String) eventSnapshot.child("email").getValue();
+                        String age = (String) eventSnapshot.child("age").getValue();
+                        String gender = (String) eventSnapshot.child("gender").getValue();
+                        String photo = (String) eventSnapshot.child("photo").getValue();
 
-                               mUserEmail.setText(email);
-                               mUserName.setText(name);
-                               mUserAge.setText(age);
-                               mUserGender.setText(gender);
-                               mUserPhoto.setText(photo);
+                        mUserEmail.setText(email);
+                        mUserName.setText(name);
+                        mUserAge.setText(age);
+                        mUserGender.setText(gender);
+                        mUserPhoto.setText(photo);
 
-                               // TO FIND EVENTS CREATED BY USER:
-                               String currentUserId = (String) eventSnapshot.getKey();
-                               findCreatedByUserEvents(currentUserId);
-                           }
-                       }
-                   }
-                   @Override
-                   public void onCancelled(DatabaseError databaseError) {
+                        String currentUserId = (String) eventSnapshot.getKey();
+                        // TO FIND EVENTS CREATED BY USER:
+                        findCreatedByUserEvents(currentUserId);
+                        // TO FIND EVENTS USER PARTICIPATED IN:
+                        findEventsUserParticipatedIn(currentUserId);
+                    }
+                }
+            }
 
-                   }
-               });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void findEventsUserParticipatedIn(String currentUserId) {
+        // GET list of user event IDs:
+        final List<String> eventIdsList = new ArrayList<>();
+        Query getUserEventIdsQuery = mUserRef.child(currentUserId).child("userEvents");
+        getUserEventIdsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        eventIdsList.add(eventSnapshot.getKey());
+                    }
+                    getEventsUserParticipatedIn(eventIdsList);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
-    private void findCreatedByUserEvents(String currentUserId){
+    private void getEventsUserParticipatedIn(List <String> eventIdsList) {
+        //TO GET EVENTS USER PARTICIPATED IN:
+        final List<Event> userEvents = new ArrayList<>();
+        System.out.println("EVENTS IDS:");
+        System.out.println(eventIdsList.size());
+        for (String eventID : eventIdsList) {
+            System.out.println(eventID);
+            Query eventsUserAttendsQuery = mEventRef.orderByKey().equalTo(eventID);
+            eventsUserAttendsQuery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                            String id = eventSnapshot.getKey();
+                            System.out.println("USER EVENT INFO:");
+                            String address = (String) eventSnapshot.child("address").getValue();
+                            System.out.println(address);
+                            String date = (String) eventSnapshot.child("dataTime").getValue();
+                            System.out.println(date);
+                            String time = (String) eventSnapshot.child("time").getValue();
+                            System.out.println(time);
+                            String creatorId = eventSnapshot.child("creatorId").getValue().toString();
+                            System.out.println(creatorId);
+                            String details = (String) eventSnapshot.child("details").getValue();
+                            System.out.println(details);
+                            String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
+                            String sportType = (String) eventSnapshot.child("sportType").getValue();
+                            System.out.println(sportType);
+
+                            Event e1 = new Event(id, sportType, address, date, time, details, peopleNeeded, creatorId);
+                            userEvents.add(e1);
+                        }
+                        // SET UP LAYOUT FOR SHOWING USER EVENTS:
+                        recyclerView = (RecyclerView) findViewById(R.id.recycle_view_events_user_participated_in);
+                        EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents);
+                        recyclerView.setAdapter(myAdapter);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                        recyclerView.setLayoutManager(layoutManager);
+                    } else {
+                        System.out.println("NO DATA FOUND!!!");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+    }
+
+
+
+
+
+
+    private void findCreatedByUserEvents(String currentUserId) {
         final List<Event> userEvents = new ArrayList<>();
         //TO GET EVENTS USER CREATED
         Query createdByUserEventsQuery = mEventRef.orderByChild("creatorId").equalTo(currentUserId);
@@ -93,7 +175,7 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                        String id =  eventSnapshot.getKey();
+                        String id = eventSnapshot.getKey();
                         String address = (String) eventSnapshot.child("address").getValue();
                         String date = (String) eventSnapshot.child("dataTime").getValue();
                         String time = (String) eventSnapshot.child("time").getValue();
@@ -106,8 +188,8 @@ public class UserProfileActivity extends AppCompatActivity {
                         userEvents.add(e1);
                     }
                 }
-            // SET UP LAYOUT FOR SHOWING USER EVENTS:
-                recyclerView =  (RecyclerView) findViewById(R.id.recycle_view_events_created_by_user);
+                // SET UP LAYOUT FOR SHOWING USER EVENTS:
+                recyclerView = (RecyclerView) findViewById(R.id.recycle_view_events_created_by_user);
                 EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents);
                 recyclerView.setAdapter(myAdapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -120,7 +202,6 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 }
