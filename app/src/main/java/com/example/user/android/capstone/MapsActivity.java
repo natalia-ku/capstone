@@ -44,25 +44,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
-
         List<Event> eventsList;
         eventsList = getIntent().getParcelableArrayListExtra("eventList");
-        for (Event event:eventsList){
-            String addressString =  event.getAddress();
+        for (Event event : eventsList) {
+            String addressString = event.getAddress();
             LatLng address = getLocationFromAddress(addressString);
             if (address != null) {
                 mMap.addMarker(new MarkerOptions().position(address)
@@ -71,8 +65,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
-      mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(47.6101, -122.2015),
-              Math.max(10, mMap.getCameraPosition().zoom)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.6101, -122.2015),
+                Math.max(10, mMap.getCameraPosition().zoom)));
 
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
@@ -85,17 +79,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
-    public LatLng getLocationFromAddress(String strAddress){
+    public LatLng getLocationFromAddress(String strAddress) {
         Geocoder coder = new Geocoder(this);
         List<android.location.Address> address;
         LatLng p1 = null;
         try {
-            address = coder.getFromLocationName(strAddress,5);
-            if (address==null || address.size() == 0 ) {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null || address.size() == 0) {
                 return null;
             }
             double latit = address.get(0).getLatitude();
-            double longit =address.get(0).getLongitude();
+            double longit = address.get(0).getLongitude();
             p1 = new LatLng(latit, longit);
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,21 +108,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (dataSnapshot.exists()) {
                     String eventId = "";
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                         eventId = eventSnapshot.getKey();
+                        eventId = eventSnapshot.getKey();
                     }
                     if (!eventId.equals("")) {
                         Intent intentToGetEventDetailsActivity = new Intent(getApplicationContext(), EventInfoActivity.class);
                         intentToGetEventDetailsActivity.putExtra("id", eventId);
                         startActivity(intentToGetEventDetailsActivity);
-                    }
-                    else {
+                    } else {
                         System.out.println("Error: cannot find event");
                     }
-                }
-                else{
+                } else {
                     System.out.println("Error: Nothing found");
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
