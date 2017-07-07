@@ -54,8 +54,6 @@ public class User {
     private final String photo;
     private final String age;
 
-    public static String userId; // for findUserIdByEmail
-    String userID = "";
 
     public User(String id, String email, String name, String gender, String photo, String age) {
         this.id = id;
@@ -74,52 +72,6 @@ public class User {
         this.photo = photo;
         this.age = age;
     }
-
-//    public static String findUserIdByEmail(FirebaseUser user){
-//
-//       // new FirebaseQueryTask().execute(user);
-//
-//        loadDataFromDatabase(user);
-//
-//        if (userId == null){
-//            System.out.println("ERROR: Cannot find user in the Database");
-//            System.out.println(userId);
-//        }
-//        System.out.println("USER ID BEFORE RETURN STATEMENT:");
-//        System.out.println(userId);
-//        return userId;
-//    }
-//
-//    private static void loadDataFromDatabase(FirebaseUser user){
-//        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference mUserRef = mRootRef.child("users");
-//        String userEmail = user.getEmail();
-//        Query findUserQuery = mUserRef.orderByChild("email").equalTo(userEmail);
-//
-//        findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-//                        setUpUserID(eventSnapshot.getKey());
-//                    }
-//                }
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//    }
-//
-//
-//
-//    private static void setUpUserID(String key){
-//        System.out.println("I AM HERE");
-//        userId = key;
-//    }
-
 
 
 }

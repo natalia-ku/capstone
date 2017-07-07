@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,7 +67,6 @@ public class EventInfoActivity extends AppCompatActivity {
         }
 
         getEventInfo(eventId);
-
         getEventParticipants(eventId);
 
         setUpGetDirections();
@@ -75,11 +75,14 @@ public class EventInfoActivity extends AppCompatActivity {
 
         setUpParticipateInEventButton();
         cancelParticipationEvent();
+
+        listenForChangesInAttendeeList();
+
     } // end of onCreate method
 
 
     private void getEventParticipants(String currentEventId) {
-        // GET list of user event IDs:
+        // GET list of participants IDs:
         final List<String> userIdsList = new ArrayList<>();
         Query getEventUserIdsQuery = mEventsRef.child(currentEventId).child("attendees");
         getEventUserIdsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -89,8 +92,8 @@ public class EventInfoActivity extends AppCompatActivity {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         userIdsList.add(eventSnapshot.getKey());
                     }
-                    getEventAttendees(userIdsList);
                 }
+                getEventAttendees(userIdsList);
             }
 
             @Override
@@ -102,11 +105,14 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     private void getEventAttendees(List<String> userIdsList) {
-        //TO GET EVENTS USER PARTICIPATED IN:
+        //TO GET USERS, PARTICIPATED IN EVENT:
         final List<User> eventUsers = new ArrayList<>();
+        if (eventUsers.size() == 0) {
+            setUpRecycleViewForUserList(eventUsers);
+        }
         for (String userID : userIdsList) {
             Query eventUsersQuery = mUserRef.orderByKey().equalTo(userID);
-            eventUsersQuery.addValueEventListener(new ValueEventListener() {
+            eventUsersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -122,11 +128,7 @@ public class EventInfoActivity extends AppCompatActivity {
                             eventUsers.add(u1);
                         }
                         // SET UP LAYOUT FOR SHOWING USERS:
-                        recyclerView = (RecyclerView) findViewById(R.id.recycle_view_event_attendees);
-                        UserAdapter myAdapter = new UserAdapter(getApplicationContext(), eventUsers);
-                        recyclerView.setAdapter(myAdapter);
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                        recyclerView.setLayoutManager(layoutManager);
+                        setUpRecycleViewForUserList(eventUsers);
                     } else {
                         System.out.println("Error: no data was found");
                     }
@@ -165,7 +167,6 @@ public class EventInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 addAttendeeToEvent(eventId, userId);
                 addEventToUserEventsList(eventId, userId);
-                //getEventParticipants(eventId);
                 mParticipateInEventButton.setVisibility(View.GONE);
                 mCancelParticipationButton.setVisibility(View.VISIBLE);
             }
@@ -178,7 +179,6 @@ public class EventInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 removeAttendeeFromEvent(eventId, userId);
                 removeEventFromUserEventList(eventId, userId);
-                //getEventParticipants(eventId);
                 mParticipateInEventButton.setVisibility(View.VISIBLE);
                 mCancelParticipationButton.setVisibility(View.GONE);
             }
@@ -228,7 +228,6 @@ public class EventInfoActivity extends AppCompatActivity {
                     mParticipateInEventButton.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -288,7 +287,6 @@ public class EventInfoActivity extends AppCompatActivity {
                             }
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -325,7 +323,6 @@ public class EventInfoActivity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -333,5 +330,47 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
+
+    private void setUpRecycleViewForUserList(List<User> eventUsers) {
+        recyclerView = (RecyclerView) findViewById(R.id.recycle_view_event_attendees);
+        UserAdapter myAdapter = new UserAdapter(getApplicationContext(), eventUsers);
+        recyclerView.setAdapter(myAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+
+    private void listenForChangesInAttendeeList() {
+        DatabaseReference attendeeRef = mEventsRef.child(eventId).child("attendees");
+        final String eventIdFinal = eventId;
+        attendeeRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                System.out.println("I AM IN CHILD ADDED");
+                getEventParticipants(eventIdFinal);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                System.out.println("I AM IN CHILD CHANGED");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                System.out.println("I AM IN CHILD REMOVE");
+                getEventParticipants(eventIdFinal);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }
