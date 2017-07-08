@@ -57,7 +57,16 @@
         <!--android:layout_width="300dp"-->
         <!--android:layout_height="400dp"-->
         <!--tools:context="com.example.user.android.capstone.MapsActivity" />-->
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/future_events_button"
+        android:text="Only future events" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/all_events_button"
+        android:text="All events" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"

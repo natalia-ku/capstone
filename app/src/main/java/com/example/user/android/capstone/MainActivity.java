@@ -13,7 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.firebase.FirebaseApp;
@@ -26,8 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    public List<Event> eventsListFromDatabase = new ArrayList<>();
 
+    List<Event> eventsListFromDatabase = new ArrayList<>();
     private FirebaseAuth mAuth;
     private RecyclerView recyclerView;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -36,13 +40,19 @@ public class MainActivity extends AppCompatActivity {
     Button mUserProfileButton;
     Button mSignInUpButton;
     public Button mSignOutMainButton;
+    public Button mFutureEventsButton;
+    public Button mAllEventsButton;
     Button mEventsOnMapButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAllEventsButton = (Button) findViewById(R.id.all_events_button);
+        mAllEventsButton.setVisibility(View.GONE);
 
 
+        mFutureEventsButton = (Button) findViewById(R.id.future_events_button);
         mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
         mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
 
@@ -58,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    mAuth.signOut();
+                mAuth.signOut();
                 Toast.makeText(MainActivity.this, "You successfully signed out",
                         Toast.LENGTH_LONG).show();
                 updateUI(null);
@@ -101,36 +111,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mEventsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                    String id = (String) eventSnapshot.getKey();
-                    String address = (String) eventSnapshot.child("address").getValue();
-                    String creatorId = eventSnapshot.child("creatorId").getValue().toString();
-                    String dataTime = (String) eventSnapshot.child("dataTime").getValue();
-                    String time = (String) eventSnapshot.child("time").getValue();
-                    String details = (String) eventSnapshot.child("details").getValue();
-                    String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
-                    String title = (String) eventSnapshot.child("title").getValue();
-                    String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
-                    Event e1 = new Event(sportCategory, id, title, address, dataTime, time, details, peopleNeeded, creatorId);
-                    eventsListFromDatabase.add(e1);
-                }
-                recyclerView =  (RecyclerView) findViewById(R.id.recycle_view);
-                EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
-                recyclerView.setAdapter(myAdapter);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(layoutManager);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
+        // TO DISPLAY ALL EVENTS:
+        displayListOfEvents(false);
+
+        // SET UP future events filter and back to all events filter:
+        futureEventsFilter();
+
+
     } // end onCreate
 
-    private void updateUI (FirebaseUser currentUser){
+    private void updateUI(FirebaseUser currentUser) {
         if (currentUser == null) {
             mSignInUpButton.setVisibility(View.VISIBLE);
             mSignOutMainButton.setVisibility(View.GONE);
@@ -143,5 +133,84 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void displayListOfEvents(final boolean onlyFutureEventsFilter) {
+        eventsListFromDatabase = new ArrayList<>();
+        mEventsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    String id = (String) eventSnapshot.getKey();
+                    String address = (String) eventSnapshot.child("address").getValue();
+                    String creatorId = eventSnapshot.child("creatorId").getValue().toString();
+                    String date = (String) eventSnapshot.child("dataTime").getValue();
+                    String time = (String) eventSnapshot.child("time").getValue();
+                    String details = (String) eventSnapshot.child("details").getValue();
+                    String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
+                    String title = (String) eventSnapshot.child("title").getValue();
+                    String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
+                    Event e1 = new Event(sportCategory, id, title, address, date, time, details, peopleNeeded, creatorId);
+                    eventsListFromDatabase.add(e1);
+
+                }
+                if (onlyFutureEventsFilter) {
+                    Iterator<Event> iterEvent = eventsListFromDatabase.iterator();
+                    while (iterEvent.hasNext()) {
+                        Event event = iterEvent.next();
+                        if (!checkIfDateInFuture(event.getDate())) {
+                            iterEvent.remove();
+                        }
+                    }
+                }
+
+                recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+                EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
+                recyclerView.setAdapter(myAdapter);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(layoutManager);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        // return eventsListFromDatabase;
+    }
+
+    private boolean checkIfDateInFuture(String date) {
+        Date today = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        try {
+            Date eventDate = formatter.parse(date);
+            if (eventDate.after(today)) {
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
+    private void futureEventsFilter() {
+        mFutureEventsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayListOfEvents(true);
+                mFutureEventsButton.setVisibility(View.GONE);
+                mAllEventsButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mAllEventsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayListOfEvents(false);
+                mFutureEventsButton.setVisibility(View.VISIBLE);
+                mAllEventsButton.setVisibility(View.GONE);
+            }
+        });
+    }
 
 }
