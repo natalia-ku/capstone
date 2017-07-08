@@ -20,6 +20,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USER PROFILE INFO" />
+
+            <ImageView
+                android:layout_width="190dp"
+                android:layout_height="190dp"
+                android:id="@+id/user_photo"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,15 +58,6 @@
                 android:text="Age:" />
             <TextView
                 android:id="@+id/age_profile_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Photo:" />
-            <TextView
-                android:id="@+id/photo_profile_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

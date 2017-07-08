@@ -7,9 +7,6 @@
     android:padding="8dp">
 
 
-
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,12 +21,6 @@
         android:id="@+id/sport_types_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
-
-    <!--<EditText-->
-        <!--android:id="@+id/et_sport_type"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="22sp" />-->
 
 
     <TextView
@@ -50,11 +41,9 @@
 
     <fragment
         android:id="@+id/place_autocomplete_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        />
-
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
     <Button
@@ -69,10 +58,10 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/show_time_picker_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select time"
-        android:id="@+id/show_time_picker_button" />
+        android:text="Select time" />
 
 
     <TextView
@@ -91,11 +80,16 @@
         android:layout_height="wrap_content"
         android:text="How many people needed?" />
 
-    <EditText
-        android:id="@+id/et_people_needed"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+    <Spinner
+        android:id="@+id/people_needed_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <!--<EditText-->
+        <!--android:id="@+id/et_people_needed"-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="22sp" />-->
 
     <Button
         android:id="@+id/add_new_event_button"

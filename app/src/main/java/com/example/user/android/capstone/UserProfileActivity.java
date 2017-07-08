@@ -1,9 +1,11 @@
 package com.example.user.android.capstone;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +28,7 @@ public class UserProfileActivity extends AppCompatActivity {
     TextView mUserEmail;
     TextView mUserAge;
     TextView mUserGender;
-    TextView mUserPhoto;
+    ImageView mUserPhotoImage;
 
     private FirebaseAuth mAuth;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -181,7 +184,7 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserEmail = (TextView) findViewById(R.id.email_profile_info);
         mUserAge = (TextView) findViewById(R.id.age_profile_info);
         mUserGender = (TextView) findViewById(R.id.gender_profile_info);
-        mUserPhoto = (TextView) findViewById(R.id.photo_profile_info);
+        mUserPhotoImage = (ImageView) findViewById(R.id.user_photo);
     }
 
     private void setTextToViews(String email, String name, String age, String gender, String photo) {
@@ -189,7 +192,10 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserName.setText(name);
         mUserAge.setText(age);
         mUserGender.setText(gender);
-        mUserPhoto.setText(photo);
+        // CHANGE TO REAL URL:
+        Picasso.with(getApplicationContext()).load("https://assets.merriam-webster.com/mw/images/article/art-wap-article-main/puppy-3143-7cfb4d6a42dfc7d9d1ae7e23126279e8@1x.jpg").into(mUserPhotoImage);
+
+
     }
 
     private void setUpRecycleView(List<Event> userEvents, boolean eventsCreatedByUser) {

@@ -47,7 +47,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText mSportTitleEdit;
     private EditText mSportDetailsEdit;
-    private EditText mSportPeopleNeededEdit;
     private Button mCreateNewEventButton;
     private TextView showDateTextView;
 
@@ -66,29 +65,16 @@ public class CreateNewEventActivity extends AppCompatActivity {
     public String placeAddress;
 
     private String sportCategory;
+    private String peopleNeeded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_event);
 
+        setUpSpinnerForCategory();
+        setUpSpinnerForPeopleCount();
 
-        Spinner spinner = (Spinner) findViewById(R.id.sport_types_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.sport_types_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                sportCategory  = (String) adapterView.getItemAtPosition(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
 
 
@@ -97,7 +83,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
 
         mSportTitleEdit = (EditText) findViewById(R.id.et_sport_title);
         mSportDetailsEdit = (EditText) findViewById(R.id.et_details);
-        mSportPeopleNeededEdit = (EditText) findViewById(R.id.et_people_needed);
         mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
         // set up ADDRESS using Place autocomplete fragment:
         getAddress();
@@ -107,7 +92,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private void clearForm() {
         mSportTitleEdit.setText("");
         mSportDetailsEdit.setText("");
-        mSportPeopleNeededEdit.setText("");
     }
 
     private void getAddress() {
@@ -147,14 +131,13 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                 String sportDate = monthString + "/" + dayString + "/" + yearString;
                                 String sportTime = hoursString + " : " + minutesString;
                                 String sportDetails = mSportDetailsEdit.getText().toString();
-                                String sportPeopleNeeded = mSportPeopleNeededEdit.getText().toString();
 
                                 if (sportTitle.equals("") ||
-                                        sportDetails.equals("") || sportPeopleNeeded.equals("") || sportCategory.equals("")) {
+                                        sportDetails.equals("") || sportCategory.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
                                     DatabaseReference newEventRef = mEventsRef.push();
-                                    newEventRef.setValue(new Event(sportCategory, sportTitle, sportAddress, sportDate, sportTime, sportDetails, sportPeopleNeeded, sportCreatorId));
+                                    newEventRef.setValue(new Event(sportCategory, sportTitle, sportAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId));
                                     // USER THAT CREATED EVENT AUTOMATICALLY ATTENDS IT:
                                     newEventRef.child("attendees").child(sportCreatorId).setValue("true");
 
@@ -232,6 +215,45 @@ public class CreateNewEventActivity extends AppCompatActivity {
             minutesString = String.valueOf(minute);
             System.out.println();
         }
+    }
+
+    private void  setUpSpinnerForCategory() {
+        Spinner spinner = (Spinner) findViewById(R.id.sport_types_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sport_types_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                sportCategory = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+
+    private void setUpSpinnerForPeopleCount() {
+        Spinner spinnerPeopleNeeded = (Spinner) findViewById(R.id.people_needed_spinner);
+        ArrayAdapter<CharSequence> adapterPeople = ArrayAdapter.createFromResource(this,
+                R.array.people_needed_array, android.R.layout.simple_spinner_item);
+        adapterPeople.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPeopleNeeded.setAdapter(adapterPeople);
+        spinnerPeopleNeeded.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                peopleNeeded = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
 }
