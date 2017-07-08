@@ -67,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mFilterStatusTextView.setText("Select filter");
         filterEventCategory = false;
         filterFutureEvents = false;
-
-
+        
         spinner = (Spinner) findViewById(R.id.sport_types_spinner);
 
         mFutureEventsButton = (Button) findViewById(R.id.future_events_button);
@@ -77,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
         mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
         mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
-
         mEventsOnMapButton = (Button) findViewById(R.id.events_map_button);
 
         mAuth = FirebaseAuth.getInstance();
@@ -154,12 +152,12 @@ public class MainActivity extends AppCompatActivity {
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter) {
         mFilterStatusTextView.setText("Select filter");
         StringBuilder statusText = new StringBuilder("Filtered by ");
-        if (onlyFutureEventsFilter){
+        if (onlyFutureEventsFilter) {
             statusText.append("future events ");
             mFilterStatusTextView.setText(statusText);
         }
-        if (categoryFilter && !filterByCategory.equals("All")){
-            if (onlyFutureEventsFilter){
+        if (categoryFilter && !filterByCategory.equals("All")) {
+            if (onlyFutureEventsFilter) {
                 statusText.append("and ");
             }
             statusText.append("category: " + filterByCategory);
@@ -218,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        // return eventsListFromDatabase;
     }
 
     private boolean checkIfDateInFuture(String date) {
@@ -233,7 +230,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return false;
-
     }
 
     private void futureEventsFilter() {
@@ -247,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 spinner.setSelection(0);
             }
         });
-
+        // Back to all events button:
         mAllEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -274,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
                 filterEventCategory = true;
                 displayListOfEvents(filterFutureEvents, filterEventCategory);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
