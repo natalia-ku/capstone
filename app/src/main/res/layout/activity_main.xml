@@ -68,6 +68,16 @@
         android:id="@+id/all_events_button"
         android:text="All events" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter events by category:"/>
+    <Spinner
+        android:id="@+id/sport_types_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"

@@ -27,6 +27,32 @@
         <item>Other</item>
     </string-array>
 
+    <string-array name="sport_types_all_array">
+        <item>All</item>
+        <item>Football</item>
+        <item>Tennis</item>
+        <item>Bowling</item>
+        <item>Volleyball</item>
+        <item>Basketball</item>
+        <item>Baseball</item>
+        <item>Cricket</item>
+        <item>Skateboarding</item>
+        <item>Snowboarding</item>
+        <item>Surfing</item>
+        <item>Swimming</item>
+        <item>Gym Workout</item>
+        <item>Climbing</item>
+        <item>Hiking</item>
+        <item>Cycling</item>
+        <item>Boxing</item>
+        <item>Golf</item>
+        <item>Ice Hockey</item>
+        <item>Squash</item>
+        <item>Running</item>
+        <item>Skiing</item>
+        <item>Other</item>
+    </string-array>
+
     <string-array name="people_needed_array">
         <item>1</item>
         <item>2</item>

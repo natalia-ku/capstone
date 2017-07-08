@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
     Button mCreateNewEventButton;
     Button mUserProfileButton;
     Button mSignInUpButton;
-    public Button mSignOutMainButton;
-    public Button mFutureEventsButton;
-    public Button mAllEventsButton;
+    Button mSignOutMainButton;
+    Button mFutureEventsButton;
+    Button mAllEventsButton;
     Button mEventsOnMapButton;
+
+    String filterByCategory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,13 +116,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // TO DISPLAY ALL EVENTS:
-        displayListOfEvents(false);
-
+        displayListOfEvents(false, false);
         // SET UP future events filter and back to all events filter:
         futureEventsFilter();
-
+        setUpSpinner();
 
     } // end onCreate
 
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void displayListOfEvents(final boolean onlyFutureEventsFilter) {
+    private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter) {
         eventsListFromDatabase = new ArrayList<>();
         mEventsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -159,6 +163,17 @@ public class MainActivity extends AppCompatActivity {
                         Event event = iterEvent.next();
                         if (!checkIfDateInFuture(event.getDate())) {
                             iterEvent.remove();
+                        }
+                    }
+                }
+                if (categoryFilter) {
+                    Iterator<Event> iterEvent = eventsListFromDatabase.iterator();
+                    while (iterEvent.hasNext()) {
+                        Event event = iterEvent.next();
+                        if(!filterByCategory.equals("All")) {
+                            if (!event.getSportCategory().equals(filterByCategory)) {
+                                iterEvent.remove();
+                            }
                         }
                     }
                 }
@@ -197,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         mFutureEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayListOfEvents(true);
+                displayListOfEvents(true, false);
                 mFutureEventsButton.setVisibility(View.GONE);
                 mAllEventsButton.setVisibility(View.VISIBLE);
             }
@@ -206,11 +221,32 @@ public class MainActivity extends AppCompatActivity {
         mAllEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayListOfEvents(false);
+                displayListOfEvents(false, false);
                 mFutureEventsButton.setVisibility(View.VISIBLE);
                 mAllEventsButton.setVisibility(View.GONE);
             }
         });
     }
 
+
+    private void setUpSpinner() {
+        Spinner spinner = (Spinner) findViewById(R.id.sport_types_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sport_types_all_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                filterByCategory = (String) adapterView.getItemAtPosition(i);
+                displayListOfEvents(false, true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
 }

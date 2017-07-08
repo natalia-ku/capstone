@@ -75,9 +75,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
         setUpSpinnerForCategory();
         setUpSpinnerForPeopleCount();
 
-
-
-
         setUpTime();
         setUpDate();
 
