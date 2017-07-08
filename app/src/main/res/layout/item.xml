@@ -5,7 +5,7 @@
     android:id="@+id/layout_item">
 
     <TextView
-        android:id="@+id/event_sport_type"
+        android:id="@+id/event_sport_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp" />

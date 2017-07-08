@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
         mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
 
@@ -111,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     String time = (String) eventSnapshot.child("time").getValue();
                     String details = (String) eventSnapshot.child("details").getValue();
                     String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
-                    String sportType = (String) eventSnapshot.child("sportType").getValue();
-                    Event e1 = new Event(id, sportType, address, dataTime, time, details, peopleNeeded, creatorId);
+                    String title = (String) eventSnapshot.child("title").getValue();
+                    Event e1 = new Event(id, title, address, dataTime, time, details, peopleNeeded, creatorId);
                     eventsListFromDatabase.add(e1);
                 }
                 recyclerView =  (RecyclerView) findViewById(R.id.recycle_view);

@@ -42,7 +42,7 @@ import java.util.List;
 
 public class CreateNewEventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private EditText mSportTypeEdit;
+    private EditText mSportTitleEdit;
     private EditText mSportDetailsEdit;
     private EditText mSportPeopleNeededEdit;
     private Button mCreateNewEventButton;
@@ -70,7 +70,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
         setUpTime();
         setUpDate();
 
-        mSportTypeEdit = (EditText) findViewById(R.id.et_sport_type);
+        mSportTitleEdit = (EditText) findViewById(R.id.et_sport_title);
         mSportDetailsEdit = (EditText) findViewById(R.id.et_details);
         mSportPeopleNeededEdit = (EditText) findViewById(R.id.et_people_needed);
         mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
@@ -80,7 +80,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
     }
 
     private void clearForm() {
-        mSportTypeEdit.setText("");
+        mSportTitleEdit.setText("");
         mSportDetailsEdit.setText("");
         mSportPeopleNeededEdit.setText("");
     }
@@ -116,19 +116,19 @@ public class CreateNewEventActivity extends AppCompatActivity {
                             for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                                 String sportCreatorId = eventSnapshot.getKey();// find user's id to create event
 
-                                String sportType = mSportTypeEdit.getText().toString();
+                                String sportTitle = mSportTitleEdit.getText().toString();
                                 String sportAddress = placeAddress;
                                 String sportDate = monthString + "/" + dayString + "/" + yearString;
                                 String sportTime = hoursString + " : " + minutesString;
                                 String sportDetails = mSportDetailsEdit.getText().toString();
                                 String sportPeopleNeeded = mSportPeopleNeededEdit.getText().toString();
 
-                                if (sportType.equals("") ||
+                                if (sportTitle.equals("") ||
                                         sportDetails.equals("") || sportPeopleNeeded.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
                                     DatabaseReference newEventRef = mEventsRef.push();
-                                    newEventRef.setValue(new Event(sportType, sportAddress, sportDate, sportTime, sportDetails, sportPeopleNeeded, sportCreatorId));
+                                    newEventRef.setValue(new Event(sportTitle, sportAddress, sportDate, sportTime, sportDetails, sportPeopleNeeded, sportCreatorId));
                                     // USER THAT CREATED EVENT AUTOMATICALLY ATTENDS IT:
                                     newEventRef.child("attendees").child(sportCreatorId).setValue("true");
 
@@ -203,6 +203,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             hoursString = String.valueOf(hourOfDay);
             minutesString = String.valueOf(minute);
+            System.out.println();
         }
     }
 

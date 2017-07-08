@@ -36,7 +36,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(EventAdapter.ViewHolder holder, final int position) {
-        holder.eventSportTypeTextView.setText(events.get(position).getSportType());
+        holder.eventTitleTextView.setText(events.get(position).getTitle());
         holder.eventLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,10 +55,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout eventLinearLayout;
-        TextView eventSportTypeTextView;
+        TextView eventTitleTextView;
         public ViewHolder(View itemView) {
             super(itemView);
-            eventSportTypeTextView = (TextView) itemView.findViewById(R.id.event_sport_type);
+            eventTitleTextView = (TextView) itemView.findViewById(R.id.event_sport_title);
             eventLinearLayout = (LinearLayout) itemView.findViewById(R.id.layout_item);
         }
     }

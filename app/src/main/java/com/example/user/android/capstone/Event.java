@@ -10,7 +10,7 @@ import android.os.Parcelable;
 public class Event  implements Parcelable{
 
     private  String id;
-    private String sportType;
+    private String title;
     private  String address;
     private  String date;
 
@@ -28,8 +28,8 @@ public class Event  implements Parcelable{
         return time;
     }
 
-    public String getSportType() {
-        return sportType;
+    public String getTitle() {
+        return title;
     }
 
     public String getAddress() {
@@ -56,9 +56,9 @@ public class Event  implements Parcelable{
         return id;
     }
 
-    public Event(String id, String sportType, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
+    public Event(String id, String title, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
         this.id = id;
-        this.sportType = sportType;
+        this.title = title;
         this.address = address;
         this.date = date;
         this.time = time;
@@ -67,9 +67,9 @@ public class Event  implements Parcelable{
         this.creatorId = creatorId;
     }
 
-    public Event(String sportType, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
+    public Event(String title, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
         this.id = null;
-        this.sportType = sportType;
+        this.title = title;
         this.address = address;
         this.date = date;
         this.time = time;
@@ -79,15 +79,6 @@ public class Event  implements Parcelable{
 
 
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -101,7 +92,7 @@ public class Event  implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
-        parcel.writeString(sportType);
+        parcel.writeString(title);
         parcel.writeString(address);
         parcel.writeString(date);
         parcel.writeString(time);
@@ -112,7 +103,7 @@ public class Event  implements Parcelable{
 
     public void readFromParcel(Parcel in) {
         id = in.readString();
-        sportType = in.readString();
+        title = in.readString();
         address = in.readString();
         date = in.readString();
         time = in.readString();
@@ -124,7 +115,7 @@ public class Event  implements Parcelable{
 
     protected Event(Parcel in) {
         id = in.readString();
-        sportType = in.readString();
+        title = in.readString();
         address = in.readString();
         date = in.readString();
         time = in.readString();

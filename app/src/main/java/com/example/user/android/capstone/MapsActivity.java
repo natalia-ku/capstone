@@ -61,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (address != null) {
                 mMap.addMarker(new MarkerOptions().position(address)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                        .title(event.getSportType()));
+                        .title(event.getTitle()));
             }
         }
 
@@ -101,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onInfoWindowClick(Marker marker) {
         String markerTitle = marker.getTitle();
-        Query findEventByTitleQuery = mEventsRef.orderByChild("sportType").equalTo(markerTitle);
+        Query findEventByTitleQuery = mEventsRef.orderByChild("title").equalTo(markerTitle);
         findEventByTitleQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

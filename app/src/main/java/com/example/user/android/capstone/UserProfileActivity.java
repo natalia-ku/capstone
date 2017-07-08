@@ -119,9 +119,9 @@ public class UserProfileActivity extends AppCompatActivity {
                             String creatorId = eventSnapshot.child("creatorId").getValue().toString();
                             String details = (String) eventSnapshot.child("details").getValue();
                             String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
-                            String sportType = (String) eventSnapshot.child("sportType").getValue();
+                            String title = (String) eventSnapshot.child("title").getValue();
 
-                            Event e1 = new Event(id, sportType, address, date, time, details, peopleNeeded, creatorId);
+                            Event e1 = new Event(id, title, address, date, time, details, peopleNeeded, creatorId);
                             userEvents.add(e1);
                         }
                         // SET UP LAYOUT FOR SHOWING USER EVENTS:
@@ -156,9 +156,9 @@ public class UserProfileActivity extends AppCompatActivity {
                         String creatorId = eventSnapshot.child("creatorId").getValue().toString();
                         String details = (String) eventSnapshot.child("details").getValue();
                         String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
-                        String sportType = (String) eventSnapshot.child("sportType").getValue();
+                        String title = (String) eventSnapshot.child("title").getValue();
 
-                        Event e1 = new Event(id, sportType, address, date, time, details, peopleNeeded, creatorId);
+                        Event e1 = new Event(id, title, address, date, time, details, peopleNeeded, creatorId);
                         userEvents.add(e1);
                     }
                 }

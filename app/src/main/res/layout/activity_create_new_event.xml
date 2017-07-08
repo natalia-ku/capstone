@@ -18,10 +18,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Sport Event Type:" />
+        android:text="Enter Sport Type:" />
 
     <EditText
-        android:id="@+id/et_sport_type"
+        android:id="@+id/et_sport_title"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:textSize="22sp" />

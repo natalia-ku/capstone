@@ -29,7 +29,7 @@ import java.util.List;
 public class EventInfoActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FirebaseAuth mAuth;
-    TextView mEventInfoSportType;
+    TextView mEventInfoTitle;
     TextView mEventInfoAddress;
     TextView mEventInfoDate;
     TextView mEventInfoTime;
@@ -237,7 +237,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     private void initializeTextViews() {
-        mEventInfoSportType = (TextView) findViewById(R.id.event_sporttype_textview);
+        mEventInfoTitle = (TextView) findViewById(R.id.event_title_textview);
         mEventInfoAddress = (TextView) findViewById(R.id.event_address_textview);
         mEventInfoDate = (TextView) findViewById(R.id.event_date_textview);
         mEventInfoTime = (TextView) findViewById(R.id.event_time_textview);
@@ -310,11 +310,11 @@ public class EventInfoActivity extends AppCompatActivity {
                         String creatorId = eventSnapshot.child("creatorId").getValue().toString();
                         String details = (String) eventSnapshot.child("details").getValue();
                         String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
-                        String sportType = (String) eventSnapshot.child("sportType").getValue();
+                        String title = (String) eventSnapshot.child("title").getValue();
 
-                        Event e1 = new Event(sportType, address, date, time, details, peopleNeeded, creatorId);
+                        Event e1 = new Event(title, address, date, time, details, peopleNeeded, creatorId);
 
-                        mEventInfoSportType.setText(e1.getSportType());
+                        mEventInfoTitle.setText(e1.getTitle());
                         mEventInfoAddress.setText(e1.getAddress());
                         mEventInfoDate.setText(e1.getDataTime());
                         mEventInfoDetails.setText(e1.getDetails());
