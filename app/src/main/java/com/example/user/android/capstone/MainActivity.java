@@ -113,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
                     String details = (String) eventSnapshot.child("details").getValue();
                     String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                     String title = (String) eventSnapshot.child("title").getValue();
-                    Event e1 = new Event(id, title, address, dataTime, time, details, peopleNeeded, creatorId);
+                    String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
+                    Event e1 = new Event(sportCategory, id, title, address, dataTime, time, details, peopleNeeded, creatorId);
                     eventsListFromDatabase.add(e1);
                 }
                 recyclerView =  (RecyclerView) findViewById(R.id.recycle_view);

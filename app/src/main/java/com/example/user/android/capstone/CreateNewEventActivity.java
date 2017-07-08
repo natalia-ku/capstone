@@ -15,9 +15,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -62,10 +65,32 @@ public class CreateNewEventActivity extends AppCompatActivity {
 
     public String placeAddress;
 
+    private String sportCategory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_event);
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.sport_types_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sport_types_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                sportCategory  = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
 
         setUpTime();
         setUpDate();
@@ -93,6 +118,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
             public void onPlaceSelected(Place place) {
                 placeAddress = place.getAddress().toString();
             }
+
             @Override
             public void onError(Status status) {
                 System.out.println("An error occurred: " + status);
@@ -124,11 +150,11 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                 String sportPeopleNeeded = mSportPeopleNeededEdit.getText().toString();
 
                                 if (sportTitle.equals("") ||
-                                        sportDetails.equals("") || sportPeopleNeeded.equals("")) {
+                                        sportDetails.equals("") || sportPeopleNeeded.equals("") || sportCategory.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
                                     DatabaseReference newEventRef = mEventsRef.push();
-                                    newEventRef.setValue(new Event(sportTitle, sportAddress, sportDate, sportTime, sportDetails, sportPeopleNeeded, sportCreatorId));
+                                    newEventRef.setValue(new Event(sportCategory, sportTitle, sportAddress, sportDate, sportTime, sportDetails, sportPeopleNeeded, sportCreatorId));
                                     // USER THAT CREATED EVENT AUTOMATICALLY ATTENDS IT:
                                     newEventRef.child("attendees").child(sportCreatorId).setValue("true");
 
@@ -139,6 +165,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
                             }
                         }
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -208,3 +235,4 @@ public class CreateNewEventActivity extends AppCompatActivity {
     }
 
 }
+

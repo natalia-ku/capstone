@@ -16,6 +16,16 @@
         android:layout_height="wrap_content"
         android:textSize="22sp" />
     <TextView
+        android:text="CATEGORY:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
+        android:id="@+id/event_category_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+    <TextView
         android:text="ADDRESS:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

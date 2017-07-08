@@ -18,6 +18,7 @@ public class Event  implements Parcelable{
     private  String details;
     private  String peopleNeeded;
     private  String creatorId;
+    private String sportCategory;
 
 
     public String getDate() {
@@ -32,6 +33,13 @@ public class Event  implements Parcelable{
         return title;
     }
 
+    public String getSportCategory() {
+        return sportCategory;
+    }
+
+    public void setSportCategory(String sportCategory) {
+        this.sportCategory = sportCategory;
+    }
     public String getAddress() {
         return address;
     }
@@ -56,7 +64,8 @@ public class Event  implements Parcelable{
         return id;
     }
 
-    public Event(String id, String title, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
+    public Event(String sportCategory, String id, String title, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
+        this.sportCategory = sportCategory;
         this.id = id;
         this.title = title;
         this.address = address;
@@ -67,7 +76,8 @@ public class Event  implements Parcelable{
         this.creatorId = creatorId;
     }
 
-    public Event(String title, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
+    public Event(String sportCategory, String title, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
+        this.sportCategory = sportCategory;
         this.id = null;
         this.title = title;
         this.address = address;
@@ -91,6 +101,7 @@ public class Event  implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(sportCategory);
         parcel.writeString(id);
         parcel.writeString(title);
         parcel.writeString(address);
@@ -102,6 +113,7 @@ public class Event  implements Parcelable{
     }
 
     public void readFromParcel(Parcel in) {
+        sportCategory = in.readString();
         id = in.readString();
         title = in.readString();
         address = in.readString();
@@ -114,6 +126,7 @@ public class Event  implements Parcelable{
 
 
     protected Event(Parcel in) {
+        sportCategory = in.readString();
         id = in.readString();
         title = in.readString();
         address = in.readString();
@@ -135,5 +148,6 @@ public class Event  implements Parcelable{
             return new Event[size];
         }
     };
+
 
 }

@@ -30,6 +30,7 @@ public class EventInfoActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FirebaseAuth mAuth;
     TextView mEventInfoTitle;
+    TextView mEventInfoCategory;
     TextView mEventInfoAddress;
     TextView mEventInfoDate;
     TextView mEventInfoTime;
@@ -123,7 +124,6 @@ public class EventInfoActivity extends AppCompatActivity {
                             String gender = (String) eventSnapshot.child("gender").getValue();
                             String photo = (String) eventSnapshot.child("photo").getValue();
                             String age = (String) eventSnapshot.child("age").getValue();
-
                             User u1 = new User(id, email, name, gender, photo, age);
                             eventUsers.add(u1);
                         }
@@ -238,6 +238,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
     private void initializeTextViews() {
         mEventInfoTitle = (TextView) findViewById(R.id.event_title_textview);
+        mEventInfoCategory = (TextView) findViewById(R.id.event_category_textview);
         mEventInfoAddress = (TextView) findViewById(R.id.event_address_textview);
         mEventInfoDate = (TextView) findViewById(R.id.event_date_textview);
         mEventInfoTime = (TextView) findViewById(R.id.event_time_textview);
@@ -311,9 +312,10 @@ public class EventInfoActivity extends AppCompatActivity {
                         String details = (String) eventSnapshot.child("details").getValue();
                         String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                         String title = (String) eventSnapshot.child("title").getValue();
+                        String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
 
-                        Event e1 = new Event(title, address, date, time, details, peopleNeeded, creatorId);
-
+                        Event e1 = new Event(sportCategory, title, address, date, time, details, peopleNeeded, creatorId);
+                        mEventInfoCategory.setText(e1.getSportCategory());
                         mEventInfoTitle.setText(e1.getTitle());
                         mEventInfoAddress.setText(e1.getAddress());
                         mEventInfoDate.setText(e1.getDataTime());
