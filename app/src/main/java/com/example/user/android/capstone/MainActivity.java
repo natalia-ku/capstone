@@ -32,6 +32,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity {
 
     List<Event> eventsListFromDatabase = new ArrayList<>();
@@ -47,8 +49,12 @@ public class MainActivity extends AppCompatActivity {
     Button mAllEventsButton;
     Button mEventsOnMapButton;
 
+    TextView mFilterStatusTextView;
     String filterByCategory;
+    Spinner spinner;
 
+    boolean filterEventCategory;
+    boolean filterFutureEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
         mAllEventsButton = (Button) findViewById(R.id.all_events_button);
         mAllEventsButton.setVisibility(View.GONE);
 
+        mFilterStatusTextView = (TextView) findViewById(R.id.filter_status);
+        mFilterStatusTextView.setText("Select filter");
+        filterEventCategory = false;
+        filterFutureEvents = false;
+
+
+        spinner = (Spinner) findViewById(R.id.sport_types_spinner);
 
         mFutureEventsButton = (Button) findViewById(R.id.future_events_button);
         mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
@@ -139,6 +152,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter) {
+        mFilterStatusTextView.setText("Select filter");
+        StringBuilder statusText = new StringBuilder("Filtered by ");
+        if (onlyFutureEventsFilter){
+            statusText.append("future events ");
+            mFilterStatusTextView.setText(statusText);
+        }
+        if (categoryFilter && !filterByCategory.equals("All")){
+            if (onlyFutureEventsFilter){
+                statusText.append("and ");
+            }
+            statusText.append("category: " + filterByCategory);
+            mFilterStatusTextView.setText(statusText);
+        }
+
+
         eventsListFromDatabase = new ArrayList<>();
         mEventsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -170,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                     Iterator<Event> iterEvent = eventsListFromDatabase.iterator();
                     while (iterEvent.hasNext()) {
                         Event event = iterEvent.next();
-                        if(!filterByCategory.equals("All")) {
+                        if (!filterByCategory.equals("All")) {
                             if (!event.getSportCategory().equals(filterByCategory)) {
                                 iterEvent.remove();
                             }
@@ -212,25 +240,29 @@ public class MainActivity extends AppCompatActivity {
         mFutureEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayListOfEvents(true, false);
+                filterFutureEvents = true;
+                displayListOfEvents(filterFutureEvents, filterEventCategory);
                 mFutureEventsButton.setVisibility(View.GONE);
                 mAllEventsButton.setVisibility(View.VISIBLE);
+                spinner.setSelection(0);
             }
         });
 
         mAllEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayListOfEvents(false, false);
+                filterEventCategory = false;
+                filterFutureEvents = false;
+                displayListOfEvents(filterFutureEvents, filterEventCategory);
                 mFutureEventsButton.setVisibility(View.VISIBLE);
                 mAllEventsButton.setVisibility(View.GONE);
+                spinner.setSelection(0);
             }
         });
     }
 
 
     private void setUpSpinner() {
-        Spinner spinner = (Spinner) findViewById(R.id.sport_types_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sport_types_all_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -239,7 +271,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 filterByCategory = (String) adapterView.getItemAtPosition(i);
-                displayListOfEvents(false, true);
+                filterEventCategory = true;
+                displayListOfEvents(filterFutureEvents, filterEventCategory);
             }
 
             @Override
