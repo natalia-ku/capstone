@@ -1,10 +1,13 @@
 package com.example.user.android.capstone;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +21,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class UserProfileActivity extends AppCompatActivity {
     TextView mUserAge;
     TextView mUserGender;
     ImageView mUserPhotoImage;
+    Button mEditProfileButton;
 
     private FirebaseAuth mAuth;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -47,6 +52,8 @@ public class UserProfileActivity extends AppCompatActivity {
             userEmail = currentUser.getEmail();
         }
         setUpProfileInfo(userEmail);
+
+
     } // END of OnCreate
 
     private void setUpProfileInfo(String userEmail) {
@@ -56,22 +63,32 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-
+                        final User user;
                         findTextViews();
-
+                        String currentUserId = (String) eventSnapshot.getKey();
                         String name = (String) eventSnapshot.child("name").getValue();
                         String email = (String) eventSnapshot.child("email").getValue();
                         String age = (String) eventSnapshot.child("age").getValue();
                         String gender = (String) eventSnapshot.child("gender").getValue();
                         String photo = (String) eventSnapshot.child("photo").getValue();
-
+                        user = new User(currentUserId, email, name, gender, photo, age);
                         setTextToViews(email, name, age, gender, photo);
 
-                        String currentUserId = (String) eventSnapshot.getKey();
+
                         // TO FIND EVENTS CREATED BY USER:
                         findCreatedByUserEvents(currentUserId);
                         // TO FIND EVENTS USER PARTICIPATED IN:
                         findEventsUserParticipatedIn(currentUserId);
+
+                        mEditProfileButton = (Button) findViewById(R.id.edit_profile);
+                        mEditProfileButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intentToUpdateProfile = new Intent(getApplicationContext(), UpdateProfileActivity.class);
+                                intentToUpdateProfile.putExtra("user", (Serializable) user);
+                                startActivity(intentToUpdateProfile);
+                            }
+                        });
                     }
                 }
             }

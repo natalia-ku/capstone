@@ -142,7 +142,6 @@ public class EventInfoActivity extends AppCompatActivity {
         }
     }
 
-
     private void addAttendeeToEvent(String eventId, String userId) {
         mEventsRef.child(eventId).child("attendees").child(userId).setValue("true");
     }

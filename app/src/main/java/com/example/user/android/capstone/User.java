@@ -9,19 +9,23 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Created by nataliakuleniuk on 7/3/17.
  */
 
-public class User {
+public class User implements Serializable {
 
     public String getId() {
         return id;
@@ -72,6 +76,7 @@ public class User {
         this.photo = photo;
         this.age = age;
     }
+
 
 
 }
