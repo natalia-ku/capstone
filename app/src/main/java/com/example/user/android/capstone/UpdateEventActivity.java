@@ -4,17 +4,10 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,7 +24,6 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,22 +31,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Date;
 
-public class CreateNewEventActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private EditText mSportTitleEdit;
-    private EditText mSportDetailsEdit;
-    private Button mCreateNewEventButton;
-    private TextView showDateTextView;
+public class UpdateEventActivity extends AppCompatActivity {
 
-    private Button selectDateButton;
-    private Button selectTimeButton;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
-    DatabaseReference mUserRef = mRootRef.child("users");
+    public String placeAddress;
+
+    EditText mTitleUpdateEvent;
+    EditText mDetailsUpdateEvent;
+    Button mUpdateEventButton;
+    Button mDeleteEventButton;
+    Button mSelectDateButton;
+    Button selectTimeButton;
+    TextView showDateTextView;
+
 
     public String dayString;
     public String yearString;
@@ -62,44 +57,104 @@ public class CreateNewEventActivity extends AppCompatActivity {
     public static String hoursString;
     public static String minutesString;
 
-    public String placeAddress;
-
     private String sportCategory;
     private String peopleNeeded;
+    Spinner spinner;
+    Spinner spinnerPeopleNeeded;
+    ArrayAdapter<CharSequence> adapter;
+    ArrayAdapter<CharSequence> adapterPeople;
+    Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_event);
+        setContentView(R.layout.activity_update_event);
 
-
+        final Event event = (Event) getIntent().getSerializableExtra("event");
+        updatEventListener(event);
+        showEventDataInEditViews();
         setUpSpinnerForCategory();
         setUpSpinnerForPeopleCount();
-
+        getAddress(event);
+        setUpDate(event);
         setUpTime();
-
-        setUpDate();
-
-        mSportTitleEdit = (EditText) findViewById(R.id.et_sport_title);
-        mSportDetailsEdit = (EditText) findViewById(R.id.et_details);
-        mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
-
-        // set up ADDRESS using Place autocomplete fragment:
-//        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-//                       getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-//        placeAddress = Event.getAddressFromForm(autocompleteFragment);
-        getAddress();
-        createNewEvent();
+        getEventData(event);
+        displayDate(event);
     }
 
-    private void clearForm() {
-        mSportTitleEdit.setText("");
-        mSportDetailsEdit.setText("");
+    private void updatEventListener(final Event event) {
+        mUpdateEventButton = (Button) findViewById(R.id.update_event_button);
+        mUpdateEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference eventRef = mEventsRef.child(event.getCreatorId());
+
+                String sportTitle = mTitleUpdateEvent.getText().toString();
+                String sportDetails = mDetailsUpdateEvent.getText().toString();
+                String sportDate = monthString + "/" + dayString + "/" + yearString;
+                String sportTime = hoursString + " : " + minutesString;
+                String sportCreatorId = event.getCreatorId();
+
+                if (sportTitle.equals("") ||
+                        sportDetails.equals("") ||
+                        placeAddress.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
+                } else {
+                    eventRef.setValue(new Event(sportCategory, sportTitle, placeAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId));
+                    Toast.makeText(getApplicationContext(), "You successfully updated sport event", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        });
     }
 
-    private void getAddress() {
+
+    private void showEventDataInEditViews() {
+        showDateTextView = (TextView) findViewById(R.id.show_date_update);
+        spinnerPeopleNeeded = (Spinner) findViewById(R.id.people_needed_spinner_update);
+        spinner = (Spinner) findViewById(R.id.sport_types_spinner_update);
+        mTitleUpdateEvent = (EditText) findViewById(R.id.et_sport_title_update);
+        mDetailsUpdateEvent = (EditText) findViewById(R.id.et_details_update);
+    }
+
+    private void displayDate(Event event) {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date eventDate = null;
+        try {
+            eventDate = formatter.parse(event.getDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar = Calendar.getInstance();
+        calendar.setTime(eventDate);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        showDateTextView = (TextView) findViewById(R.id.show_date_update);
+        showDateTextView.setText(month + "/" + day + "/" + year);
+    }
+
+
+    private void getEventData(Event event) {
+        mTitleUpdateEvent = (EditText) findViewById(R.id.et_sport_title_update);
+        mDetailsUpdateEvent = (EditText) findViewById(R.id.et_details_update);
+
+        mTitleUpdateEvent.setText(event.getTitle());
+        mDetailsUpdateEvent.setText(event.getDetails());
+        int position = adapter.getPosition(event.getSportCategory());
+        spinner.setSelection(position);
+        int positionPeople = adapterPeople.getPosition(event.getPeopleNeeded());
+        spinnerPeopleNeeded.setSelection(positionPeople);
+
+
+    }
+
+    private void getAddress(Event event) {
+        placeAddress = event.getAddress();
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_update);
+        autocompleteFragment.setText(placeAddress);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -113,66 +168,16 @@ public class CreateNewEventActivity extends AppCompatActivity {
         });
     }
 
-    private void createNewEvent() {
-        mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                System.out.println("CREATE EVENT");
-                mAuth = FirebaseAuth.getInstance();
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                String userEmail = currentUser.getEmail();
-
-                Query findUserQuery = mUserRef.orderByChild("email").equalTo(userEmail);
-
-                findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                                String sportCreatorId = eventSnapshot.getKey();// find user's id to create event
-
-                                String sportTitle = mSportTitleEdit.getText().toString();
-                                String sportAddress = placeAddress;
-                                String sportDate = monthString + "/" + dayString + "/" + yearString;
-                                String sportTime = hoursString + " : " + minutesString;
-                                String sportDetails = mSportDetailsEdit.getText().toString();
-
-                                if (sportTitle.equals("") ||
-                                        sportDetails.equals("") || sportCategory.equals("")) {
-                                    Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
-                                } else {
-                                    DatabaseReference newEventRef = mEventsRef.push();
-                                    newEventRef.setValue(new Event(sportCategory, sportTitle, sportAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId));
-                                    // USER THAT CREATED EVENT AUTOMATICALLY ATTENDS IT:
-                                    newEventRef.child("attendees").child(sportCreatorId).setValue("true");
-                                    mUserRef.child(sportCreatorId).child("userEvents").child(sportCreatorId).setValue("true");
-                                    Toast.makeText(getApplicationContext(), "You successfully created new sport event", Toast.LENGTH_LONG).show();
-                                    clearForm();
-                                    finish();
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        });
-    }
-
-
-    private  void setUpDate() {
-        selectDateButton = (Button) findViewById(R.id.select_date_button);
-        selectDateButton.setOnClickListener(new View.OnClickListener() {
+    private void setUpDate(final Event event) {
+        mSelectDateButton = (Button) findViewById(R.id.select_date_button_update);
+        mSelectDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int year = 2017;
-                int month = 7;
-                int day = 1;
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog picker = new DatePickerDialog(CreateNewEventActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog picker = new DatePickerDialog(UpdateEventActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         yearString = String.valueOf(i);
@@ -187,12 +192,10 @@ public class CreateNewEventActivity extends AppCompatActivity {
                 picker.show();
             }
         });
-
     }
 
-
     private void setUpTime() {
-        selectTimeButton = (Button) findViewById(R.id.show_time_picker_button);
+        selectTimeButton = (Button) findViewById(R.id.show_time_picker_button_update);
         selectTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -201,7 +204,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
             }
         });
     }
-
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
@@ -223,9 +225,9 @@ public class CreateNewEventActivity extends AppCompatActivity {
         }
     }
 
-    private  void setUpSpinnerForCategory() {
-        Spinner spinner = (Spinner) findViewById(R.id.sport_types_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+
+    private void setUpSpinnerForCategory() {
+        adapter = ArrayAdapter.createFromResource(this,
                 R.array.sport_types_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -244,8 +246,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
 
 
     private void setUpSpinnerForPeopleCount() {
-        Spinner spinnerPeopleNeeded = (Spinner) findViewById(R.id.people_needed_spinner);
-        ArrayAdapter<CharSequence> adapterPeople = ArrayAdapter.createFromResource(this,
+        adapterPeople = ArrayAdapter.createFromResource(this,
                 R.array.people_needed_array, android.R.layout.simple_spinner_item);
         adapterPeople.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPeopleNeeded.setAdapter(adapterPeople);
@@ -262,5 +263,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
         });
     }
 
-}
 
+
+}

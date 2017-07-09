@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,16 +7,18 @@
 
 
     <TextView
+        android:id="@+id/update_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter details to create new event" />
+        android:text="UPDATE EVENT DETAILS"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Event Type:" />
 
     <Spinner
-        android:id="@+id/sport_types_spinner"
+        android:id="@+id/sport_types_spinner_update"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
@@ -28,7 +29,7 @@
         android:text="Enter Event Title:" />
 
     <EditText
-        android:id="@+id/et_sport_title"
+        android:id="@+id/et_sport_title_update"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:textSize="22sp" />
@@ -39,25 +40,25 @@
         android:text="Enter Sport Event Address:" />
 
     <fragment
-        android:id="@+id/place_autocomplete_fragment"
+        android:id="@+id/place_autocomplete_fragment_update"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 
     <Button
-        android:id="@+id/select_date_button"
+        android:id="@+id/select_date_button_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select date" />
 
     <TextView
-        android:id="@+id/show_date"
+        android:id="@+id/show_date_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/show_time_picker_button"
+        android:id="@+id/show_time_picker_button_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select time" />
@@ -69,7 +70,7 @@
         android:text="Enter Sport Event Details:" />
 
     <EditText
-        android:id="@+id/et_details"
+        android:id="@+id/et_details_update"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:textSize="22sp" />
@@ -80,21 +81,24 @@
         android:text="How many people needed?" />
 
     <Spinner
-        android:id="@+id/people_needed_spinner"
+        android:id="@+id/people_needed_spinner_update"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
 
-    <!--<EditText-->
-        <!--android:id="@+id/et_people_needed"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="22sp" />-->
+
+
 
     <Button
-        android:id="@+id/add_new_event_button"
+        android:id="@+id/update_event_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create new event" />
-</LinearLayout>
+        android:text="Update" />
 
+    <Button
+        android:id="@+id/delete_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Event" />
+
+</LinearLayout>

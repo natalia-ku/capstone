@@ -5,6 +5,11 @@
     android:padding="8dp"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/update_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Event"/>
     <TextView
         android:text="TITLE:"
         android:layout_width="wrap_content"

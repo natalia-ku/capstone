@@ -1,13 +1,27 @@
 package com.example.user.android.capstone;
 
+import android.app.DatePickerDialog;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import java.io.Serializable;
 
 /**
  * Created by nataliakuleniuk on 6/28/17.
  */
 
-public class Event  implements Parcelable{
+public class Event  implements Parcelable, Serializable{
 
     private  String id;
     private String title;
@@ -64,6 +78,8 @@ public class Event  implements Parcelable{
         return id;
     }
 
+    public  static String placeAddress;
+
     public Event(String sportCategory, String id, String title, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
         this.sportCategory = sportCategory;
         this.id = id;
@@ -92,8 +108,12 @@ public class Event  implements Parcelable{
 
 
 
-    // PARCELABLE:
 
+
+
+
+
+    // PARCELABLE:
     @Override
     public int describeContents() {
         return 0;

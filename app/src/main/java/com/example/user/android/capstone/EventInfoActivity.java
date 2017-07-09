@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class EventInfoActivity extends AppCompatActivity {
     Button mGetDirectionsButton;
     Button mParticipateInEventButton;
     Button mCancelParticipationButton;
+    Button mUpdateEvent;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
@@ -78,6 +80,28 @@ public class EventInfoActivity extends AppCompatActivity {
         cancelParticipationEvent();
 
         listenForChangesInAttendeeList();
+
+        mUpdateEvent = (Button) findViewById(R.id.update_event_button);
+        mUpdateEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String address = (String) mEventInfoAddress.getText();
+                String date = (String) mEventInfoDate.getText();
+                String time = (String) mEventInfoTime.getText();
+                String creatorId = (String) mEventInfoCreatorId.getText();
+                String details = (String) mEventInfoDetails.getText();
+                String peopleNeeded = (String) mEventInfoPeopleNeeded.getText();
+                String title = (String) mEventInfoTitle.getText();
+                String sportCategory = (String) mEventInfoCategory.getText();
+
+                Event event = new Event(sportCategory, title, address, date, time, details, peopleNeeded, creatorId);
+
+                Intent intentToUpdateEvent = new Intent(getApplicationContext(), UpdateEventActivity.class);
+                intentToUpdateEvent.putExtra("event", (Serializable) event);
+                startActivity(intentToUpdateEvent);
+            }
+        });
 
     } // end of onCreate method
 
@@ -318,6 +342,7 @@ public class EventInfoActivity extends AppCompatActivity {
                         mEventInfoTitle.setText(e1.getTitle());
                         mEventInfoAddress.setText(e1.getAddress());
                         mEventInfoDate.setText(e1.getDataTime());
+                        mEventInfoTime.setText(e1.getTime());
                         mEventInfoDetails.setText(e1.getDetails());
                         mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
                         mEventInfoCreatorId.setText(e1.getCreatorId());
