@@ -84,13 +84,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<android.location.Address> address;
         LatLng p1 = null;
         try {
-            address = coder.getFromLocationName(strAddress, 5);
-            if (address == null || address.size() == 0) {
-                return null;
+            if (strAddress != null) {
+                address = coder.getFromLocationName(strAddress, 5);
+                if (address == null || address.size() == 0) {
+                    return null;
+                }
+                double latit = address.get(0).getLatitude();
+                double longit = address.get(0).getLongitude();
+                p1 = new LatLng(latit, longit);
             }
-            double latit = address.get(0).getLatitude();
-            double longit = address.get(0).getLongitude();
-            p1 = new LatLng(latit, longit);
         } catch (IOException e) {
             e.printStackTrace();
         }

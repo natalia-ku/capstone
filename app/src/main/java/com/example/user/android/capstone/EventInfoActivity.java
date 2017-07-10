@@ -1,13 +1,11 @@
 package com.example.user.android.capstone;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -49,6 +47,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
     String eventId; // to create user-event relations
     String userId; // to create user-event relations
+    final int REQUEST_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +63,11 @@ public class EventInfoActivity extends AppCompatActivity {
         eventId = event.getId();
 
 
-        getEventInfo(event);
+        updateEventUI(event);
 
 
         updateEventListener(event);
-        // getEventInfo(eventId);
+        // updateEventUI(eventId);
         getEventParticipants(eventId);
 
 
@@ -103,9 +102,20 @@ public class EventInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intentToUpdateEvent = new Intent(getApplicationContext(), UpdateEventActivity.class);
                 intentToUpdateEvent.putExtra("event", (Serializable) event);
-                startActivity(intentToUpdateEvent);
+                startActivityForResult(intentToUpdateEvent, REQUEST_CODE);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                Event event = (Event) data.getSerializableExtra("event");
+                updateEventUI(event);
+            }
+        }
     }
 
     private void getEventParticipants(String currentEventId) {
@@ -328,7 +338,7 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
-    private void getEventInfo(Event e1) {
+    private void updateEventUI(Event e1) {
         mEventInfoCategory.setText(e1.getSportCategory());
         mEventInfoTitle.setText(e1.getTitle());
         mEventInfoAddress.setText(e1.getAddress());

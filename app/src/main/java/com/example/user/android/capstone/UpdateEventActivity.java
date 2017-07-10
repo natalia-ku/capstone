@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -31,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -88,7 +90,7 @@ public class UpdateEventActivity extends AppCompatActivity {
         mUpdateEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference eventRef = mEventsRef.child(event.getCreatorId());
+                DatabaseReference eventRef = mEventsRef.child(event.getId());
 
                 String sportTitle = mTitleUpdateEvent.getText().toString();
                 String sportDetails = mDetailsUpdateEvent.getText().toString();
@@ -101,8 +103,12 @@ public class UpdateEventActivity extends AppCompatActivity {
                         placeAddress.equals("")) {
                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                 } else {
-                    eventRef.setValue(new Event(sportCategory, sportTitle, placeAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId));
+                    Event event = new Event(sportCategory, sportTitle, placeAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId);
+                    eventRef.setValue(event);
                     Toast.makeText(getApplicationContext(), "You successfully updated sport event", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent();
+                    intent.putExtra("event", (Serializable) event);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
@@ -171,27 +177,24 @@ public class UpdateEventActivity extends AppCompatActivity {
 
     private void setUpDate(final Event event) {
         String date = event.getDate();
-        if (date.length() == 8 ){ // 7/9/0000
+        if (date.length() == 8) { // 7/9/0000
             yearString = date.substring(4);
             monthString = date.substring(0, 1);
-            dayString = date.substring(2,3);
-        }
-        else if (date.length() == 9) {//  9/99/9999 or 99/9/9999
+            dayString = date.substring(2, 3);
+        } else if (date.length() == 9) {//  9/99/9999 or 99/9/9999
             if (date.indexOf("/") == 1) {
                 yearString = date.substring(5);
                 monthString = date.substring(0, 1);
                 dayString = date.substring(2, 4);
-            }
-            else {
+            } else {
                 yearString = date.substring(5);
                 monthString = date.substring(0, 2);
                 dayString = date.substring(3, 4);
             }
-        }
-        else {// 99/99/9999
+        } else {// 99/99/9999
             yearString = date.substring(6);
             monthString = date.substring(0, 2);
-            dayString = date.substring(3,5);
+            dayString = date.substring(3, 5);
         }
 
         mSelectDateButton = (Button) findViewById(R.id.select_date_button_update);
