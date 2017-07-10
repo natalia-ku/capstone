@@ -3,6 +3,7 @@ package com.example.user.android.capstone;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -109,12 +110,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     String eventId = "";
+                    String address = "";
+                    String creatorId = "";
+                    String date = "";
+                    String time = "";
+                    String details = "";
+                    String peopleNeeded = "";
+                    String title = "";
+                    String sportCategory = "";
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         eventId = eventSnapshot.getKey();
+                        address = (String) eventSnapshot.child("address").getValue();
+                        creatorId = eventSnapshot.child("creatorId").getValue().toString();
+                        date = (String) eventSnapshot.child("dataTime").getValue();
+                        time = (String) eventSnapshot.child("time").getValue();
+                        details = (String) eventSnapshot.child("details").getValue();
+                        peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
+                        sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
+                        title = (String) eventSnapshot.child("title").getValue();
                     }
+                    Event event = new Event(sportCategory, eventId, title, address, date, time, details, peopleNeeded, creatorId);
                     if (!eventId.equals("")) {
                         Intent intentToGetEventDetailsActivity = new Intent(getApplicationContext(), EventInfoActivity.class);
-                        intentToGetEventDetailsActivity.putExtra("id", eventId);
+                        intentToGetEventDetailsActivity.putExtra("event", (Parcelable) event);
                         startActivity(intentToGetEventDetailsActivity);
                     } else {
                         System.out.println("Error: cannot find event");

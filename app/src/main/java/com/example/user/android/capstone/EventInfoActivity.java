@@ -57,24 +57,17 @@ public class EventInfoActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
-       // eventId = getIntent().getStringExtra("id");
         Event event = getIntent().getParcelableExtra("event");
         eventId = event.getId();
 
 
         updateEventUI(event);
-
-
         updateEventListener(event);
-        // updateEventUI(eventId);
         getEventParticipants(eventId);
-
 
         // Find USER ID FOR SIGNED-IN user:
         if (currentUser != null) {
             findUserIdForSignedInUser(currentUser);
-
         } else {
             mParticipateInEventButton.setVisibility(View.GONE);
             mCancelParticipationButton.setVisibility(View.GONE);
