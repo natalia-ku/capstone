@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,13 +54,11 @@ public class EventInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_info);
-        initializeTextViews();
-
+        initializeTextViewsAndButtons();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         Event event = getIntent().getParcelableExtra("event");
         eventId = event.getId();
-
 
         updateEventUI(event);
         updateEventListener(event);
@@ -76,10 +75,8 @@ public class EventInfoActivity extends AppCompatActivity {
 
         setUpGetDirections();
         setUpCreatorIdEvent();
-        setUpParticipateInEventButton();
-
-        setUpParticipateInEventButton();
-        cancelParticipationEvent();
+        setUpParticipateInEventButton(event);
+        cancelParticipationEvent(event);
 
         listenForChangesInAttendeeList();
 
@@ -88,8 +85,6 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     private void updateEventListener(final Event event) {
-
-        mUpdateEvent = (Button) findViewById(R.id.update_event_button);
         mUpdateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,7 +118,7 @@ public class EventInfoActivity extends AppCompatActivity {
                         userIdsList.add(eventSnapshot.getKey());
                     }
                 }
-                getEventAttendees(userIdsList);
+                displayAttendeesList(userIdsList);
             }
 
             @Override
@@ -134,7 +129,7 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
-    private void getEventAttendees(List<String> userIdsList) {
+    private void displayAttendeesList(List<String> userIdsList) {
         //TO GET USERS, PARTICIPATED IN EVENT:
         final List<User> eventUsers = new ArrayList<>();
         if (eventUsers.size() == 0) {
@@ -189,19 +184,27 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
-    private void setUpParticipateInEventButton() {
+    private void setUpParticipateInEventButton(final Event event) {
         mParticipateInEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addAttendeeToEvent(eventId, userId);
-                addEventToUserEventsList(eventId, userId);
-                mParticipateInEventButton.setVisibility(View.GONE);
-                mCancelParticipationButton.setVisibility(View.VISIBLE);
+                int count = Integer.parseInt(event.getPeopleNeeded());
+                if (count > 1) {
+                    addAttendeeToEvent(eventId, userId);
+                    addEventToUserEventsList(eventId, userId);
+                    mParticipateInEventButton.setVisibility(View.GONE);
+                    mCancelParticipationButton.setVisibility(View.VISIBLE);
+                    updateAttendeesCount(false, event);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Sorry, we don't need more people", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
 
-    private void cancelParticipationEvent() {
+    private void cancelParticipationEvent(final Event event) {
         mCancelParticipationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,8 +212,24 @@ public class EventInfoActivity extends AppCompatActivity {
                 removeEventFromUserEventList(eventId, userId);
                 mParticipateInEventButton.setVisibility(View.VISIBLE);
                 mCancelParticipationButton.setVisibility(View.GONE);
+                updateAttendeesCount(true, event);
+
             }
         });
+    }
+
+    private void updateAttendeesCount (boolean increaseCount, Event event){
+        int count = Integer.parseInt(event.getPeopleNeeded());
+        if (!increaseCount) {
+            mEventsRef.child(eventId).child("peopleNeeded").setValue(count-1);
+            event.setPeopleNeeded(String.valueOf(count-1));
+            updateEventUI(event);
+        }
+        else{
+            mEventsRef.child(eventId).child("peopleNeeded").setValue(count+1);
+            event.setPeopleNeeded(String.valueOf(count+1));
+            updateEventUI(event);
+        }
     }
 
 
@@ -268,7 +287,8 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
-    private void initializeTextViews() {
+    private void initializeTextViewsAndButtons() {
+        mUpdateEvent = (Button) findViewById(R.id.update_event_button);
         mEventInfoTitle = (TextView) findViewById(R.id.event_title_textview);
         mEventInfoCategory = (TextView) findViewById(R.id.event_category_textview);
         mEventInfoAddress = (TextView) findViewById(R.id.event_address_textview);

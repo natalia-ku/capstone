@@ -27,7 +27,6 @@ public class Event  implements Parcelable, Serializable{
     private String title;
     private  String address;
     private  String date;
-
     private  String time;
     private  String details;
     private  String peopleNeeded;
@@ -64,6 +63,10 @@ public class Event  implements Parcelable, Serializable{
 
     public String getDetails() {
         return details;
+    }
+
+    public void setPeopleNeeded(String peopleNeeded) {
+        this.peopleNeeded = peopleNeeded;
     }
 
     public String getPeopleNeeded() {
@@ -113,7 +116,7 @@ public class Event  implements Parcelable, Serializable{
 
 
 
-    // PARCELABLE:
+    // IMPLEMENT PARCELABLE INTERFACE:
     @Override
     public int describeContents() {
         return 0;

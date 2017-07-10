@@ -42,7 +42,7 @@ public class UpdateEventActivity extends AppCompatActivity {
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
-    public String placeAddress;
+    private String placeAddress;
 
     EditText mTitleUpdateEvent;
     EditText mDetailsUpdateEvent;
@@ -53,11 +53,11 @@ public class UpdateEventActivity extends AppCompatActivity {
     TextView showDateTextView;
     static TextView showTimeTextView;
 
-    public String dayString;
-    public String yearString;
-    public String monthString;
-    public static String hoursString;
-    public static String minutesString;
+    private String dayString;
+    private String yearString;
+    private String monthString;
+    private static String hoursString;
+    private static String minutesString;
 
     private String sportCategory;
     private String peopleNeeded;
@@ -112,7 +112,7 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteEventListener(final Event event){
+    private void deleteEventListener(final Event event) {
         mDeleteEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -228,7 +228,7 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeButtonsAndTextView(){
+    private void initializeButtonsAndTextView() {
         showDateTextView = (TextView) findViewById(R.id.show_date_update);
         mUpdateEventButton = (Button) findViewById(R.id.update_event_button);
         mDeleteEventButton = (Button) findViewById(R.id.delete_event_button);
@@ -274,7 +274,7 @@ public class UpdateEventActivity extends AppCompatActivity {
             if (hourOfDay < 10) {
                 hoursString = "0" + hoursString;
             }
-            showTimeTextView.setText(hoursString +" : "+ minutesString);
+            showTimeTextView.setText(hoursString + " : " + minutesString);
         }
     }
 
