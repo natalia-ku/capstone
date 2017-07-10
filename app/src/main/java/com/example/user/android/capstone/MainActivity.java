@@ -163,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
             statusText.append("category: " + filterByCategory);
             mFilterStatusTextView.setText(statusText);
         }
-
-
         eventsListFromDatabase = new ArrayList<>();
         mEventsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -181,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
                     String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
                     Event e1 = new Event(sportCategory, id, title, address, date, time, details, peopleNeeded, creatorId);
                     eventsListFromDatabase.add(e1);
-
                 }
                 if (onlyFutureEventsFilter) {
                     Iterator<Event> iterEvent = eventsListFromDatabase.iterator();
@@ -205,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+                System.out.println("EVENT LIST FORM DATABASE SIZE " + eventsListFromDatabase.size());
                 EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
                 recyclerView.setAdapter(myAdapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

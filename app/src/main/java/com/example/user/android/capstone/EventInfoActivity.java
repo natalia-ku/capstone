@@ -1,7 +1,12 @@
 package com.example.user.android.capstone;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.provider.CalendarContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +27,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,6 +50,7 @@ public class EventInfoActivity extends AppCompatActivity {
     Button mParticipateInEventButton;
     Button mCancelParticipationButton;
     Button mUpdateEvent;
+    Button mAddToCalendarButton;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
@@ -72,16 +82,39 @@ public class EventInfoActivity extends AppCompatActivity {
             mCancelParticipationButton.setVisibility(View.GONE);
         }
 
-
         setUpGetDirections();
         setUpCreatorIdEvent();
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
 
         listenForChangesInAttendeeList();
-
+        addToCalendarListener(event);
 
     } // end of onCreate method
+
+
+    private void addToCalendarListener(final Event event) {
+        mAddToCalendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date eventDate = null;
+                try {
+                    eventDate = formatter.parse(event.getDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Intent calIntent = new Intent(Intent.ACTION_INSERT);
+                calIntent.setType("vnd.android.cursor.item/event");
+                calIntent.putExtra(CalendarContract.Events.TITLE, event.getTitle());
+                calIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.getAddress());
+                calIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.getDetails());
+                calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDate);
+                startActivity(calIntent);
+            }
+        });
+
+    }
 
 
     private void updateEventListener(final Event event) {
@@ -288,6 +321,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     private void initializeTextViewsAndButtons() {
+        mAddToCalendarButton = (Button) findViewById(R.id.add_to_calendar_button);
         mUpdateEvent = (Button) findViewById(R.id.update_event_button);
         mEventInfoTitle = (TextView) findViewById(R.id.event_title_textview);
         mEventInfoCategory = (TextView) findViewById(R.id.event_category_textview);
