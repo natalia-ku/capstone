@@ -63,11 +63,11 @@ public class EventInfoActivity extends AppCompatActivity {
         Event event = getIntent().getParcelableExtra("event");
         eventId = event.getId();
 
-        
+
         getEventInfo(event);
 
 
-        updateEventListener();
+        updateEventListener(event);
         // getEventInfo(eventId);
         getEventParticipants(eventId);
 
@@ -75,12 +75,7 @@ public class EventInfoActivity extends AppCompatActivity {
         // Find USER ID FOR SIGNED-IN user:
         if (currentUser != null) {
             findUserIdForSignedInUser(currentUser);
-            String currentUserId = userId;
-            System.out.println("USER ID " + currentUserId);
-            System.out.println("CREATOR ID " + mEventInfoCreatorId.getText());
-            if (!mEventInfoCreatorId.getText().toString().equals(currentUserId)) {
-                mUpdateEvent.setVisibility(View.GONE);
-            }
+
         } else {
             mParticipateInEventButton.setVisibility(View.GONE);
             mCancelParticipationButton.setVisibility(View.GONE);
@@ -100,24 +95,12 @@ public class EventInfoActivity extends AppCompatActivity {
     } // end of onCreate method
 
 
-    private void updateEventListener() {
+    private void updateEventListener(final Event event) {
 
         mUpdateEvent = (Button) findViewById(R.id.update_event_button);
         mUpdateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String address = (String) mEventInfoAddress.getText();
-                String date = (String) mEventInfoDate.getText();
-                String time = (String) mEventInfoTime.getText();
-                String creatorId = (String) mEventInfoCreatorId.getText();
-                String details = (String) mEventInfoDetails.getText();
-                String peopleNeeded = (String) mEventInfoPeopleNeeded.getText();
-                String title = (String) mEventInfoTitle.getText();
-                String sportCategory = (String) mEventInfoCategory.getText();
-
-                Event event = new Event(sportCategory, title, address, date, time, details, peopleNeeded, creatorId);
-
                 Intent intentToUpdateEvent = new Intent(getApplicationContext(), UpdateEventActivity.class);
                 intentToUpdateEvent.putExtra("event", (Serializable) event);
                 startActivity(intentToUpdateEvent);
@@ -238,6 +221,9 @@ public class EventInfoActivity extends AppCompatActivity {
                         userId = eventSnapshot.getKey();
                     }
                     checkIfUserAlreadyAttendee();
+                    if (!mEventInfoCreatorId.getText().toString().equals(userId)) {
+                        mUpdateEvent.setVisibility(View.GONE);
+                    }
                 }
             }
 
@@ -341,42 +327,6 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
-
-//    private void getEventInfo(String eventId) {
-//        Query eventDetailsQuery = mEventsRef.orderByKey().equalTo(eventId);
-//        eventDetailsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-//                        String address = (String) eventSnapshot.child("address").getValue();
-//                        String date = (String) eventSnapshot.child("dataTime").getValue();
-//                        String time = (String) eventSnapshot.child("time").getValue();
-//                        String creatorId = eventSnapshot.child("creatorId").getValue().toString();
-//                        String details = (String) eventSnapshot.child("details").getValue();
-//                        String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
-//                        String title = (String) eventSnapshot.child("title").getValue();
-//                        String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
-//
-//                        Event e1 = new Event(sportCategory, title, address, date, time, details, peopleNeeded, creatorId);
-//                        mEventInfoCategory.setText(e1.getSportCategory());
-//                        mEventInfoTitle.setText(e1.getTitle());
-//                        mEventInfoAddress.setText(e1.getAddress());
-//                        mEventInfoDate.setText(e1.getDataTime());
-//                        mEventInfoTime.setText(e1.getTime());
-//                        mEventInfoDetails.setText(e1.getDetails());
-//                        mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
-//                        mEventInfoCreatorId.setText(e1.getCreatorId());
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     private void getEventInfo(Event e1) {
         mEventInfoCategory.setText(e1.getSportCategory());

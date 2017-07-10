@@ -217,8 +217,11 @@ public class CreateNewEventActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             hoursString = String.valueOf(hourOfDay);
             minutesString = String.valueOf(minute);
-            if (minute == 0){
-                minutesString = "00";
+            if (minute < 10) {
+                minutesString = "0" + minutesString;
+            }
+            if (hourOfDay < 10){
+                hoursString = "0" + hoursString;
             }
         }
     }

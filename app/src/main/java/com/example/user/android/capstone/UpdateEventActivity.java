@@ -71,15 +71,16 @@ public class UpdateEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_event);
 
         final Event event = (Event) getIntent().getSerializableExtra("event");
+        displayDate(event);
         updatEventListener(event);
         showEventDataInEditViews();
         setUpSpinnerForCategory();
         setUpSpinnerForPeopleCount();
         getAddress(event);
         setUpDate(event);
-        setUpTime();
+        setUpTime(event);
         getEventData(event);
-        displayDate(event);
+
     }
 
     private void updatEventListener(final Event event) {
@@ -169,6 +170,30 @@ public class UpdateEventActivity extends AppCompatActivity {
     }
 
     private void setUpDate(final Event event) {
+        String date = event.getDate();
+        if (date.length() == 8 ){ // 7/9/0000
+            yearString = date.substring(4);
+            monthString = date.substring(0, 1);
+            dayString = date.substring(2,3);
+        }
+        else if (date.length() == 9) {//  9/99/9999 or 99/9/9999
+            if (date.indexOf("/") == 1) {
+                yearString = date.substring(5);
+                monthString = date.substring(0, 1);
+                dayString = date.substring(2, 4);
+            }
+            else {
+                yearString = date.substring(5);
+                monthString = date.substring(0, 2);
+                dayString = date.substring(3, 4);
+            }
+        }
+        else {// 99/99/9999
+            yearString = date.substring(6);
+            monthString = date.substring(0, 2);
+            dayString = date.substring(3,5);
+        }
+
         mSelectDateButton = (Button) findViewById(R.id.select_date_button_update);
         mSelectDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,8 +208,12 @@ public class UpdateEventActivity extends AppCompatActivity {
                         yearString = String.valueOf(i);
                         monthString = String.valueOf(i1);
                         dayString = String.valueOf(i2);
-                        showDateTextView = (TextView) findViewById(R.id.show_date);
-                        showDateTextView.setText(monthString + "/" + dayString + "/" + yearString);
+                        showDateTextView = (TextView) findViewById(R.id.show_date_update);
+                        if (monthString == null) {
+                            showDateTextView.setText("Can't set date");
+                        } else {
+                            showDateTextView.setText(monthString + "/" + dayString + "/" + yearString);
+                        }
                     }
                 },
                         year, month, day);
@@ -194,12 +223,18 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpTime() {
+    private void setUpTime(final Event event) {
+        String time = event.getTime();
+        hoursString = time.substring(0, 2);
+        minutesString = time.substring(5);
         selectTimeButton = (Button) findViewById(R.id.show_time_picker_button_update);
         selectTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragment newFragment = new TimePickerFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("event", event);
+                newFragment.setArguments(bundle);
                 newFragment.show(getFragmentManager(), "timePicker");
             }
         });
@@ -207,11 +242,22 @@ public class UpdateEventActivity extends AppCompatActivity {
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Event event = (Event) getArguments().getSerializable("event");
             final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
+            int hour;
+            int minute;
+            System.out.println("EVENT TIME: " + event.getTime().substring(0, 2));
+            System.out.println("EVENT TIME: " + event.getTime().substring(5));
+            if (event.getTime() == null) {
+                hour = 10;
+                minute = 30;
+            } else {
+                hour = Integer.parseInt(event.getTime().substring(0, 2));
+                minute = Integer.parseInt(event.getTime().substring(5));
+            }
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
@@ -219,8 +265,11 @@ public class UpdateEventActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             hoursString = String.valueOf(hourOfDay);
             minutesString = String.valueOf(minute);
-            if (minute == 0){
-                minutesString = "00";
+            if (minute < 10) {
+                minutesString = "0" + minutesString;
+            }
+            if (hourOfDay < 10) {
+                hoursString = "0" + hoursString;
             }
         }
     }
@@ -262,7 +311,6 @@ public class UpdateEventActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 }
