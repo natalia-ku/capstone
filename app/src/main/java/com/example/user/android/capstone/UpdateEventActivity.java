@@ -51,7 +51,7 @@ public class UpdateEventActivity extends AppCompatActivity {
     Button mSelectDateButton;
     Button selectTimeButton;
     TextView showDateTextView;
-
+    static TextView showTimeTextView;
 
     public String dayString;
     public String yearString;
@@ -71,33 +71,30 @@ public class UpdateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_event);
-
+        initializeButtonsAndTextView();
         final Event event = (Event) getIntent().getSerializableExtra("event");
-        displayDate(event);
+        displayDateAndTime(event);
         updatEventListener(event);
-        showEventDataInEditViews();
         setUpSpinnerForCategory();
         setUpSpinnerForPeopleCount();
         getAddress(event);
         setUpDate(event);
         setUpTime(event);
         getEventData(event);
-
+        deleteEventListener(event);
     }
 
+
     private void updatEventListener(final Event event) {
-        mUpdateEventButton = (Button) findViewById(R.id.update_event_button);
         mUpdateEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatabaseReference eventRef = mEventsRef.child(event.getId());
-
                 String sportTitle = mTitleUpdateEvent.getText().toString();
                 String sportDetails = mDetailsUpdateEvent.getText().toString();
                 String sportDate = monthString + "/" + dayString + "/" + yearString;
                 String sportTime = hoursString + " : " + minutesString;
                 String sportCreatorId = event.getCreatorId();
-
                 if (sportTitle.equals("") ||
                         sportDetails.equals("") ||
                         placeAddress.equals("")) {
@@ -115,50 +112,33 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
-
-    private void showEventDataInEditViews() {
-        showDateTextView = (TextView) findViewById(R.id.show_date_update);
-        spinnerPeopleNeeded = (Spinner) findViewById(R.id.people_needed_spinner_update);
-        spinner = (Spinner) findViewById(R.id.sport_types_spinner_update);
-        mTitleUpdateEvent = (EditText) findViewById(R.id.et_sport_title_update);
-        mDetailsUpdateEvent = (EditText) findViewById(R.id.et_details_update);
+    private void deleteEventListener(final Event event){
+        mDeleteEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEventsRef.child(event.getId()).removeValue();
+            }
+        });
     }
 
-    private void displayDate(Event event) {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        Date eventDate = null;
-        try {
-            eventDate = formatter.parse(event.getDate());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        calendar = Calendar.getInstance();
-        calendar.setTime(eventDate);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        showDateTextView = (TextView) findViewById(R.id.show_date_update);
-        showDateTextView.setText(month + "/" + day + "/" + year);
+
+    private void displayDateAndTime(Event event) {
+        showDateTextView.setText(event.getDate());
+        showTimeTextView.setText(event.getTime());
     }
 
 
     private void getEventData(Event event) {
-        mTitleUpdateEvent = (EditText) findViewById(R.id.et_sport_title_update);
-        mDetailsUpdateEvent = (EditText) findViewById(R.id.et_details_update);
-
         mTitleUpdateEvent.setText(event.getTitle());
         mDetailsUpdateEvent.setText(event.getDetails());
         int position = adapter.getPosition(event.getSportCategory());
         spinner.setSelection(position);
         int positionPeople = adapterPeople.getPosition(event.getPeopleNeeded());
         spinnerPeopleNeeded.setSelection(positionPeople);
-
-
     }
 
     private void getAddress(Event event) {
         placeAddress = event.getAddress();
-
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_update);
         autocompleteFragment.setText(placeAddress);
@@ -175,8 +155,18 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
+
     private void setUpDate(final Event event) {
-        String date = event.getDate();
+        final String date = event.getDate();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date eventDate = null;
+        try {
+            eventDate = formatter.parse(event.getDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar = Calendar.getInstance();
+        calendar.setTime(eventDate);
         if (date.length() == 8) { // 7/9/0000
             yearString = date.substring(4);
             monthString = date.substring(0, 1);
@@ -196,22 +186,18 @@ public class UpdateEventActivity extends AppCompatActivity {
             monthString = date.substring(0, 2);
             dayString = date.substring(3, 5);
         }
-
-        mSelectDateButton = (Button) findViewById(R.id.select_date_button_update);
         mSelectDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
-
                 DatePickerDialog picker = new DatePickerDialog(UpdateEventActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         yearString = String.valueOf(i);
-                        monthString = String.valueOf(i1);
+                        monthString = String.valueOf(i1 + 1);
                         dayString = String.valueOf(i2);
-                        showDateTextView = (TextView) findViewById(R.id.show_date_update);
                         if (monthString == null) {
                             showDateTextView.setText("Can't set date");
                         } else {
@@ -230,7 +216,6 @@ public class UpdateEventActivity extends AppCompatActivity {
         String time = event.getTime();
         hoursString = time.substring(0, 2);
         minutesString = time.substring(5);
-        selectTimeButton = (Button) findViewById(R.id.show_time_picker_button_update);
         selectTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -243,6 +228,23 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
+    private void initializeButtonsAndTextView(){
+        showDateTextView = (TextView) findViewById(R.id.show_date_update);
+        mUpdateEventButton = (Button) findViewById(R.id.update_event_button);
+        mDeleteEventButton = (Button) findViewById(R.id.delete_event_button);
+        showDateTextView = (TextView) findViewById(R.id.show_date_update);
+        spinnerPeopleNeeded = (Spinner) findViewById(R.id.people_needed_spinner_update);
+        spinner = (Spinner) findViewById(R.id.sport_types_spinner_update);
+        mTitleUpdateEvent = (EditText) findViewById(R.id.et_sport_title_update);
+        mDetailsUpdateEvent = (EditText) findViewById(R.id.et_details_update);
+        mSelectDateButton = (Button) findViewById(R.id.select_date_button_update);
+        mTitleUpdateEvent = (EditText) findViewById(R.id.et_sport_title_update);
+        mDetailsUpdateEvent = (EditText) findViewById(R.id.et_details_update);
+        selectTimeButton = (Button) findViewById(R.id.show_time_picker_button_update);
+        showDateTextView = (TextView) findViewById(R.id.show_date_update);
+        showTimeTextView = (TextView) findViewById(R.id.show_time_update);
+    }
+
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
@@ -252,8 +254,6 @@ public class UpdateEventActivity extends AppCompatActivity {
             final Calendar c = Calendar.getInstance();
             int hour;
             int minute;
-            System.out.println("EVENT TIME: " + event.getTime().substring(0, 2));
-            System.out.println("EVENT TIME: " + event.getTime().substring(5));
             if (event.getTime() == null) {
                 hour = 10;
                 minute = 30;
@@ -274,6 +274,7 @@ public class UpdateEventActivity extends AppCompatActivity {
             if (hourOfDay < 10) {
                 hoursString = "0" + hoursString;
             }
+            showTimeTextView.setText(hoursString +" : "+ minutesString);
         }
     }
 

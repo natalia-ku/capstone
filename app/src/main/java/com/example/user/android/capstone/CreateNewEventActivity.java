@@ -49,7 +49,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private EditText mSportDetailsEdit;
     private Button mCreateNewEventButton;
     private TextView showDateTextView;
-
     private Button selectDateButton;
     private Button selectTimeButton;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -63,7 +62,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
     public static String minutesString;
 
     public String placeAddress;
-
     private String sportCategory;
     private String peopleNeeded;
 
@@ -75,42 +73,12 @@ public class CreateNewEventActivity extends AppCompatActivity {
 
         setUpSpinnerForCategory();
         setUpSpinnerForPeopleCount();
-
         setUpTime();
-
         setUpDate();
+        initializeTextViewAndButtons();
 
-        mSportTitleEdit = (EditText) findViewById(R.id.et_sport_title);
-        mSportDetailsEdit = (EditText) findViewById(R.id.et_details);
-        mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
-
-        // set up ADDRESS using Place autocomplete fragment:
-//        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-//                       getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-//        placeAddress = Event.getAddressFromForm(autocompleteFragment);
         getAddress();
         createNewEvent();
-    }
-
-    private void clearForm() {
-        mSportTitleEdit.setText("");
-        mSportDetailsEdit.setText("");
-    }
-
-    private void getAddress() {
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                placeAddress = place.getAddress().toString();
-            }
-
-            @Override
-            public void onError(Status status) {
-                System.out.println("An error occurred in get address from autocomplete form: " + status);
-            }
-        });
     }
 
     private void createNewEvent() {
@@ -162,8 +130,36 @@ public class CreateNewEventActivity extends AppCompatActivity {
         });
     }
 
+    private void initializeTextViewAndButtons() {
+        mSportTitleEdit = (EditText) findViewById(R.id.et_sport_title);
+        mSportDetailsEdit = (EditText) findViewById(R.id.et_details);
+        mCreateNewEventButton = (Button) findViewById(R.id.add_new_event_button);
+    }
 
-    private  void setUpDate() {
+    private void clearForm() {
+        mSportTitleEdit.setText("");
+        mSportDetailsEdit.setText("");
+    }
+
+    private void getAddress() {
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                placeAddress = place.getAddress().toString();
+            }
+            @Override
+            public void onError(Status status) {
+                System.out.println("An error occurred in get address from autocomplete form: " + status);
+            }
+        });
+    }
+
+
+
+
+    private void setUpDate() {
         selectDateButton = (Button) findViewById(R.id.select_date_button);
         selectDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +172,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         yearString = String.valueOf(i);
-                        monthString = String.valueOf(i1);
+                        monthString = String.valueOf(i1 + 1) ;
                         dayString = String.valueOf(i2);
                         showDateTextView = (TextView) findViewById(R.id.show_date);
                         showDateTextView.setText(monthString + "/" + dayString + "/" + yearString);
@@ -220,13 +216,13 @@ public class CreateNewEventActivity extends AppCompatActivity {
             if (minute < 10) {
                 minutesString = "0" + minutesString;
             }
-            if (hourOfDay < 10){
+            if (hourOfDay < 10) {
                 hoursString = "0" + hoursString;
             }
         }
     }
 
-    private  void setUpSpinnerForCategory() {
+    private void setUpSpinnerForCategory() {
         Spinner spinner = (Spinner) findViewById(R.id.sport_types_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sport_types_array, android.R.layout.simple_spinner_item);
