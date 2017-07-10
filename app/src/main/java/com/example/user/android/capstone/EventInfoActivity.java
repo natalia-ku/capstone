@@ -59,18 +59,33 @@ public class EventInfoActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        eventId = getIntent().getStringExtra("id");
+       // eventId = getIntent().getStringExtra("id");
+        Event event = getIntent().getParcelableExtra("event");
+        eventId = event.getId();
+
+        
+        getEventInfo(event);
+
+
+        updateEventListener();
+        // getEventInfo(eventId);
+        getEventParticipants(eventId);
+
 
         // Find USER ID FOR SIGNED-IN user:
         if (currentUser != null) {
             findUserIdForSignedInUser(currentUser);
+            String currentUserId = userId;
+            System.out.println("USER ID " + currentUserId);
+            System.out.println("CREATOR ID " + mEventInfoCreatorId.getText());
+            if (!mEventInfoCreatorId.getText().toString().equals(currentUserId)) {
+                mUpdateEvent.setVisibility(View.GONE);
+            }
         } else {
             mParticipateInEventButton.setVisibility(View.GONE);
             mCancelParticipationButton.setVisibility(View.GONE);
         }
 
-        getEventInfo(eventId);
-        getEventParticipants(eventId);
 
         setUpGetDirections();
         setUpCreatorIdEvent();
@@ -80,6 +95,12 @@ public class EventInfoActivity extends AppCompatActivity {
         cancelParticipationEvent();
 
         listenForChangesInAttendeeList();
+
+
+    } // end of onCreate method
+
+
+    private void updateEventListener() {
 
         mUpdateEvent = (Button) findViewById(R.id.update_event_button);
         mUpdateEvent.setOnClickListener(new View.OnClickListener() {
@@ -102,9 +123,7 @@ public class EventInfoActivity extends AppCompatActivity {
                 startActivity(intentToUpdateEvent);
             }
         });
-
-    } // end of onCreate method
-
+    }
 
     private void getEventParticipants(String currentEventId) {
         // GET list of participants IDs:
@@ -251,6 +270,7 @@ public class EventInfoActivity extends AppCompatActivity {
                     mParticipateInEventButton.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -311,6 +331,7 @@ public class EventInfoActivity extends AppCompatActivity {
                             }
                         }
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -321,39 +342,51 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
-    private void getEventInfo(String eventId) {
-        Query eventDetailsQuery = mEventsRef.orderByKey().equalTo(eventId);
-        eventDetailsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                        String address = (String) eventSnapshot.child("address").getValue();
-                        String date = (String) eventSnapshot.child("dataTime").getValue();
-                        String time = (String) eventSnapshot.child("time").getValue();
-                        String creatorId = eventSnapshot.child("creatorId").getValue().toString();
-                        String details = (String) eventSnapshot.child("details").getValue();
-                        String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
-                        String title = (String) eventSnapshot.child("title").getValue();
-                        String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
+//    private void getEventInfo(String eventId) {
+//        Query eventDetailsQuery = mEventsRef.orderByKey().equalTo(eventId);
+//        eventDetailsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+//                        String address = (String) eventSnapshot.child("address").getValue();
+//                        String date = (String) eventSnapshot.child("dataTime").getValue();
+//                        String time = (String) eventSnapshot.child("time").getValue();
+//                        String creatorId = eventSnapshot.child("creatorId").getValue().toString();
+//                        String details = (String) eventSnapshot.child("details").getValue();
+//                        String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
+//                        String title = (String) eventSnapshot.child("title").getValue();
+//                        String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
+//
+//                        Event e1 = new Event(sportCategory, title, address, date, time, details, peopleNeeded, creatorId);
+//                        mEventInfoCategory.setText(e1.getSportCategory());
+//                        mEventInfoTitle.setText(e1.getTitle());
+//                        mEventInfoAddress.setText(e1.getAddress());
+//                        mEventInfoDate.setText(e1.getDataTime());
+//                        mEventInfoTime.setText(e1.getTime());
+//                        mEventInfoDetails.setText(e1.getDetails());
+//                        mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
+//                        mEventInfoCreatorId.setText(e1.getCreatorId());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-                        Event e1 = new Event(sportCategory, title, address, date, time, details, peopleNeeded, creatorId);
-                        mEventInfoCategory.setText(e1.getSportCategory());
-                        mEventInfoTitle.setText(e1.getTitle());
-                        mEventInfoAddress.setText(e1.getAddress());
-                        mEventInfoDate.setText(e1.getDataTime());
-                        mEventInfoTime.setText(e1.getTime());
-                        mEventInfoDetails.setText(e1.getDetails());
-                        mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
-                        mEventInfoCreatorId.setText(e1.getCreatorId());
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private void getEventInfo(Event e1) {
+        mEventInfoCategory.setText(e1.getSportCategory());
+        mEventInfoTitle.setText(e1.getTitle());
+        mEventInfoAddress.setText(e1.getAddress());
+        mEventInfoDate.setText(e1.getDataTime());
+        mEventInfoTime.setText(e1.getTime());
+        mEventInfoDetails.setText(e1.getDetails());
+        mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
+        mEventInfoCreatorId.setText(e1.getCreatorId());
     }
 
 

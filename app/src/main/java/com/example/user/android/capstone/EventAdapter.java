@@ -2,6 +2,7 @@ package com.example.user.android.capstone;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             public void onClick(View view) {
                 Class destinationClass = EventInfoActivity.class;
                 Intent intentToStartEventInfoActivity = new Intent(context, destinationClass);
-                intentToStartEventInfoActivity.putExtra("id", events.get(position).getId());
+//                intentToStartEventInfoActivity.putExtra("id", events.get(position).getId());
+                intentToStartEventInfoActivity.putExtra("event", (Parcelable) events.get(position));
                 context.startActivity(intentToStartEventInfoActivity);
             }
         });
