@@ -60,13 +60,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/future_events_button"
-        android:text="Only future events" />
+        android:id="@+id/all_events_button"
+        android:text="All events including past" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/all_events_button"
-        android:text="All events" />
+        android:id="@+id/future_events_button"
+        android:text="Future events" />
 
     <TextView
         android:layout_width="wrap_content"

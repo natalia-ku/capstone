@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     Button mUserProfileButton;
     Button mSignInUpButton;
     Button mSignOutMainButton;
-    Button mFutureEventsButton;
-    Button mAllEventsButton;
+    Button mAllEventsNewButton;
+    Button mFutureEventsNewButton;
     Button mEventsOnMapButton;
 
     TextView mFilterStatusTextView;
@@ -60,93 +60,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAllEventsButton = (Button) findViewById(R.id.all_events_button);
-        mAllEventsButton.setVisibility(View.GONE);
-
-        mFilterStatusTextView = (TextView) findViewById(R.id.filter_status);
-        mFilterStatusTextView.setText("Select filter");
-        filterEventCategory = false;
-        filterFutureEvents = false;
-        
-        spinner = (Spinner) findViewById(R.id.sport_types_spinner);
-
-        mFutureEventsButton = (Button) findViewById(R.id.future_events_button);
-        mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
-        mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
-
-        mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
-        mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
-        mEventsOnMapButton = (Button) findViewById(R.id.events_map_button);
+        initializeTextViewsAndButtons();
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-
-        mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                Toast.makeText(MainActivity.this, "You successfully signed out",
-                        Toast.LENGTH_LONG).show();
-                updateUI(null);
-            }
-        });
-
-        mUserProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Class destinationClass = UserProfileActivity.class;
-                Intent intentToUserProfileActivity = new Intent(getApplicationContext(), destinationClass);
-                startActivity(intentToUserProfileActivity);
-            }
-        });
-
-        mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Class destinationClass = CreateNewEventActivity.class;
-                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
-                startActivity(intentToStartCreateNewEventActivity);
-            }
-        });
-
-        mSignInUpButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Class destinationClass = SignUpActivity.class;
-                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
-                startActivity(intentToStartCreateNewEventActivity);
-            }
-        });
-
-
-        mEventsOnMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putParcelableArrayListExtra("eventList", (ArrayList<? extends Parcelable>) eventsListFromDatabase);
-                startActivity(intent);
-            }
-        });
-
-        // TO DISPLAY ALL EVENTS:
-        displayListOfEvents(false, false);
-        // SET UP future events filter and back to all events filter:
+        setOnClickListeners();
+        // TO DISPLAY ONLY FUTURE EVENTS:
+        displayListOfEvents(true, false);
         futureEventsFilter();
         setUpSpinner();
-
     } // end onCreate
-
-    private void updateUI(FirebaseUser currentUser) {
-        if (currentUser == null) {
-            mSignInUpButton.setVisibility(View.VISIBLE);
-            mSignOutMainButton.setVisibility(View.GONE);
-            mUserProfileButton.setVisibility(View.GONE);
-            mCreateNewEventButton.setVisibility(View.GONE);
-        } else {
-            mSignInUpButton.setVisibility(View.GONE);
-            mSignOutMainButton.setVisibility(View.VISIBLE);
-            mUserProfileButton.setVisibility(View.VISIBLE);
-        }
-    }
 
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter) {
@@ -231,25 +155,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void futureEventsFilter() {
-        mFutureEventsButton.setOnClickListener(new View.OnClickListener() {
+        mAllEventsNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterFutureEvents = true;
+                filterFutureEvents = false;
+                System.out.println("Filter future events:" + filterFutureEvents );
+                System.out.println("Filter  event category:" + filterEventCategory );
                 displayListOfEvents(filterFutureEvents, filterEventCategory);
-                mFutureEventsButton.setVisibility(View.GONE);
-                mAllEventsButton.setVisibility(View.VISIBLE);
+                mAllEventsNewButton.setVisibility(View.GONE);
+                mFutureEventsNewButton.setVisibility(View.VISIBLE);
                 spinner.setSelection(0);
             }
         });
-        // Back to all events button:
-        mAllEventsButton.setOnClickListener(new View.OnClickListener() {
+        // Back to future events button:
+        mFutureEventsNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterEventCategory = false;
-                filterFutureEvents = false;
+                filterFutureEvents = true;
+                System.out.println("Filter future events:" + filterFutureEvents );
+                System.out.println("Filter  event category:" + filterEventCategory );
+                System.out.println("Event category " + filterByCategory );
                 displayListOfEvents(filterFutureEvents, filterEventCategory);
-                mFutureEventsButton.setVisibility(View.VISIBLE);
-                mAllEventsButton.setVisibility(View.GONE);
+                mAllEventsNewButton.setVisibility(View.VISIBLE);
+                mFutureEventsNewButton.setVisibility(View.GONE);
                 spinner.setSelection(0);
             }
         });
@@ -266,13 +194,94 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 filterByCategory = (String) adapterView.getItemAtPosition(i);
                 filterEventCategory = true;
+                System.out.println("FILTER FUTURE EVENTS:" + filterFutureEvents);
                 displayListOfEvents(filterFutureEvents, filterEventCategory);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
 
+    }
+
+    private void setOnClickListeners() {
+
+        mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.signOut();
+                Toast.makeText(MainActivity.this, "You successfully signed out",
+                        Toast.LENGTH_LONG).show();
+                updateUI(null);
+            }
+        });
+
+        mUserProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Class destinationClass = UserProfileActivity.class;
+                Intent intentToUserProfileActivity = new Intent(getApplicationContext(), destinationClass);
+                startActivity(intentToUserProfileActivity);
+            }
+        });
+
+        mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Class destinationClass = CreateNewEventActivity.class;
+                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
+                startActivity(intentToStartCreateNewEventActivity);
+            }
+        });
+
+        mSignInUpButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Class destinationClass = SignUpActivity.class;
+                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
+                startActivity(intentToStartCreateNewEventActivity);
+            }
+        });
+
+
+        mEventsOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putParcelableArrayListExtra("eventList", (ArrayList<? extends Parcelable>) eventsListFromDatabase);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    private void initializeTextViewsAndButtons() {
+        mAllEventsNewButton = (Button) findViewById(R.id.all_events_button);
+        mFutureEventsNewButton = (Button) findViewById(R.id.future_events_button);
+        mFutureEventsNewButton.setVisibility(View.GONE);
+        mFilterStatusTextView = (TextView) findViewById(R.id.filter_status);
+        mFilterStatusTextView.setText("Select filter");
+        filterEventCategory = false;
+        filterFutureEvents = true;
+        spinner = (Spinner) findViewById(R.id.sport_types_spinner);
+
+        mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
+        mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
+        mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
+        mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
+        mEventsOnMapButton = (Button) findViewById(R.id.events_map_button);
+    }
+
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser == null) {
+            mSignInUpButton.setVisibility(View.VISIBLE);
+            mSignOutMainButton.setVisibility(View.GONE);
+            mUserProfileButton.setVisibility(View.GONE);
+            mCreateNewEventButton.setVisibility(View.GONE);
+        } else {
+            mSignInUpButton.setVisibility(View.GONE);
+            mSignOutMainButton.setVisibility(View.VISIBLE);
+            mUserProfileButton.setVisibility(View.VISIBLE);
+        }
     }
 }
