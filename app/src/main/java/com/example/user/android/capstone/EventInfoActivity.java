@@ -86,35 +86,10 @@ public class EventInfoActivity extends AppCompatActivity {
         setUpCreatorIdEvent();
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
-
         listenForChangesInAttendeeList();
         addToCalendarListener(event);
 
     } // end of onCreate method
-
-
-    private void addToCalendarListener(final Event event) {
-        mAddToCalendarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-                Date eventDate = null;
-                try {
-                    eventDate = formatter.parse(event.getDate());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                Intent calIntent = new Intent(Intent.ACTION_INSERT);
-                calIntent.setType("vnd.android.cursor.item/event");
-                calIntent.putExtra(CalendarContract.Events.TITLE, event.getTitle());
-                calIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.getAddress());
-                calIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.getDetails());
-                calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDate);
-                startActivity(calIntent);
-            }
-        });
-
-    }
 
 
     private void updateEventListener(final Event event) {
@@ -131,8 +106,8 @@ public class EventInfoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE){
-            if (resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 Event event = (Event) data.getSerializableExtra("event");
                 updateEventUI(event);
             }
@@ -228,8 +203,7 @@ public class EventInfoActivity extends AppCompatActivity {
                     mParticipateInEventButton.setVisibility(View.GONE);
                     mCancelParticipationButton.setVisibility(View.VISIBLE);
                     updateAttendeesCount(false, event);
-                }
-                else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Sorry, we don't need more people", Toast.LENGTH_LONG).show();
                 }
 
@@ -251,16 +225,15 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void updateAttendeesCount (boolean increaseCount, Event event){
+    private void updateAttendeesCount(boolean increaseCount, Event event) {
         int count = Integer.parseInt(event.getPeopleNeeded());
         if (!increaseCount) {
-            mEventsRef.child(eventId).child("peopleNeeded").setValue(count-1);
-            event.setPeopleNeeded(String.valueOf(count-1));
+            mEventsRef.child(eventId).child("peopleNeeded").setValue(count - 1);
+            event.setPeopleNeeded(String.valueOf(count - 1));
             updateEventUI(event);
-        }
-        else{
-            mEventsRef.child(eventId).child("peopleNeeded").setValue(count+1);
-            event.setPeopleNeeded(String.valueOf(count+1));
+        } else {
+            mEventsRef.child(eventId).child("peopleNeeded").setValue(count + 1);
+            event.setPeopleNeeded(String.valueOf(count + 1));
             updateEventUI(event);
         }
     }
@@ -306,7 +279,9 @@ public class EventInfoActivity extends AppCompatActivity {
                 if (userAlreadyInList) {
                     mCancelParticipationButton.setVisibility(View.VISIBLE);
                     mParticipateInEventButton.setVisibility(View.GONE);
+                    mAddToCalendarButton.setVisibility(View.VISIBLE);
                 } else {
+                    mAddToCalendarButton.setVisibility(View.GONE);
                     mCancelParticipationButton.setVisibility(View.GONE);
                     mParticipateInEventButton.setVisibility(View.VISIBLE);
                 }
@@ -397,6 +372,7 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
+
     private void setUpRecycleViewForUserList(List<User> eventUsers) {
         recyclerView = (RecyclerView) findViewById(R.id.recycle_view_event_attendees);
         UserAdapter myAdapter = new UserAdapter(getApplicationContext(), eventUsers);
@@ -414,6 +390,7 @@ public class EventInfoActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 System.out.println("I AM IN CHILD ADDED");
                 getEventParticipants(eventIdFinal);
+                mAddToCalendarButton.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -425,6 +402,7 @@ public class EventInfoActivity extends AppCompatActivity {
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 System.out.println("I AM IN CHILD REMOVE");
                 getEventParticipants(eventIdFinal);
+                mAddToCalendarButton.setVisibility(View.GONE);
             }
 
             @Override
@@ -437,6 +415,30 @@ public class EventInfoActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void addToCalendarListener(final Event event) {
+        mAddToCalendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date eventDate = null;
+                try {
+                    eventDate = formatter.parse(event.getDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Intent calIntent = new Intent(Intent.ACTION_INSERT);
+                calIntent.setType("vnd.android.cursor.item/event");
+                calIntent.putExtra(CalendarContract.Events.TITLE, event.getTitle());
+                calIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.getAddress());
+                calIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.getDetails());
+                calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDate);
+                startActivity(calIntent);
+            }
+        });
+
     }
 
 }
