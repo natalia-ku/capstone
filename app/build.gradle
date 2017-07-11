@@ -5,7 +5,8 @@ android {
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.example.user.android.capstone"
-        minSdkVersion 15
+        minSdkVersion 16
+//        minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -19,63 +20,29 @@ android {
     }
 }
 
-// OLD:
-
-//dependencies {
-//
-////    apply plugin: 'com.android.application'
-////    apply plugin: 'com.google.gms.google-services'
-//
-//
-////    compile 'com.google.android.gms:play-services:11.0.2'
-//   // compile 'com.google.android.gms:play-services-places:9.0.0'
-////    compile 'com.google.android.gms:play-services:9.0.0'
-//    //compile 'com.google.android.gms:9.0.0'
-////    compile 'com.google.android.gms:play-services-location:9.4.0'
-//
-//
-//    compile 'com.google.android.gms:play-services-places:11.0.2'
-//    //compile 'com.google.gms:google-services:3.1.0'
-//
-//
-//
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    })
-//
-////    compile 'com.google.firebase:firebase-auth:10.2.0'
-////    compile 'com.google.firebase:firebase-core:10.2.0'
-////    compile 'com.google.firebase:firebase-database:10.2.0'
-//
-//
-//    compile 'com.google.firebase:firebase-auth:9.0.0'
-//    compile 'com.google.firebase:firebase-core:9.0.0'
-//    compile 'com.google.firebase:firebase-database:9.0.0'
-//    compile 'com.android.support:recyclerview-v7:25.1.0'
-//    compile 'com.android.support:appcompat-v7:26.+'
-//    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-//    testCompile 'junit:junit:4.12'
-//}
-//
-
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    // compile 'com.google.maps.android:android-maps-utils:0.4.+'
-    //compile 'com.google.android.gms:play-services-maps:11.0.2'
+
     compile 'com.squareup.picasso:picasso:2.5.2'
+
     compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.google.firebase:firebase-database:9.6.1'
+
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:design:24.2.1'
+
     compile 'com.google.firebase:firebase-crash:9.6.1'
     compile 'com.google.firebase:firebase-messaging:9.6.1'
     compile 'com.google.firebase:firebase-ads:9.6.1'
     compile 'com.google.firebase:firebase-auth:9.6.1'
+
+   //    compile 'com.firebaseui:firebase-ui:2.0.1'
+
+
     compile 'com.google.android.gms:play-services:9.6.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.gms:play-services-maps:9.6.1'
