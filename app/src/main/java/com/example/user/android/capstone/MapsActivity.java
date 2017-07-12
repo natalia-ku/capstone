@@ -54,11 +54,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        List<Event> eventsList;
-        eventsList = getIntent().getParcelableArrayListExtra("eventList");
-        for (Event event : eventsList) {
-            String addressString = event.getAddress();
-            LatLng address = getLocationFromAddress(addressString);
+        if (getIntent().getParcelableArrayListExtra("eventList") != null) { // get List from Intent
+            List<Event> eventsList;
+            eventsList = getIntent().getParcelableArrayListExtra("eventList");
+            for (Event event : eventsList) {
+                LatLng address = getLocationFromAddress(event.getAddress());
+                if (address != null) {
+                    mMap.addMarker(new MarkerOptions().position(address)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                            .title(event.getTitle()));
+                }
+            }
+        }
+        else{ // get Event from intent
+            Event event;
+            event = getIntent().getParcelableExtra("event");
+            LatLng address = getLocationFromAddress(event.getAddress());
             if (address != null) {
                 mMap.addMarker(new MarkerOptions().position(address)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))

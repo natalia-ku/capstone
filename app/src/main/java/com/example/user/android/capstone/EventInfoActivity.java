@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,8 @@ public class EventInfoActivity extends AppCompatActivity {
     Button mCancelParticipationButton;
     Button mUpdateEvent;
     Button mAddToCalendarButton;
+    Button mOpenChatButton;
+    Button mEventOnMap;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
@@ -84,10 +87,12 @@ public class EventInfoActivity extends AppCompatActivity {
 
         setUpGetDirections();
         setUpCreatorIdEvent();
+        getEventOnMapListener(event);
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
         listenForChangesInAttendeeList();
         addToCalendarListener(event);
+        openChatListener(event);
 
     } // end of onCreate method
 
@@ -197,7 +202,7 @@ public class EventInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int count = Integer.parseInt(event.getPeopleNeeded());
-                if (count > 1) {
+                if (count >= 1) {
                     addAttendeeToEvent(eventId, userId);
                     addEventToUserEventsList(eventId, userId);
                     mParticipateInEventButton.setVisibility(View.GONE);
@@ -207,6 +212,17 @@ public class EventInfoActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Sorry, we don't need more people", Toast.LENGTH_LONG).show();
                 }
 
+            }
+        });
+    }
+
+    private void getEventOnMapListener(final Event event){
+        mEventOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        intent.putExtra("event",(Parcelable) event);
+                        startActivity(intent);
             }
         });
     }
@@ -280,8 +296,10 @@ public class EventInfoActivity extends AppCompatActivity {
                     mCancelParticipationButton.setVisibility(View.VISIBLE);
                     mParticipateInEventButton.setVisibility(View.GONE);
                     mAddToCalendarButton.setVisibility(View.VISIBLE);
+                    mOpenChatButton.setVisibility(View.VISIBLE);
                 } else {
                     mAddToCalendarButton.setVisibility(View.GONE);
+                    mOpenChatButton.setVisibility(View.GONE);
                     mCancelParticipationButton.setVisibility(View.GONE);
                     mParticipateInEventButton.setVisibility(View.VISIBLE);
                 }
@@ -296,6 +314,8 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     private void initializeTextViewsAndButtons() {
+        mEventOnMap = (Button) findViewById(R.id.event_on_map_button);
+        mOpenChatButton = (Button) findViewById(R.id.open_chat_button);
         mAddToCalendarButton = (Button) findViewById(R.id.add_to_calendar_button);
         mUpdateEvent = (Button) findViewById(R.id.update_event_button);
         mEventInfoTitle = (TextView) findViewById(R.id.event_title_textview);
@@ -391,6 +411,7 @@ public class EventInfoActivity extends AppCompatActivity {
                 System.out.println("I AM IN CHILD ADDED");
                 getEventParticipants(eventIdFinal);
                 mAddToCalendarButton.setVisibility(View.VISIBLE);
+                mOpenChatButton.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -403,6 +424,7 @@ public class EventInfoActivity extends AppCompatActivity {
                 System.out.println("I AM IN CHILD REMOVE");
                 getEventParticipants(eventIdFinal);
                 mAddToCalendarButton.setVisibility(View.GONE);
+                mOpenChatButton.setVisibility(View.GONE);
             }
 
             @Override
@@ -436,6 +458,17 @@ public class EventInfoActivity extends AppCompatActivity {
                 calIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.getDetails());
                 calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDate);
                 startActivity(calIntent);
+            }
+        });
+    }
+
+    private void openChatListener(final Event event) {
+        mOpenChatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentToOpenChat = new Intent(getApplicationContext(), ChatActivity.class);
+                intentToOpenChat.putExtra("event", (Serializable) event);
+                startActivity(intentToOpenChat);
             }
         });
 
