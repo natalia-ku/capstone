@@ -153,9 +153,6 @@ public class UpdateEventActivity extends AppCompatActivity {
 
 
     private void removeFromList(List<String> userIdsList, final String eventId) {
-        //TO GET USERS, PARTICIPATED IN EVENT:
-        final List<User> eventUsers = new ArrayList<>();
-
         for (String userID : userIdsList) {
             Query eventUsersQuery = mUsersRef.orderByKey().equalTo(userID);
             eventUsersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -167,7 +164,6 @@ public class UpdateEventActivity extends AppCompatActivity {
                         }
                     }
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
