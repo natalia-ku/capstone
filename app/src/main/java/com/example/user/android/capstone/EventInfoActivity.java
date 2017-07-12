@@ -164,10 +164,7 @@ public class EventInfoActivity extends AppCompatActivity {
                             User u1 = new User(id, email, name, gender, photo, age);
                             eventUsers.add(u1);
                         }
-                        // SET UP LAYOUT FOR SHOWING USERS:
                         setUpRecycleViewForUserList(eventUsers);
-                    } else {
-                        System.out.println("Error: no data was found");
                     }
                 }
 
@@ -209,7 +206,7 @@ public class EventInfoActivity extends AppCompatActivity {
                     mCancelParticipationButton.setVisibility(View.VISIBLE);
                     updateAttendeesCount(false, event);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Sorry, we don't need more people", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Sorry, we don't need more people for this event", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -408,7 +405,6 @@ public class EventInfoActivity extends AppCompatActivity {
         attendeeRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                System.out.println("I AM IN CHILD ADDED");
                 getEventParticipants(eventIdFinal);
                 mAddToCalendarButton.setVisibility(View.VISIBLE);
                 mOpenChatButton.setVisibility(View.VISIBLE);
@@ -416,12 +412,10 @@ public class EventInfoActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                System.out.println("I AM IN CHILD CHANGED");
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                System.out.println("I AM IN CHILD REMOVE");
                 getEventParticipants(eventIdFinal);
                 mAddToCalendarButton.setVisibility(View.GONE);
                 mOpenChatButton.setVisibility(View.GONE);

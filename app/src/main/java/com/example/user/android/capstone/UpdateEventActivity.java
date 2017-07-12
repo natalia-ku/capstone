@@ -35,13 +35,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class UpdateEventActivity extends AppCompatActivity {
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
+    DatabaseReference mUsersRef = mRootRef.child("users");
     private String placeAddress;
 
     EditText mTitleUpdateEvent;
@@ -116,9 +119,61 @@ public class UpdateEventActivity extends AppCompatActivity {
         mDeleteEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                deleteEventFromUsersEventList(event.getId());
                 mEventsRef.child(event.getId()).removeValue();
             }
+
+            // Query findParticipatedUsersQuery = mUsersRef.child("userEvents").getKey().equals(event.getId());
+
         });
+    }
+
+
+    private void deleteEventFromUsersEventList(final String eventId) {
+        // GET list of participants IDs:
+        final List<String> userIdsList = new ArrayList<>();
+        Query getEventUserIdsQuery = mEventsRef.child(eventId).child("attendees");
+        getEventUserIdsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        userIdsList.add(eventSnapshot.getKey());
+                    }
+                }
+                removeFromList(userIdsList, eventId);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    private void removeFromList(List<String> userIdsList, final String eventId) {
+        //TO GET USERS, PARTICIPATED IN EVENT:
+        final List<User> eventUsers = new ArrayList<>();
+
+        for (String userID : userIdsList) {
+            Query eventUsersQuery = mUsersRef.orderByKey().equalTo(userID);
+            eventUsersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            userSnapshot.getRef().child("userEvents").child(eventId).removeValue();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
 

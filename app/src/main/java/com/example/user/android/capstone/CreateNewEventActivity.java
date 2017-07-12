@@ -109,10 +109,11 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
                                     DatabaseReference newEventRef = mEventsRef.push();
-                                    newEventRef.setValue(new Event(sportCategory, sportTitle, sportAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId));
+                                    Event  event = new Event(sportCategory, sportTitle, sportAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId);
+                                    newEventRef.setValue(event);
                                     // USER THAT CREATED EVENT AUTOMATICALLY ATTENDS IT:
                                     newEventRef.child("attendees").child(sportCreatorId).setValue("true");
-                                    mUserRef.child(sportCreatorId).child("userEvents").child(sportCreatorId).setValue("true");
+                                    mUserRef.child(event.getCreatorId()).child("userEvents").child(newEventRef.getKey()).setValue("true");
                                     Toast.makeText(getApplicationContext(), "You successfully created new sport event", Toast.LENGTH_LONG).show();
                                     clearForm();
                                     finish();
