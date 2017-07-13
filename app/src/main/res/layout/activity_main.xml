@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="8dp"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
 
-
-
+    <LinearLayout
+        android:id="@+id/ly_list_form"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
 
     <Button
         android:layout_width="wrap_content"
@@ -30,12 +32,6 @@
         android:id="@+id/sign_in_up_button"
         android:text="Sign In/ Sign Up" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/create_event_button"
-        android:text="Create new event" />
-
 
     <Button
         android:layout_width="wrap_content"
@@ -43,20 +39,6 @@
         android:id="@+id/events_map_button"
         android:text="Events on map" />
 
-    <!--<com.google.android.gms.maps.MapView-->
-        <!--android:id="@+id/mapView"-->
-        <!--class="com.google.android.gms.maps.SupportMapFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
-    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--xmlns:map="http://schemas.android.com/apk/res-auto"-->
-        <!--xmlns:tools="http://schemas.android.com/tools"-->
-        <!--android:id="@+id/map_fragment"-->
-        <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
-        <!--android:layout_width="300dp"-->
-        <!--android:layout_height="400dp"-->
-        <!--tools:context="com.example.user.android.capstone.MapsActivity" />-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,17 +64,137 @@
         android:id="@+id/filter_status"/>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
-    </android.support.v7.widget.RecyclerView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ly_bar_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/create_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="28dp"
+            android:src="@drawable/ic_add_circle_white_24dp"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp" />
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+
+<!--OLD:-->
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:padding="8dp"-->
+    <!--android:orientation="vertical">-->
+
+
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/sign_out_main_button"-->
+        <!--android:text="Sign Out"-->
+        <!--android:visibility="invisible"/>-->
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/user_profile_button"-->
+        <!--android:text="Profile"-->
+        <!--android:visibility="visible"/>-->
+
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/sign_in_up_button"-->
+        <!--android:text="Sign In/ Sign Up" />-->
+
+
+
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/events_map_button"-->
+        <!--android:text="Events on map" />-->
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/all_events_button"-->
+        <!--android:text="All events including past" />-->
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/future_events_button"-->
+        <!--android:text="Future events" />-->
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Filter events by category:"/>-->
+    <!--<Spinner-->
+        <!--android:id="@+id/sport_types_spinner"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/filter_status"/>-->
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="140dp"-->
+        <!--android:src="@drawable/ic_add_circle_white_24dp"-->
+        <!--app:elevation="4dp"-->
+        <!--android:id="@+id/create_event_button"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_gravity="bottom|right"-->
+        <!--app:pressedTranslationZ="12dp" />-->
+
+
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/recycle_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:visibility="visible">-->
+    <!--</android.support.v7.widget.RecyclerView>-->
 
 
 
 
 
 
-</LinearLayout>
+
+
+
+
+
+
+<!--</LinearLayout>-->
 

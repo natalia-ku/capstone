@@ -3,6 +3,7 @@ package com.example.user.android.capstone;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
-    Button mCreateNewEventButton;
+    FloatingActionButton mCreateNewEventButton;
     Button mUserProfileButton;
     Button mSignInUpButton;
     Button mSignOutMainButton;
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
                 recyclerView.setAdapter(myAdapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setHasFixedSize(true); ////
                 recyclerView.setLayoutManager(layoutManager);
             }
 
@@ -263,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
         filterEventCategory = false;
         filterFutureEvents = true;
         spinner = (Spinner) findViewById(R.id.sport_types_spinner);
-        mCreateNewEventButton = (Button) findViewById(R.id.create_event_button);
+        mCreateNewEventButton = (FloatingActionButton) findViewById(R.id.create_event_button);
         mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
         mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
         mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
