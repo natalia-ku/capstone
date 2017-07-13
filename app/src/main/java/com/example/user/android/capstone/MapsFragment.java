@@ -1,27 +1,23 @@
 package com.example.user.android.capstone;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Geocoder;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.identity.intents.Address;
+import android.content.Intent;
+import android.location.Geocoder;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -35,40 +31,73 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
-    private GoogleMap mMap;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class MapsFragment extends Fragment implements OnMapReadyCallback, EventsFragmentInterface, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+    MapView mapView;
+
+    GoogleMap mMap;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); // in onCreateView in MapFragment
-        setContentView(R.layout.activity_maps);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+    public MapsFragment() {
+        // Required empty public constructor
     }
 
 
+
+
+
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        System.out.println("MAPS ON CREATE VIEW");
+
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
+        mapView = (MapView) view.findViewById(R.id.map_view);
+        mapView.getMapAsync(this);
+       // updateList(new ArrayList<Event>());
+        return view;
+    }
+
+        @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        if (getIntent().getParcelableArrayListExtra("eventList") != null) { // get List from Intent
-            List<Event> eventsList;
-            eventsList = getIntent().getParcelableArrayListExtra("eventList");
-            for (Event event : eventsList) {
-                LatLng address = getLocationFromAddress(event.getAddress());
-                if (address != null) {
-                    mMap.addMarker(new MarkerOptions().position(address)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                            .title(event.getTitle()));
-                }
+            System.out.println("ON MAP READY");
+            mMap = googleMap;
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.6101, -122.2015),
+                    Math.max(10, mMap.getCameraPosition().zoom)));
+        }
+
+
+    @Override
+    public void updateList(final List<Event> events) {
+        System.out.println("MAPS UPDATE LIST");
+
+
+        for (Event event : events) {
+            LatLng address = getLocationFromAddress(event.getAddress());
+            if (address != null) {
+//                mMap.addMarker(new MarkerOptions().position(address)
+//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+//                        .title(event.getTitle()));
             }
         }
-        else{ // get Event from intent
-            Event event;
-            event = getIntent().getParcelableExtra("event");
+
+
+
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+
+    }
+
+
+    public void callMap(GoogleMap googleMap, List<Event> eventsList) {
+        mMap = googleMap;
+        System.out.println("MAPS CALL MAPS");
+        for (Event event : eventsList) {
             LatLng address = getLocationFromAddress(event.getAddress());
             if (address != null) {
                 mMap.addMarker(new MarkerOptions().position(address)
@@ -82,9 +111,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
-
-
     }
+
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
@@ -92,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public LatLng getLocationFromAddress(String strAddress) {
-        Geocoder coder = new Geocoder(this);
+        Geocoder coder = new Geocoder(getContext());
         List<android.location.Address> address;
         LatLng p1 = null;
         try {
@@ -142,7 +170,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     Event event = new Event(sportCategory, eventId, title, address, date, time, details, peopleNeeded, creatorId);
                     if (!eventId.equals("")) {
-                        Intent intentToGetEventDetailsActivity = new Intent(getApplicationContext(), EventInfoActivity.class);
+                        Intent intentToGetEventDetailsActivity = new Intent(getContext(), EventInfoActivity.class);
                         intentToGetEventDetailsActivity.putExtra("event", (Parcelable) event);
                         startActivity(intentToGetEventDetailsActivity);
                     } else {
@@ -159,4 +187,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+
+
+    @Override
+    public void onResume() {
+        mapView.onResume();
+        super.onResume();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+
 }

@@ -1,18 +1,17 @@
 package com.example.user.android.capstone;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +23,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.firebase.FirebaseApp;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     Button mAllEventsNewButton;
     Button mFutureEventsNewButton;
     Button mEventsOnMapButton;
+    EventsFragmentInterface eFrafmentInterface;
 
     TextView mFilterStatusTextView;
     String filterByCategory;
@@ -63,14 +61,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initializeTextViewsAndButtons();
 
+        eFrafmentInterface = new MapsFragment();
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
         setOnClickListeners();
         // TO DISPLAY ONLY FUTURE EVENTS:
+        initListFragment();
         displayListOfEvents(true, false);
         futureEventsFilter();
         setUpSpinner();
+
     } // end onCreate
 
 
@@ -126,13 +128,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
-                System.out.println("EVENT LIST FORM DATABASE SIZE " + eventsListFromDatabase.size());
-                EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
-                recyclerView.setAdapter(myAdapter);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setHasFixedSize(true); ////
-                recyclerView.setLayoutManager(layoutManager);
+//                recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+//                System.out.println("EVENT LIST FORM DATABASE SIZE " + eventsListFromDatabase.size());
+//                EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
+//                recyclerView.setAdapter(myAdapter);
+//                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                recyclerView.setHasFixedSize(true); ////
+//                recyclerView.setLayoutManager(layoutManager);
+//
+                updateFragment();
+
             }
 
             @Override
@@ -140,6 +145,30 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
+    }
+
+    //EventsFragmentInterface activeFragment;
+    private void toggleFragment() {
+        if (eFrafmentInterface instanceof MapsFragment) {
+            eFrafmentInterface = new EventFragment();
+        } else if (eFrafmentInterface instanceof EventFragment) {
+            eFrafmentInterface = new MapsFragment();
+        }
+        initListFragment();
+        updateFragment();
+    }
+
+
+    private void initListFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameEvents, (Fragment) eFrafmentInterface);
+//        ft.replace(R.id.frameEvents, new MapsFragment());
+        ft.commit();
+    }
+
+    private void updateFragment() {
+        eFrafmentInterface.updateList(eventsListFromDatabase);
     }
 
     private boolean checkIfDateInFuture(String date) {
@@ -161,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 filterFutureEvents = false;
-                System.out.println("Filter future events:" + filterFutureEvents );
-                System.out.println("Filter  event category:" + filterEventCategory );
+                System.out.println("Filter future events:" + filterFutureEvents);
+                System.out.println("Filter  event category:" + filterEventCategory);
                 displayListOfEvents(filterFutureEvents, filterEventCategory);
                 mAllEventsNewButton.setVisibility(View.GONE);
                 mFutureEventsNewButton.setVisibility(View.VISIBLE);
@@ -174,9 +203,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 filterFutureEvents = true;
-                System.out.println("Filter future events:" + filterFutureEvents );
-                System.out.println("Filter  event category:" + filterEventCategory );
-                System.out.println("Event category " + filterByCategory );
+                System.out.println("Filter future events:" + filterFutureEvents);
+                System.out.println("Filter  event category:" + filterEventCategory);
+                System.out.println("Event category " + filterByCategory);
                 displayListOfEvents(filterFutureEvents, filterEventCategory);
                 mAllEventsNewButton.setVisibility(View.VISIBLE);
                 mFutureEventsNewButton.setVisibility(View.GONE);
@@ -230,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
         mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 Class destinationClass = CreateNewEventActivity.class;
                 Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
                 startActivity(intentToStartCreateNewEventActivity);
@@ -248,9 +278,12 @@ public class MainActivity extends AppCompatActivity {
         mEventsOnMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putParcelableArrayListExtra("eventList", (ArrayList<? extends Parcelable>) eventsListFromDatabase);
-                startActivity(intent);
+                toggleFragment();
+
+
+//                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+//                intent.putParcelableArrayListExtra("eventList", (ArrayList<? extends Parcelable>) eventsListFromDatabase);
+//                startActivity(intent);
             }
         });
     }
