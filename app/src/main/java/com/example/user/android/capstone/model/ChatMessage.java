@@ -1,4 +1,4 @@
-package com.example.user.android.capstone;
+package com.example.user.android.capstone.model;
 
 import java.util.Date;
 

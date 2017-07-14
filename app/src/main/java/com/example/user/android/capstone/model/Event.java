@@ -1,20 +1,8 @@
-package com.example.user.android.capstone;
+package com.example.user.android.capstone.model;
 
-import android.app.DatePickerDialog;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.TextView;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import java.io.Serializable;
 
 /**

@@ -1,20 +1,13 @@
-package com.example.user.android.capstone;
+package com.example.user.android.capstone.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,13 +18,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.model.Event;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,9 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class CreateNewEventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -109,7 +101,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
                                 } else {
                                     DatabaseReference newEventRef = mEventsRef.push();
-                                    Event  event = new Event(sportCategory, sportTitle, sportAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId);
+                                    Event event = new Event(sportCategory, sportTitle, sportAddress, sportDate, sportTime, sportDetails, peopleNeeded, sportCreatorId);
                                     newEventRef.setValue(event);
                                     // USER THAT CREATED EVENT AUTOMATICALLY ATTENDS IT:
                                     newEventRef.child("attendees").child(sportCreatorId).setValue("true");

@@ -1,4 +1,4 @@
-package com.example.user.android.capstone;
+package com.example.user.android.capstone.fragment;
 
 
 import android.os.Bundle;
@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
+import com.example.user.android.capstone.adapter.EventAdapter;
+import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.model.Event;
+
 import java.util.List;
 
 

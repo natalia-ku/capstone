@@ -1,4 +1,4 @@
-package com.example.user.android.capstone;
+package com.example.user.android.capstone.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -19,12 +19,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.model.Event;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

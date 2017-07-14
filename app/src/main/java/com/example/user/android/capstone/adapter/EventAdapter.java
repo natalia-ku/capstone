@@ -1,4 +1,4 @@
-package com.example.user.android.capstone;
+package com.example.user.android.capstone.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.activity.EventInfoActivity;
+import com.example.user.android.capstone.model.Event;
 
 import java.util.List;
 

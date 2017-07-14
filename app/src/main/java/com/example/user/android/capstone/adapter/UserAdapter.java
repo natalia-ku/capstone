@@ -1,5 +1,5 @@
 
-package com.example.user.android.capstone;
+package com.example.user.android.capstone.adapter;
 
         import android.content.Context;
         import android.content.Intent;
@@ -9,6 +9,10 @@ package com.example.user.android.capstone;
         import android.view.ViewGroup;
         import android.widget.LinearLayout;
         import android.widget.TextView;
+
+        import com.example.user.android.capstone.R;
+        import com.example.user.android.capstone.activity.UserProfileActivity;
+        import com.example.user.android.capstone.model.User;
 
         import java.util.List;
 

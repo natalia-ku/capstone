@@ -1,6 +1,5 @@
-package com.example.user.android.capstone;
+package com.example.user.android.capstone.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.user.android.capstone.adapter.EventAdapter;
+import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.model.Event;
+import com.example.user.android.capstone.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
