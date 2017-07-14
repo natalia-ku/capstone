@@ -1,146 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp">
 
-    <Button
-        android:id="@+id/update_event_button"
-        android:layout_width="wrap_content"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Update Event" />
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TITLE:"
-        android:textSize="22sp" />
+        <Button
+            android:id="@+id/update_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update Event" />
 
-    <TextView
-        android:id="@+id/event_title_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TITLE:"
+            android:textSize="22sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CATEGORY:"
-        android:textSize="22sp" />
+        <TextView
+            android:id="@+id/event_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/event_category_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CATEGORY:"
+            android:textSize="22sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ADDRESS:"
-        android:textSize="22sp" />
+        <TextView
+            android:id="@+id/event_category_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/event_address_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADDRESS:"
+            android:textSize="22sp" />
 
-    <Button
-        android:id="@+id/get_directions_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get directions" />
+        <TextView
+            android:id="@+id/event_address_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
 
-    <Button
-        android:id="@+id/event_on_map_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event on map" />
+        <Button
+            android:id="@+id/get_directions_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get directions" />
 
-    <TextView
-        android:id="@+id/event_date_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        <Button
+            android:id="@+id/event_on_map_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event on map" />
 
-    <TextView
-        android:id="@+id/event_time_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        <TextView
+            android:id="@+id/event_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DETAILS:"
-        android:textSize="22sp" />
+        <TextView
+            android:id="@+id/event_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/event_details_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DETAILS:"
+            android:textSize="22sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PEOPLE NEEDED:"
-        android:textSize="22sp" />
+        <TextView
+            android:id="@+id/event_details_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/event_people_needed_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PEOPLE NEEDED:"
+            android:textSize="22sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CREATOR:"
-        android:textSize="22sp" />
+        <TextView
+            android:id="@+id/event_people_needed_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/event_creator_id_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CREATOR:"
+            android:textSize="22sp" />
 
-    <Button
-        android:id="@+id/paticipate_in_event_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Participate in event" />
+        <TextView
+            android:id="@+id/event_creator_id_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
 
-    <Button
-        android:id="@+id/cancel_participation_in_event_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancel" />
+        <Button
+            android:id="@+id/paticipate_in_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Participate in event" />
 
-    <Button
-        android:id="@+id/add_to_calendar_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add to calendar" />
+        <Button
+            android:id="@+id/cancel_participation_in_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
 
-    <Button
-        android:id="@+id/open_chat_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Open chat" />
+        <Button
+            android:id="@+id/add_to_calendar_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to calendar" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LIST OF PARTICIPANTS:"
-        android:textSize="22sp" />
+        <Button
+            android:id="@+id/open_chat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open chat" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle_view_event_attendees"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"></android.support.v7.widget.RecyclerView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LIST OF PARTICIPANTS:"
+            android:textSize="22sp" />
 
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view_event_attendees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+</ScrollView>
+
