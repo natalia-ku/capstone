@@ -1,8 +1,11 @@
 package com.example.user.android.capstone;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Geocoder;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -47,17 +51,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
     }
 
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         System.out.println("MAPS ON CREATE VIEW");
 
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-        mapView = (MapView) view.findViewById(R.id.map_view);
-        mapView.getMapAsync(this);
+
+
+
+//        mapView = (MapView) view.findViewById(R.id.map_view);
+//        mapView.getMapAsync(this);
        // updateList(new ArrayList<Event>());
         return view;
     }
@@ -69,6 +73,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.6101, -122.2015),
                     Math.max(10, mMap.getCameraPosition().zoom)));
+
+
         }
 
 
@@ -94,7 +100,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
     }
 
 
-    public void callMap(GoogleMap googleMap, List<Event> eventsList) {
+    public  void callMap(GoogleMap googleMap, List<Event> eventsList) {
         mMap = googleMap;
         System.out.println("MAPS CALL MAPS");
         for (Event event : eventsList) {
@@ -188,31 +194,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
         });
     }
 
-
-    @Override
-    public void onResume() {
-        mapView.onResume();
-        super.onResume();
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
 
 
 }

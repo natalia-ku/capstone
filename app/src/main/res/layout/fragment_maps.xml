@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.user.android.capstone.MapsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <com.google.android.gms.maps.MapView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/map_view" />
+
+    <!--<fragment-->
+    <!--android:id="@+id/map_fragment"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--class="com.google.android.gms.maps.SupportMapFragment" />-->
 
 </FrameLayout>

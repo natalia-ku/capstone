@@ -114,6 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        System.out.println("IN INTENT!!");
         String markerTitle = marker.getTitle();
         Query findEventByTitleQuery = mEventsRef.orderByChild("title").equalTo(markerTitle);
         findEventByTitleQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -142,6 +143,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     Event event = new Event(sportCategory, eventId, title, address, date, time, details, peopleNeeded, creatorId);
                     if (!eventId.equals("")) {
+
                         Intent intentToGetEventDetailsActivity = new Intent(getApplicationContext(), EventInfoActivity.class);
                         intentToGetEventDetailsActivity.putExtra("event", (Parcelable) event);
                         startActivity(intentToGetEventDetailsActivity);

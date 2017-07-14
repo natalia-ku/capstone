@@ -1,8 +1,11 @@
 package com.example.user.android.capstone;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +15,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,16 +28,26 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity {
+import static com.example.user.android.capstone.EventFragment.eventFragment;
+
+public class MainActivity extends AppCompatActivity  {
 
     List<Event> eventsListFromDatabase = new ArrayList<>();
     private FirebaseAuth mAuth;
@@ -54,26 +69,34 @@ public class MainActivity extends AppCompatActivity {
 
     boolean filterEventCategory;
     boolean filterFutureEvents;
+    private SupportMapFragment map;
+    EventFragment eventFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initializeTextViewsAndButtons();
 
-        eFrafmentInterface = new MapsFragment();
+         eventFragment = new EventFragment();
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-        setOnClickListeners();
-        // TO DISPLAY ONLY FUTURE EVENTS:
+        setOnClickListeners(null);
+
         initListFragment();
+
+
         displayListOfEvents(true, false);
         futureEventsFilter();
         setUpSpinner();
 
+
     } // end onCreate
+
+
 
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter) {
@@ -127,15 +150,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
-
-//                recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
-//                System.out.println("EVENT LIST FORM DATABASE SIZE " + eventsListFromDatabase.size());
-//                EventAdapter myAdapter = new EventAdapter(getApplicationContext(), eventsListFromDatabase);
-//                recyclerView.setAdapter(myAdapter);
-//                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//                recyclerView.setHasFixedSize(true); ////
-//                recyclerView.setLayoutManager(layoutManager);
-//
+                setOnClickListeners(eventsListFromDatabase);
+                initListFragment();
                 updateFragment();
 
             }
@@ -148,27 +164,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //EventsFragmentInterface activeFragment;
-    private void toggleFragment() {
-        if (eFrafmentInterface instanceof MapsFragment) {
-            eFrafmentInterface = new EventFragment();
-        } else if (eFrafmentInterface instanceof EventFragment) {
-            eFrafmentInterface = new MapsFragment();
-        }
-        initListFragment();
-        updateFragment();
-    }
 
 
     private void initListFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frameEvents, (Fragment) eFrafmentInterface);
-//        ft.replace(R.id.frameEvents, new MapsFragment());
+        ft.replace(R.id.frameEvents, eventFragment);
         ft.commit();
     }
 
     private void updateFragment() {
-        eFrafmentInterface.updateList(eventsListFromDatabase);
+        eventFragment.updateList(eventsListFromDatabase);
     }
 
     private boolean checkIfDateInFuture(String date) {
@@ -237,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setOnClickListeners() {
+    private void setOnClickListeners(final List<Event> eventsList) {
         mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -278,14 +283,111 @@ public class MainActivity extends AppCompatActivity {
         mEventsOnMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleFragment();
+                FrameLayout fl = (FrameLayout) findViewById(R.id.frameEvents);
+                fl.setVisibility(View.GONE);
+                map = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 
+                map.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap mMap) {
+                        if (eventsList != null) {
+                            for (Event event : eventsList) {
+                                LatLng address = getLocationFromAddress(event.getAddress());
+                                if (address != null) {
+                                    mMap.addMarker(new MarkerOptions().position(address)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                                            .title(event.getTitle()));
+                                }
+                            }
 
-//                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-//                intent.putParcelableArrayListExtra("eventList", (ArrayList<? extends Parcelable>) eventsListFromDatabase);
-//                startActivity(intent);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.6101, -122.2015),
+                                    Math.max(10, mMap.getCameraPosition().zoom)));
+                        }
+                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(Marker marker) {
+                                return false;
+                            }
+                        });
+                        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(Marker marker) {
+                                String markerTitle = marker.getTitle();
+                                Query findEventByTitleQuery = mEventsRef.orderByChild("title").equalTo(markerTitle);
+                                findEventByTitleQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            String eventId = "";
+                                            String address = "";
+                                            String creatorId = "";
+                                            String date = "";
+                                            String time = "";
+                                            String details = "";
+                                            String peopleNeeded = "";
+                                            String title = "";
+                                            String sportCategory = "";
+                                            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                                                eventId = eventSnapshot.getKey();
+                                                address = (String) eventSnapshot.child("address").getValue();
+                                                creatorId = eventSnapshot.child("creatorId").getValue().toString();
+                                                date = (String) eventSnapshot.child("dataTime").getValue();
+                                                time = (String) eventSnapshot.child("time").getValue();
+                                                details = (String) eventSnapshot.child("details").getValue();
+                                                peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
+                                                sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
+                                                title = (String) eventSnapshot.child("title").getValue();
+                                            }
+                                            Event event = new Event(sportCategory, eventId, title, address, date, time, details, peopleNeeded, creatorId);
+                                            if (!eventId.equals("")) {
+                                                Intent intentToGetEventDetailsActivity = new Intent(getApplicationContext(), EventInfoActivity.class);
+                                                intentToGetEventDetailsActivity.putExtra("event", (Parcelable) event);
+                                                startActivity(intentToGetEventDetailsActivity);
+                                            } else {
+                                                System.out.println("Error: cannot find event");
+                                            }
+                                        } else {
+                                            System.out.println("Error: Nothing found");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                                if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    return;
+                                }
+                            }
+                        });
+
+                    }
+                });
             }
         });
+    }
+
+
+    public LatLng getLocationFromAddress(String strAddress) {
+        Geocoder coder = new Geocoder(this);
+        List<android.location.Address> address;
+        LatLng p1 = null;
+        try {
+            if (strAddress != null) {
+                address = coder.getFromLocationName(strAddress, 5);
+                if (address == null || address.size() == 0) {
+                    return null;
+                }
+                double latit = address.get(0).getLatitude();
+                double longit = address.get(0).getLongitude();
+                p1 = new LatLng(latit, longit);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return p1;
     }
 
 
@@ -317,4 +419,5 @@ public class MainActivity extends AppCompatActivity {
             mUserProfileButton.setVisibility(View.VISIBLE);
         }
     }
+
 }
