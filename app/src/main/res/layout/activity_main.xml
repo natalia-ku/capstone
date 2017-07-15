@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/menu"/>
 
 
     <LinearLayout
@@ -34,57 +43,72 @@
             android:text="Sign In/ Sign Up" />
 
 
-        <Button
-            android:id="@+id/all_events_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="All events including past" />
-
-        <Button
-            android:id="@+id/future_events_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Future events" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Filter events by category:" />
-
-        <Spinner
-            android:id="@+id/sport_types_spinner"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/filter_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <Spinner
+                android:id="@+id/sport_types_spinner"
+                android:layout_width="150dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:paddingTop="15dp" />
 
 
-        <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/segmented2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="horizontal"
-            segmentedgroup:sc_border_width="2dp"
-            segmentedgroup:sc_corner_radius="10dp">
 
-            <RadioButton
-                android:id="@+id/events_list_button"
-                style="@style/RadioButton"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/segmented2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="List" />
+                android:layout_margin="10dp"
+                android:paddingLeft="40dp"
+                android:orientation="horizontal"
+                segmentedgroup:sc_border_width="2dp"
+                segmentedgroup:sc_corner_radius="10dp">
 
-            <RadioButton
-                android:id="@+id/events_map_button"
-                style="@style/RadioButton"
+                <RadioButton
+                    android:id="@+id/events_list_button"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="List" />
+
+                <RadioButton
+                    android:id="@+id/events_map_button"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Map" />
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/segmented1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Map" />
-        </info.hoang8f.android.segmented.SegmentedGroup>
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                segmentedgroup:sc_border_width="2dp"
+                segmentedgroup:sc_corner_radius="10dp">
+
+                <RadioButton
+                    android:id="@+id/future_events_button"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Future events" />
+
+                <RadioButton
+                    android:id="@+id/all_events_button"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All" />
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+        </LinearLayout>
 
 
         <FrameLayout
@@ -100,15 +124,18 @@
             android:layout_height="match_parent" />
 
 
+
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/ly_bar_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:gravity="right"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="34dp"
+        android:layout_alignParentStart="true">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/create_event_button"
@@ -119,13 +146,12 @@
             android:layout_margin="28dp"
             android:layout_marginBottom="30dp"
             android:backgroundTint="#0090C1"
-            app:layout_anchorGravity="bottom|right|end"
             android:src="@drawable/ic_add_circle_white_24dp"
             app:borderWidth="0dp"
             app:elevation="10dp"
-            app:pressedTranslationZ="0dp"
             app:fabSize="normal"
-            />
+            app:layout_anchorGravity="bottom|right|end"
+            app:pressedTranslationZ="0dp" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -61,19 +62,16 @@ public class MainActivity extends AppCompatActivity {
     Button mUserProfileButton;
     Button mSignInUpButton;
     Button mSignOutMainButton;
-    Button mAllEventsNewButton;
-    Button mFutureEventsNewButton;
+    RadioButton mAllEventsNewButton;
+    RadioButton mFutureEventsNewButton;
     RadioButton mEventsOnMapButton;
     RadioButton mEventOnListButton;
     FrameLayout fl;
-    Switch mySwitch;
-    TextView mFilterStatusTextView;
     String filterByCategory;
     Spinner spinner;
     boolean filterEventCategory;
     boolean filterFutureEvents;
     boolean listView;
-    private SupportMapFragment map;
     EventFragment eventFragment;
 
     @Override
@@ -91,25 +89,20 @@ public class MainActivity extends AppCompatActivity {
         displayListOfEvents(true, false, listView);
         futureEventsFilter();
         setUpSpinner();
+
+
+
+
+
+
+
+
     } // end onCreate
 
 
 
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter, final boolean listView) {
-        mFilterStatusTextView.setText("Select filter");
-        StringBuilder statusText = new StringBuilder("Filtered by ");
-        if (onlyFutureEventsFilter) {
-            statusText.append("future events ");
-            mFilterStatusTextView.setText(statusText);
-        }
-        if (categoryFilter && !filterByCategory.equals("All")) {
-            if (onlyFutureEventsFilter) {
-                statusText.append("and ");
-            }
-            statusText.append("category: " + filterByCategory);
-            mFilterStatusTextView.setText(statusText);
-        }
         eventsListFromDatabase = new ArrayList<>();
         mEventsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -176,11 +169,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 filterFutureEvents = false;
-                System.out.println("Filter future events:" + filterFutureEvents);
-                System.out.println("Filter  event category:" + filterEventCategory);
                 displayListOfEvents(filterFutureEvents, filterEventCategory, listView);
-                mAllEventsNewButton.setVisibility(View.GONE);
-                mFutureEventsNewButton.setVisibility(View.VISIBLE);
                 spinner.setSelection(0);
             }
         });
@@ -189,12 +178,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 filterFutureEvents = true;
-                System.out.println("Filter future events:" + filterFutureEvents);
-                System.out.println("Filter  event category:" + filterEventCategory);
-                System.out.println("Event category " + filterByCategory);
                 displayListOfEvents(filterFutureEvents, filterEventCategory, listView);
-                mAllEventsNewButton.setVisibility(View.VISIBLE);
-                mFutureEventsNewButton.setVisibility(View.GONE);
                 spinner.setSelection(0);
             }
         });
@@ -298,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.6101, -122.2015),
                             Math.max(10, mMap.getCameraPosition().zoom)));
+
                 }
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
@@ -385,11 +370,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeTextViewsAndButtons() {
-        mAllEventsNewButton = (Button) findViewById(R.id.all_events_button);
-        mFutureEventsNewButton = (Button) findViewById(R.id.future_events_button);
-        mFutureEventsNewButton.setVisibility(View.GONE);
-        mFilterStatusTextView = (TextView) findViewById(R.id.filter_status);
-        mFilterStatusTextView.setText("Select filter");
+        mAllEventsNewButton = (RadioButton) findViewById(R.id.all_events_button);
+        mFutureEventsNewButton = (RadioButton) findViewById(R.id.future_events_button);
+        mFutureEventsNewButton.setChecked(true);
+
         filterEventCategory = false;
         filterFutureEvents = true;
         spinner = (Spinner) findViewById(R.id.sport_types_spinner);
