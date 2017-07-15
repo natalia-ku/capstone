@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity implements
         View.OnClickListener {
 
+    String userAgeFromSpinner;
     private static final String TAG = "EmailPassword";
     private TextView mStatusTextView;
     private EditText mEmailField;
@@ -39,7 +43,8 @@ public class SignUpActivity extends AppCompatActivity implements
     private EditText mNameSignUpField;
     private EditText mGenderSignUpField;
     private EditText mPhotoSignUpField;
-    private EditText mAgeSignUpField;
+
+    private Spinner mAgeSignUpSpinner;
 
 
     @Override
@@ -60,6 +65,7 @@ public class SignUpActivity extends AppCompatActivity implements
 
         mAuth = FirebaseAuth.getInstance();
 
+        setUpSpinner();
     }
 
     @Override
@@ -69,6 +75,27 @@ public class SignUpActivity extends AppCompatActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
+
+
+    private void setUpSpinner() {
+        mAgeSignUpSpinner = (Spinner) findViewById(R.id.age_sign_up_form_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.age_sign_up_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mAgeSignUpSpinner.setAdapter(adapter);
+        mAgeSignUpSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                userAgeFromSpinner = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
 
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
@@ -84,13 +111,15 @@ public class SignUpActivity extends AppCompatActivity implements
                             mNameSignUpField = (EditText) findViewById(R.id.name_sign_up_form_editview);
                             mGenderSignUpField = (EditText) findViewById(R.id.gender_sign_up_form_editview);
                             mPhotoSignUpField = (EditText) findViewById(R.id.photo_sign_up_form_editview);
-                            mAgeSignUpField = (EditText) findViewById(R.id.age_sign_up_form_editview);
+                           // mAgeSignUpField = (EditText) findViewById(R.id.age_sign_up_form_editview);
+//                            mAgeSignUpSpinner = (Spinner) findViewById(R.id.age_sign_up_form_spinner);
                             mEmailSignUpField = (EditText) findViewById(R.id.signup_field_email);
 
                             String userName = mNameSignUpField.getText().toString();
                             String userGender = mGenderSignUpField.getText().toString();
                             String userPhoto = mPhotoSignUpField.getText().toString();
-                            String userAge = mAgeSignUpField.getText().toString();
+                            String userAge = userAgeFromSpinner;
+//                            String userAge = mAgeSignUpField.getText().toString();
                             String userEmail = mEmailSignUpField.getText().toString();
 
                             mUserRef.push().setValue(new User(userEmail, userName, userGender, userPhoto, userAge));

@@ -11,6 +11,7 @@
         android:layout_height="fill_parent"
         android:orientation="vertical">
 
+
         <Button
             android:id="@+id/sign_out_main_button"
             android:layout_width="wrap_content"
@@ -33,7 +34,6 @@
             android:text="Sign In/ Sign Up" />
 
 
-
         <Button
             android:id="@+id/all_events_button"
             android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
 
         <Spinner
             android:id="@+id/sport_types_spinner"
-            android:layout_width="fill_parent"
+            android:layout_width="100dp"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -62,18 +62,29 @@
             android:layout_height="wrap_content" />
 
 
-        <Button
-            android:id="@+id/events_map_button"
+        <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/segmented2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Events on map" />
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            segmentedgroup:sc_border_width="2dp"
+            segmentedgroup:sc_corner_radius="10dp">
 
-        <Button
-            android:id="@+id/events_list_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Events on list" />
+            <RadioButton
+                android:id="@+id/events_list_button"
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="List" />
 
+            <RadioButton
+                android:id="@+id/events_map_button"
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Map" />
+        </info.hoang8f.android.segmented.SegmentedGroup>
 
 
         <FrameLayout
@@ -91,9 +102,9 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ly_bar_bottom"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="right"
@@ -103,13 +114,19 @@
             android:id="@+id/create_event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_margin="28dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="#0090C1"
+            app:layout_anchorGravity="bottom|right|end"
             android:src="@drawable/ic_add_circle_white_24dp"
             app:borderWidth="0dp"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp" />
-    </LinearLayout>
+            app:elevation="10dp"
+            app:pressedTranslationZ="0dp"
+            app:fabSize="normal"
+            />
+    </RelativeLayout>
 
 </RelativeLayout>
 

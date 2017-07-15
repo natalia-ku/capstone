@@ -70,12 +70,15 @@ public class UpdateEventActivity extends AppCompatActivity {
     ArrayAdapter<CharSequence> adapterPeople;
     Calendar calendar;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_event);
         initializeButtonsAndTextView();
         final Event event = (Event) getIntent().getSerializableExtra("event");
+
         displayDateAndTime(event);
         updatEventListener(event);
         setUpSpinnerForCategory();
@@ -86,6 +89,8 @@ public class UpdateEventActivity extends AppCompatActivity {
         getEventData(event);
         deleteEventListener(event);
     }
+
+
 
 
     private void updatEventListener(final Event event) {

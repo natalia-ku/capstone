@@ -3,6 +3,7 @@ package com.example.user.android.capstone.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,6 +52,10 @@ public class EventFragment extends Fragment  {
         recyclerView.setHasFixedSize(true); ////
         recyclerView.setLayoutManager(layoutManager);
     }
+
+
+
+
 
 
 }

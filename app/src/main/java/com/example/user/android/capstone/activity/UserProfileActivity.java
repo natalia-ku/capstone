@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class UserProfileActivity extends AppCompatActivity {
     TextView mUserGender;
     ImageView mUserPhotoImage;
     Button mEditProfileButton;
+    final int REQUEST_CODE = 23;
 
     private FirebaseAuth mAuth;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -57,42 +59,49 @@ public class UserProfileActivity extends AppCompatActivity {
         setUpProfileInfo(userEmail);
 
 
+
+
     } // END of OnCreate
 
     private void setUpProfileInfo(String userEmail) {
+
         Query userProfileQuery = mUserRef.orderByChild("email").equalTo(userEmail);
         userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.exists()) {
+                    System.out.println("IN USER PROFILE ACTIVITY" );
+                    final User user;
+                    String currentUserId ="";
+                    String name = "";
+                    String email = "";
+                    String age ="";
+                    String gender="";
+                    String photo ="";
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                        final User user;
                         findTextViews();
-                        String currentUserId = (String) eventSnapshot.getKey();
-                        String name = (String) eventSnapshot.child("name").getValue();
-                        String email = (String) eventSnapshot.child("email").getValue();
-                        String age = (String) eventSnapshot.child("age").getValue();
-                        String gender = (String) eventSnapshot.child("gender").getValue();
-                        String photo = (String) eventSnapshot.child("photo").getValue();
-                        user = new User(currentUserId, email, name, gender, photo, age);
-                        setTextToViews(email, name, age, gender, photo);
-
-
-                        // TO FIND EVENTS CREATED BY USER:
-                        findCreatedByUserEvents(currentUserId);
-                        // TO FIND EVENTS USER PARTICIPATED IN:
-                        findEventsUserParticipatedIn(currentUserId);
-
-                        mEditProfileButton = (Button) findViewById(R.id.edit_profile);
-                        mEditProfileButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intentToUpdateProfile = new Intent(getApplicationContext(), UpdateProfileActivity.class);
-                                intentToUpdateProfile.putExtra("user", (Serializable) user);
-                                startActivity(intentToUpdateProfile);
-                            }
-                        });
+                         currentUserId = (String) eventSnapshot.getKey();
+                         name = (String) eventSnapshot.child("name").getValue();
+                         email = (String) eventSnapshot.child("email").getValue();
+                         age = (String) eventSnapshot.child("age").getValue();
+                         gender = (String) eventSnapshot.child("gender").getValue();
+                         photo = (String) eventSnapshot.child("photo").getValue();
                     }
+                    user = new User(currentUserId, email, name, gender, photo, age);
+                    System.out.println("USER INFO:   " + user.getAge() + user.getEmail());
+                    setTextToViews(email, name, age, gender, photo);
+                    findCreatedByUserEvents(currentUserId);
+                    findEventsUserParticipatedIn(currentUserId);
+
+                    mEditProfileButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intentToUpdateProfile = new Intent(getApplicationContext(), UpdateProfileActivity.class);
+                            intentToUpdateProfile.putExtra("user", (Serializable) user);
+                            startActivityForResult(intentToUpdateProfile, REQUEST_CODE);
+                        }
+                    });
                 }
             }
 
@@ -100,7 +109,21 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                User user = (User) data.getSerializableExtra("user");
+                setTextToViews(user.getEmail(), user.getName(), user.getAge(), user.getGender(), user.getPhoto());
+            }
+        }
+    }
+
 
     private void findEventsUserParticipatedIn(String currentUserId) {
         // GET list of user event IDs:
@@ -205,6 +228,7 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserAge = (TextView) findViewById(R.id.age_profile_info);
         mUserGender = (TextView) findViewById(R.id.gender_profile_info);
         mUserPhotoImage = (ImageView) findViewById(R.id.user_photo);
+        mEditProfileButton = (Button) findViewById(R.id.edit_profile);
     }
 
     private void setTextToViews(String email, String name, String age, String gender, String photo) {
@@ -214,8 +238,6 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserGender.setText(gender);
         // CHANGE TO REAL URL:
         Picasso.with(getApplicationContext()).load("https://assets.merriam-webster.com/mw/images/article/art-wap-article-main/puppy-3143-7cfb4d6a42dfc7d9d1ae7e23126279e8@1x.jpg").into(mUserPhotoImage);
-
-
     }
 
     private void setUpRecycleView(List<Event> userEvents, boolean eventsCreatedByUser) {

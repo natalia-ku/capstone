@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.user.android.capstone.R;
@@ -21,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
+
 public class UpdateProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -32,16 +37,18 @@ public class UpdateProfileActivity extends AppCompatActivity {
     EditText mNameUpdateProfile;
     EditText mGenderUpdateProfile;
     EditText mPhotoUpdateProfile;
-    EditText mAgeUpdateProfile;
     Button mUpdateProfileButton;
     Button mDeleteProfileButton;
-
+    Spinner mAgeUpdateSpinner;
+    String userAgeFromSpinner;
+    private ArrayAdapter<CharSequence> adapter;
     private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_profile);
+        setUpSpinner();
         final User user = (User) getIntent().getSerializableExtra("user");
         mUpdateProfileButton = (Button) findViewById(R.id.update_button);
         mDeleteProfileButton = (Button) findViewById(R.id.delete_profile_button);
@@ -79,6 +86,25 @@ public class UpdateProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void setUpSpinner() {
+        mAgeUpdateSpinner = (Spinner) findViewById(R.id.age_update_spinner);
+        adapter = ArrayAdapter.createFromResource(this,
+                R.array.age_sign_up_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mAgeUpdateSpinner.setAdapter(adapter);
+        mAgeUpdateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                userAgeFromSpinner = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
     private void deleteProfileEventListener(final User user){
         mDeleteProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,19 +155,27 @@ public class UpdateProfileActivity extends AppCompatActivity {
         String name = mNameUpdateProfile.getText().toString();
         String gender = mGenderUpdateProfile.getText().toString();
         String photo = mPhotoUpdateProfile.getText().toString();
-        String age = mAgeUpdateProfile.getText().toString();
-
+        String age = userAgeFromSpinner;
         if (email.equals("") ||
                 name.equals("") || gender.equals("") || photo.equals("") || age.equals("") || password.equals("")) {
             Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
         } else {
-            userRef.setValue(new User(email, name, gender, photo, age));
+            User user = new User(email, name, gender, photo, age);
+            userRef.setValue(user);
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
             if (!email.equals(currentUser.getEmail())) {
+                System.out.println("EMAIL:");
+                System.out.println(email);
+                System.out.println(currentUser.getEmail());
                 currentUser.updateEmail(email);
                 currentUser.updatePassword(password);
             }
             Toast.makeText(getApplicationContext(), "You successfully updated profile info", Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent();
+            intent.putExtra("user", (Serializable) user);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
@@ -153,12 +187,14 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mNameUpdateProfile = (EditText) findViewById(R.id.update_field_name);
         mGenderUpdateProfile = (EditText) findViewById(R.id.update_field_gender);
         mPhotoUpdateProfile = (EditText) findViewById(R.id.update_field_photo);
-        mAgeUpdateProfile = (EditText) findViewById(R.id.update_field_age);
+
+        int position = adapter.getPosition(user.getAge());
+        mAgeUpdateSpinner.setSelection(position);
 
         mEmailUpdateProfile.setText(user.getEmail());
         mNameUpdateProfile.setText(user.getName());
         mGenderUpdateProfile.setText(user.getGender());
         mPhotoUpdateProfile.setText(user.getPhoto());
-        mAgeUpdateProfile.setText(user.getAge());
+
     }
 }

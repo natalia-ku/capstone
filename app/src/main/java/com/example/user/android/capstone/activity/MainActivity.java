@@ -10,12 +10,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
     List<Event> eventsListFromDatabase = new ArrayList<>();
     private FirebaseAuth mAuth;
-    private RecyclerView recyclerView;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
     FloatingActionButton mCreateNewEventButton;
@@ -60,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
     Button mSignOutMainButton;
     Button mAllEventsNewButton;
     Button mFutureEventsNewButton;
-    Button mEventsOnMapButton;
-    Button mEventOnListButton;
+    RadioButton mEventsOnMapButton;
+    RadioButton mEventOnListButton;
     FrameLayout fl;
-
+    Switch mySwitch;
     TextView mFilterStatusTextView;
     String filterByCategory;
     Spinner spinner;
@@ -77,26 +80,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         initializeTextViewsAndButtons();
-
         eventFragment = new EventFragment();
-
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
         setOnClickListeners(null);
-
         initListFragment();
-
         listView = true;
         displayListOfEvents(true, false, listView);
         futureEventsFilter();
         setUpSpinner();
-
-
     } // end onCreate
+
+
 
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter, final boolean listView) {
@@ -125,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                     Iterator<Event> iterEvent = eventsListFromDatabase.iterator();
                     while (iterEvent.hasNext()) {
                         Event event = iterEvent.next();
-                        if (!checkIfDateInFuture(event.getDate())) {
+                        if (!event.checkIfDateInFuture(event.getDate())) {
                             iterEvent.remove();
                         }
                     }
@@ -142,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 setOnClickListeners(eventsListFromDatabase);
+
 
                 if (listView) {
                     initListFragment();
@@ -160,29 +158,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void initListFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameEvents, eventFragment);
-        ft.commit();
+        if (isDestroyed()) {
+            return;
+        }
+        ft.commitAllowingStateLoss();
     }
 
     private void updateFragment() {
         eventFragment.updateList(eventsListFromDatabase);
-    }
-
-    private boolean checkIfDateInFuture(String date) {
-        Date today = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        try {
-            Date eventDate = formatter.parse(date);
-            if (eventDate.after(today)) {
-                return true;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     private void futureEventsFilter() {
@@ -276,8 +262,6 @@ public class MainActivity extends AppCompatActivity {
         mEventOnListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mEventOnListButton.setVisibility(View.GONE);
-                mEventsOnMapButton.setVisibility(View.VISIBLE);
                 fl.setVisibility(View.VISIBLE);
                 listView = true;
             }
@@ -293,10 +277,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void setUpMap(final List<Event>eventsList){
-        mEventsOnMapButton.setVisibility(View.GONE);
-        mEventOnListButton.setVisibility(View.VISIBLE);
+//        mEventsOnMapButton.setVisibility(View.GONE);
+//        mEventOnListButton.setVisibility(View.VISIBLE);
         fl.setVisibility(View.GONE);
         SupportMapFragment map = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
         map.getMapAsync(new OnMapReadyCallback() {
@@ -414,9 +397,9 @@ public class MainActivity extends AppCompatActivity {
         mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
         mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
         mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
-        mEventsOnMapButton = (Button) findViewById(R.id.events_map_button);
-        mEventOnListButton = (Button) findViewById(R.id.events_list_button);
-        mEventOnListButton.setVisibility(View.GONE);
+        mEventsOnMapButton = (RadioButton) findViewById(R.id.events_map_button);
+        mEventOnListButton = (RadioButton) findViewById(R.id.events_list_button);
+        mEventOnListButton.setChecked(true);
          fl = (FrameLayout) findViewById(R.id.frameEvents);
 
     }

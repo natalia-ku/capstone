@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by nataliakuleniuk on 6/28/17.
@@ -97,8 +100,19 @@ public class Event  implements Parcelable, Serializable{
 
     }
 
-
-
+    public   boolean checkIfDateInFuture(String date) {
+        Date today = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        try {
+            Date eventDate = formatter.parse(date);
+            if (eventDate.after(today)) {
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
 

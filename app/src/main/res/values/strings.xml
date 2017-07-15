@@ -71,6 +71,20 @@
         <item>15</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <string-array name="age_sign_up_array">
+        <item> less than 18</item>
+        <item>18-24</item>
+        <item>25-30</item>
+        <item>31-35</item>
+        <item>36-40</item>
+        <item>41-45</item>
+        <item>46-50</item>
+        <item>51-55</item>
+        <item>56-65</item>
+        <item>66-75</item>
+        <item> more than 76</item>
+    </string-array>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

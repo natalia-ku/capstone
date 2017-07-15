@@ -36,8 +36,13 @@ import java.util.List;
 
 
 public class EventInfoActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    FirebaseUser currentUser = mAuth.getCurrentUser();
+    DatabaseReference mEventsRef = mRootRef.child("events");
+    DatabaseReference mUserRef = mRootRef.child("users");
     private RecyclerView recyclerView;
-    private FirebaseAuth mAuth;
     TextView mEventInfoTitle;
     TextView mEventInfoCategory;
     TextView mEventInfoAddress;
@@ -53,13 +58,10 @@ public class EventInfoActivity extends AppCompatActivity {
     Button mAddToCalendarButton;
     Button mOpenChatButton;
     Button mEventOnMap;
+    boolean eventInPast;
 
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mEventsRef = mRootRef.child("events");
-    DatabaseReference mUserRef = mRootRef.child("users");
-
-    String eventId; // to create user-event relations
-    String userId; // to create user-event relations
+    String eventId;
+    String userId;
     final int REQUEST_CODE = 23;
 
     @Override
@@ -67,11 +69,12 @@ public class EventInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_info);
         initializeTextViewsAndButtons();
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+
         Event event = getIntent().getParcelableExtra("event");
         eventId = event.getId();
-
+        if(!event.checkIfDateInFuture(event.getDate())){
+            eventInPast = true;
+        }
         updateEventUI(event);
         updateEventListener(event);
         getEventParticipants(eventId);
@@ -83,15 +86,15 @@ public class EventInfoActivity extends AppCompatActivity {
             mParticipateInEventButton.setVisibility(View.GONE);
             mCancelParticipationButton.setVisibility(View.GONE);
         }
-
         setUpGetDirections();
         setUpCreatorIdEvent();
         getEventOnMapListener(event);
-        setUpParticipateInEventButton(event);
-        cancelParticipationEvent(event);
         listenForChangesInAttendeeList();
         addToCalendarListener(event);
         openChatListener(event);
+        setUpParticipateInEventButton(event);
+        cancelParticipationEvent(event);
+
 
     } // end of onCreate method
 
@@ -212,13 +215,13 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void getEventOnMapListener(final Event event){
+    private void getEventOnMapListener(final Event event) {
         mEventOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                        intent.putExtra("event",(Parcelable) event);
-                        startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("event", (Parcelable) event);
+                startActivity(intent);
             }
         });
     }
@@ -298,6 +301,17 @@ public class EventInfoActivity extends AppCompatActivity {
                     mOpenChatButton.setVisibility(View.GONE);
                     mCancelParticipationButton.setVisibility(View.GONE);
                     mParticipateInEventButton.setVisibility(View.VISIBLE);
+                }
+                if (eventInPast) {
+                    mParticipateInEventButton.setVisibility(View.GONE);
+                    mCancelParticipationButton.setVisibility(View.GONE);
+                    mAddToCalendarButton.setVisibility(View.GONE);
+                    if (userAlreadyInList){
+                        mOpenChatButton.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        mOpenChatButton.setVisibility(View.GONE);
+                    }
                 }
             }
 
@@ -383,10 +397,13 @@ public class EventInfoActivity extends AppCompatActivity {
         mEventInfoDate.setText(e1.getDataTime());
         mEventInfoTime.setText(e1.getTime());
         mEventInfoDetails.setText(e1.getDetails());
-        mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
+        if (Integer.parseInt(e1.getPeopleNeeded()) == 0) {
+            mEventInfoPeopleNeeded.setText("We already found all people for this event");
+        } else {
+            mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
+        }
         mEventInfoCreatorId.setText(e1.getCreatorId());
     }
-
 
 
     private void setUpRecycleViewForUserList(List<User> eventUsers) {
@@ -405,8 +422,12 @@ public class EventInfoActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 getEventParticipants(eventIdFinal);
-                mAddToCalendarButton.setVisibility(View.VISIBLE);
-                mOpenChatButton.setVisibility(View.VISIBLE);
+                    mAddToCalendarButton.setVisibility(View.VISIBLE);
+                    mOpenChatButton.setVisibility(View.VISIBLE);
+                if (currentUser == null){
+                    mOpenChatButton.setVisibility(View.GONE);
+                }
+
             }
 
             @Override
@@ -416,8 +437,11 @@ public class EventInfoActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 getEventParticipants(eventIdFinal);
-                mAddToCalendarButton.setVisibility(View.GONE);
-                mOpenChatButton.setVisibility(View.GONE);
+                    mAddToCalendarButton.setVisibility(View.GONE);
+                    mOpenChatButton.setVisibility(View.GONE);
+                if (currentUser == null){
+                    mOpenChatButton.setVisibility(View.GONE);
+                }
             }
 
             @Override
