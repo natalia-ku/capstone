@@ -114,7 +114,23 @@ public class MainActivity extends AppCompatActivity {
         displayListOfEvents(true, false, listView);
         futureEventsFilter();
         setUpSpinner();
+        if (currentUser == null) {
+            hideItem();
+        }
     } // end onCreate
+
+    private void hideItem() {
+        Menu navMenu = nvDrawer.getMenu();
+        navMenu.findItem(R.id.nav_first_fragment).setVisible(false);
+        navMenu.findItem(R.id.nav_fourth_fragment).setVisible(false);
+    }
+
+    private void showItem() {
+        Menu navMenu = nvDrawer.getMenu();
+        navMenu.findItem(R.id.nav_first_fragment).setVisible(true);
+        navMenu.findItem(R.id.nav_fourth_fragment).setVisible(true);
+        navMenu.findItem(R.id.nav_second_fragment).setVisible(false);
+    }
 
 
     private ActionBarDrawerToggle setupDrawerToggle() {
@@ -135,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
+
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -153,15 +170,26 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_second_fragment:
                 destinationClass = SignUpActivity.class;
                 break;
+            case R.id.nav_third_fragment:
+                destinationClass = MainActivity.class;
+                break;
+            case R.id.nav_fourth_fragment:
+                destinationClass = null;
+                mAuth.signOut();
+                Toast.makeText(MainActivity.this, "You successfully signed out",
+                        Toast.LENGTH_LONG).show();
+                updateUI(null);
+                break;
             default:
                 destinationClass = MainActivity.class;
         }
-
-        Intent intent = new Intent(getApplicationContext(), destinationClass);
-        startActivity(intent);
-        menuItem.setChecked(true);
-        setTitle(menuItem.getTitle());
-        mDrawer.closeDrawers();
+        if (destinationClass != null) {
+            Intent intent = new Intent(getApplicationContext(), destinationClass);
+            startActivity(intent);
+            menuItem.setChecked(true);
+            setTitle(menuItem.getTitle());
+            mDrawer.closeDrawers();
+        }
     }
 
     @Override
@@ -465,6 +493,7 @@ public class MainActivity extends AppCompatActivity {
             mSignOutMainButton.setVisibility(View.GONE);
             mUserProfileButton.setVisibility(View.GONE);
             mCreateNewEventButton.setVisibility(View.GONE);
+            hideItem();
         } else {
             mSignInUpButton.setVisibility(View.GONE);
             mSignOutMainButton.setVisibility(View.VISIBLE);
