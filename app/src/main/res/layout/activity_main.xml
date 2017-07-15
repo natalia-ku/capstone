@@ -13,8 +13,8 @@
 
 
     <!-- The main content view -->
-
 <LinearLayout
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -37,26 +37,26 @@
         android:orientation="vertical">
 
 
-        <Button
-            android:id="@+id/sign_out_main_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign Out"
-            android:visibility="invisible" />
+        <!--<Button-->
+            <!--android:id="@+id/sign_out_main_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Sign Out"-->
+            <!--android:visibility="invisible" />-->
 
-        <Button
-            android:id="@+id/user_profile_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Profile"
-            android:visibility="visible" />
+        <!--<Button-->
+            <!--android:id="@+id/user_profile_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Profile"-->
+            <!--android:visibility="visible" />-->
 
 
-        <Button
-            android:id="@+id/sign_in_up_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign In/ Sign Up" />
+        <!--<Button-->
+            <!--android:id="@+id/sign_in_up_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Sign In/ Sign Up" />-->
 
 
             <Spinner
@@ -113,7 +113,7 @@
                     style="@style/RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Future events" />
+                    android:text="Upcoming" />
 
                 <RadioButton
                     android:id="@+id/all_events_button"

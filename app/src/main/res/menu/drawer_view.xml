@@ -10,19 +10,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_third_fragment"
+            android:id="@+id/nav_home"
 
             android:title="HOME" />
         <item
-            android:id="@+id/nav_first_fragment"
+            android:id="@+id/nav_profile"
 
             android:title="Profile" />
         <item
-            android:id="@+id/nav_second_fragment"
+            android:id="@+id/nav_signin_signup"
 
             android:title="Sign In / Sign Up" />
         <item
-            android:id="@+id/nav_fourth_fragment"
+            android:id="@+id/nav_signout"
 
             android:title="Sign Out" />
 

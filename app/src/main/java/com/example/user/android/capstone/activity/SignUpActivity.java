@@ -26,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity implements
         View.OnClickListener {
-
     String userAgeFromSpinner;
     private static final String TAG = "EmailPassword";
     private TextView mStatusTextView;
@@ -34,12 +33,9 @@ public class SignUpActivity extends AppCompatActivity implements
     private EditText mPasswordField;
     private EditText mEmailSignUpField;
     private EditText mPasswordSignUpField;
-
     private FirebaseAuth mAuth;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mUserRef = mRootRef.child("users");
-
-    // TO CREATE NEW USER:
     private EditText mNameSignUpField;
     private EditText mGenderSignUpField;
     private EditText mPhotoSignUpField;
@@ -51,27 +47,33 @@ public class SignUpActivity extends AppCompatActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        mStatusTextView = (TextView) findViewById(R.id.status);
 
+        initializeViewsElements();
+        mAuth = FirebaseAuth.getInstance();
+        setUpSpinner();
+    }
+
+
+
+
+
+
+    
+    private void initializeViewsElements(){
+        mStatusTextView = (TextView) findViewById(R.id.status);
         // SIGN IN:
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
         // SIGN UP:
         mEmailSignUpField = (EditText) findViewById(R.id.signup_field_email);
         mPasswordSignUpField = (EditText) findViewById(R.id.signup_field_password);
-
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_up_button).setOnClickListener(this);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        setUpSpinner();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
@@ -111,21 +113,15 @@ public class SignUpActivity extends AppCompatActivity implements
                             mNameSignUpField = (EditText) findViewById(R.id.name_sign_up_form_editview);
                             mGenderSignUpField = (EditText) findViewById(R.id.gender_sign_up_form_editview);
                             mPhotoSignUpField = (EditText) findViewById(R.id.photo_sign_up_form_editview);
-                           // mAgeSignUpField = (EditText) findViewById(R.id.age_sign_up_form_editview);
-//                            mAgeSignUpSpinner = (Spinner) findViewById(R.id.age_sign_up_form_spinner);
                             mEmailSignUpField = (EditText) findViewById(R.id.signup_field_email);
 
                             String userName = mNameSignUpField.getText().toString();
                             String userGender = mGenderSignUpField.getText().toString();
                             String userPhoto = mPhotoSignUpField.getText().toString();
                             String userAge = userAgeFromSpinner;
-//                            String userAge = mAgeSignUpField.getText().toString();
                             String userEmail = mEmailSignUpField.getText().toString();
 
                             mUserRef.push().setValue(new User(userEmail, userName, userGender, userPhoto, userAge));
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-
                             Toast.makeText(SignUpActivity.this, "You successfully created new account",
                                     Toast.LENGTH_SHORT).show();
 

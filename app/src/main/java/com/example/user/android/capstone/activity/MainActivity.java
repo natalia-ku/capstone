@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -67,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
     FloatingActionButton mCreateNewEventButton;
-    Button mUserProfileButton;
-    Button mSignInUpButton;
-    Button mSignOutMainButton;
     RadioButton mAllEventsNewButton;
     RadioButton mFutureEventsNewButton;
     RadioButton mEventsOnMapButton;
@@ -88,11 +86,13 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
 
+
+    protected LinearLayout frameLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        frameLayout = (LinearLayout)findViewById(R.id.main_layout);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         eventFragment = new EventFragment();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
         setOnClickListeners(null);
         initListFragment();
         listView = true;
@@ -115,21 +114,26 @@ public class MainActivity extends AppCompatActivity {
         futureEventsFilter();
         setUpSpinner();
         if (currentUser == null) {
-            hideItem();
+            hideMenuItems();
+        } else {
+            showMenuItems();
         }
     } // end onCreate
 
-    private void hideItem() {
+    private void hideMenuItems() {
         Menu navMenu = nvDrawer.getMenu();
-        navMenu.findItem(R.id.nav_first_fragment).setVisible(false);
-        navMenu.findItem(R.id.nav_fourth_fragment).setVisible(false);
+        navMenu.findItem(R.id.nav_profile).setVisible(false);
+        navMenu.findItem(R.id.nav_signout).setVisible(false);
+        navMenu.findItem(R.id.nav_signin_signup).setVisible(true);
+        mCreateNewEventButton.setVisibility(View.GONE);
     }
 
-    private void showItem() {
+    private void showMenuItems() {
         Menu navMenu = nvDrawer.getMenu();
-        navMenu.findItem(R.id.nav_first_fragment).setVisible(true);
-        navMenu.findItem(R.id.nav_fourth_fragment).setVisible(true);
-        navMenu.findItem(R.id.nav_second_fragment).setVisible(false);
+        navMenu.findItem(R.id.nav_profile).setVisible(true);
+        navMenu.findItem(R.id.nav_signout).setVisible(true);
+        navMenu.findItem(R.id.nav_signin_signup).setVisible(false);
+        mCreateNewEventButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -164,21 +168,21 @@ public class MainActivity extends AppCompatActivity {
     public void selectDrawerItem(MenuItem menuItem) {
         Class destinationClass;
         switch (menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
+            case R.id.nav_profile:
                 destinationClass = UserProfileActivity.class;
                 break;
-            case R.id.nav_second_fragment:
+            case R.id.nav_signin_signup:
                 destinationClass = SignUpActivity.class;
                 break;
-            case R.id.nav_third_fragment:
+            case R.id.nav_home:
                 destinationClass = MainActivity.class;
                 break;
-            case R.id.nav_fourth_fragment:
+            case R.id.nav_signout:
                 destinationClass = null;
                 mAuth.signOut();
                 Toast.makeText(MainActivity.this, "You successfully signed out",
                         Toast.LENGTH_LONG).show();
-                updateUI(null);
+                hideMenuItems();
                 break;
             default:
                 destinationClass = MainActivity.class;
@@ -305,37 +309,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners(final List<Event> eventsList) {
-        mSignOutMainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                Toast.makeText(MainActivity.this, "You successfully signed out",
-                        Toast.LENGTH_LONG).show();
-                updateUI(null);
-            }
-        });
-
-        mUserProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Class destinationClass = UserProfileActivity.class;
-                Intent intentToUserProfileActivity = new Intent(getApplicationContext(), destinationClass);
-                startActivity(intentToUserProfileActivity);
-            }
-        });
-
         mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 Class destinationClass = CreateNewEventActivity.class;
-                Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
-                startActivity(intentToStartCreateNewEventActivity);
-            }
-        });
-
-        mSignInUpButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Class destinationClass = SignUpActivity.class;
                 Intent intentToStartCreateNewEventActivity = new Intent(getApplicationContext(), destinationClass);
                 startActivity(intentToStartCreateNewEventActivity);
             }
@@ -348,7 +324,6 @@ public class MainActivity extends AppCompatActivity {
                 listView = true;
             }
         });
-
 
         mEventsOnMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -472,14 +447,13 @@ public class MainActivity extends AppCompatActivity {
         mAllEventsNewButton = (RadioButton) findViewById(R.id.all_events_button);
         mFutureEventsNewButton = (RadioButton) findViewById(R.id.future_events_button);
         mFutureEventsNewButton.setChecked(true);
-
         filterEventCategory = false;
         filterFutureEvents = true;
         spinner = (Spinner) findViewById(R.id.sport_types_spinner);
         mCreateNewEventButton = (FloatingActionButton) findViewById(R.id.create_event_button);
-        mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
-        mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
-        mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
+//        mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
+//        mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
+//        mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
         mEventsOnMapButton = (RadioButton) findViewById(R.id.events_map_button);
         mEventOnListButton = (RadioButton) findViewById(R.id.events_list_button);
         mEventOnListButton.setChecked(true);
@@ -487,18 +461,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void updateUI(FirebaseUser currentUser) {
-        if (currentUser == null) {
-            mSignInUpButton.setVisibility(View.VISIBLE);
-            mSignOutMainButton.setVisibility(View.GONE);
-            mUserProfileButton.setVisibility(View.GONE);
-            mCreateNewEventButton.setVisibility(View.GONE);
-            hideItem();
-        } else {
-            mSignInUpButton.setVisibility(View.GONE);
-            mSignOutMainButton.setVisibility(View.VISIBLE);
-            mUserProfileButton.setVisibility(View.VISIBLE);
-        }
-    }
 
 }
