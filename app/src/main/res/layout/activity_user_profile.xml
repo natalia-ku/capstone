@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+   >
 
 
     <ScrollView
@@ -15,57 +15,122 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/user_profile_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="USER PROFILE INFO" />
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:background="@drawable/back"
+                android:layout_height="280dp">
+                <TextView
+                    android:textColor="#FFFFFF"
+                    android:id="@+id/user_profile_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="30dp"
+                    android:text="PROFILE" />
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="190dp"
+                    android:layout_height="190dp"
+                    android:id="@+id/user_photo"/>
+
+                <TextView
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:textSize="30dp"
+                    android:id="@+id/name_profile_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            
+
+<TableLayout
+    android:layout_gravity="center_horizontal"
+    android:layout_width="fill_parent"
+    android:background="@drawable/border"
+    android:layout_height="fill_parent">
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+        <TextView
+            android:textColor="#D3D3D3"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:layout_width="123dp"
+            android:layout_height="wrap_content"
+            android:text="Email" />
+
+        <TextView
+            android:textColor="#D3D3D3"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:layout_width="123dp"
+
+            android:layout_height="wrap_content"
+            android:text="Gender" />
+
+        <TextView
+            android:textColor="#D3D3D3"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:layout_width="123dp"
+
+            android:layout_height="wrap_content"
+            android:text="Age group" />
+
+
+    </TableRow>
+
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+
+        <TextView
+            android:textSize="20dp"
+
+            android:layout_gravity="center"
+            android:id="@+id/email_profile_info"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:id="@+id/gender_profile_info"
+            android:layout_width="123dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:id="@+id/age_profile_info"
+            android:layout_width="123dp"
+            android:layout_height="wrap_content"/>
+
+    </TableRow>
+
+</TableLayout>
+
 
             <Button
                 android:text="Update Profile"
+                android:layout_gravity="center"
+                android:backgroundTint="#966EF4"
+                android:textColor="#FFFFFF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_profile"/>
 
-            <ImageView
-                android:layout_width="190dp"
-                android:layout_height="190dp"
-                android:id="@+id/user_photo"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email:" />
-            <TextView
-                android:id="@+id/email_profile_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name:" />
-            <TextView
-                android:id="@+id/name_profile_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gender:" />
-            <TextView
-                android:id="@+id/gender_profile_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Age group:" />
-            <TextView
-                android:id="@+id/age_profile_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
             <TextView
                 android:layout_width="wrap_content"

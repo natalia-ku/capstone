@@ -3,12 +3,15 @@ package com.example.user.android.capstone.activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -34,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,9 +46,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.fragment.EventFragment;
 import com.example.user.android.capstone.model.Event;
+import com.example.user.android.capstone.model.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -60,53 +68,59 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import static com.example.user.android.capstone.R.id.imageView;
 
 public class MainActivity extends AppCompatActivity {
 
-    List<Event> eventsListFromDatabase = new ArrayList<>();
+    private List<Event> eventsListFromDatabase = new ArrayList<>();
     private FirebaseAuth mAuth;
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mEventsRef = mRootRef.child("events");
-    FloatingActionButton mCreateNewEventButton;
-    RadioButton mAllEventsNewButton;
-    RadioButton mFutureEventsNewButton;
-    RadioButton mEventsOnMapButton;
-    RadioButton mEventOnListButton;
-    FrameLayout fl;
-    String filterByCategory;
-    Spinner spinner;
-    boolean filterEventCategory;
-    boolean filterFutureEvents;
-    boolean listView;
-    EventFragment eventFragment;
-
-
+    FirebaseUser currentUser;
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mEventsRef = mRootRef.child("events");
+    private DatabaseReference mUsersRef = mRootRef.child("users");
+    private FloatingActionButton mCreateNewEventButton;
+    private RadioButton mAllEventsNewButton;
+    private RadioButton mEventOnListButton;
+    private RadioButton mFutureEventsNewButton;
+    private RadioButton mEventsOnMapButton;
+    private FrameLayout fl;
+    private String filterByCategory;
+    private Spinner spinner;
+    private boolean filterEventCategory;
+    private boolean filterFutureEvents;
+    private boolean listView;
+    private EventFragment eventFragment;
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
-
-
+    private ImageView mImageProfileView;
+    private TextView mUserNameTextView;
     protected LinearLayout frameLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        frameLayout = (LinearLayout)findViewById(R.id.main_layout);
+        frameLayout = (LinearLayout) findViewById(R.id.main_layout);
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
-
-
         initializeTextViewsAndButtons();
         eventFragment = new EventFragment();
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+         currentUser = mAuth.getCurrentUser();
         setOnClickListeners(null);
         initListFragment();
         listView = true;
@@ -117,92 +131,9 @@ public class MainActivity extends AppCompatActivity {
             hideMenuItems();
         } else {
             showMenuItems();
+            findUserByEmail(currentUser.getEmail());
         }
     } // end onCreate
-
-    private void hideMenuItems() {
-        Menu navMenu = nvDrawer.getMenu();
-        navMenu.findItem(R.id.nav_profile).setVisible(false);
-        navMenu.findItem(R.id.nav_signout).setVisible(false);
-        navMenu.findItem(R.id.nav_signin_signup).setVisible(true);
-        mCreateNewEventButton.setVisibility(View.GONE);
-    }
-
-    private void showMenuItems() {
-        Menu navMenu = nvDrawer.getMenu();
-        navMenu.findItem(R.id.nav_profile).setVisible(true);
-        navMenu.findItem(R.id.nav_signout).setVisible(true);
-        navMenu.findItem(R.id.nav_signin_signup).setVisible(false);
-        mCreateNewEventButton.setVisibility(View.VISIBLE);
-    }
-
-
-    private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        selectDrawerItem(menuItem);
-                        return true;
-                    }
-                });
-    }
-
-    public void selectDrawerItem(MenuItem menuItem) {
-        Class destinationClass;
-        switch (menuItem.getItemId()) {
-            case R.id.nav_profile:
-                destinationClass = UserProfileActivity.class;
-                break;
-            case R.id.nav_signin_signup:
-                destinationClass = SignUpActivity.class;
-                break;
-            case R.id.nav_home:
-                destinationClass = MainActivity.class;
-                break;
-            case R.id.nav_signout:
-                destinationClass = null;
-                mAuth.signOut();
-                Toast.makeText(MainActivity.this, "You successfully signed out",
-                        Toast.LENGTH_LONG).show();
-                hideMenuItems();
-                break;
-            default:
-                destinationClass = MainActivity.class;
-        }
-        if (destinationClass != null) {
-            Intent intent = new Intent(getApplicationContext(), destinationClass);
-            startActivity(intent);
-            menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
-            mDrawer.closeDrawers();
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter, final boolean listView) {
@@ -451,14 +382,148 @@ public class MainActivity extends AppCompatActivity {
         filterFutureEvents = true;
         spinner = (Spinner) findViewById(R.id.sport_types_spinner);
         mCreateNewEventButton = (FloatingActionButton) findViewById(R.id.create_event_button);
-//        mSignInUpButton = (Button) findViewById(R.id.sign_in_up_button);
-//        mSignOutMainButton = (Button) findViewById(R.id.sign_out_main_button);
-//        mUserProfileButton = (Button) findViewById(R.id.user_profile_button);
         mEventsOnMapButton = (RadioButton) findViewById(R.id.events_map_button);
         mEventOnListButton = (RadioButton) findViewById(R.id.events_list_button);
         mEventOnListButton.setChecked(true);
         fl = (FrameLayout) findViewById(R.id.frameEvents);
+    }
 
+
+// ---------------NAVIGATION:---------------
+
+    private void hideMenuItems() {
+        Menu navMenu = nvDrawer.getMenu();
+        navMenu.findItem(R.id.nav_profile).setVisible(false);
+        navMenu.findItem(R.id.nav_signout).setVisible(false);
+        navMenu.findItem(R.id.nav_signin_signup).setVisible(true);
+        nvDrawer.getHeaderView(0).setVisibility(View.GONE);
+        mCreateNewEventButton.setVisibility(View.GONE);
+    }
+
+    private void showMenuItems() {
+        Menu navMenu = nvDrawer.getMenu();
+        navMenu.findItem(R.id.nav_profile).setVisible(true);
+        navMenu.findItem(R.id.nav_signout).setVisible(true);
+        navMenu.findItem(R.id.nav_signin_signup).setVisible(false);
+        mCreateNewEventButton.setVisibility(View.VISIBLE);
+        View headerLayout = nvDrawer.getHeaderView(0);
+        headerLayout.setVisibility(View.VISIBLE);
+        mImageProfileView = (ImageView) headerLayout.findViewById(imageView);
+        mUserNameTextView = (TextView) headerLayout.findViewById(R.id.user_name_textview);
+
+    }
+
+    private void findUserByEmail(String email){
+        Query userProfileQuery = mUsersRef.orderByChild("email").equalTo(email);
+        userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    final User user;
+                    String currentUserId ="";
+                    String name = "";
+                    String email = "";
+                    String age ="";
+                    String gender="";
+                    String photo ="";
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        currentUserId = (String) eventSnapshot.getKey();
+                        name = (String) eventSnapshot.child("name").getValue();
+                        email = (String) eventSnapshot.child("email").getValue();
+                        age = (String) eventSnapshot.child("age").getValue();
+                        gender = (String) eventSnapshot.child("gender").getValue();
+                        photo = (String) eventSnapshot.child("photo").getValue();
+                    }
+                    user = new User(currentUserId, email, name, gender, photo, age);
+                    String photoUrl = user.getPhoto();
+                    mUserNameTextView.setText("Hello, " + user.getName());
+                    Glide.with(getApplicationContext()).load(photoUrl).asBitmap().centerCrop().into(new BitmapImageViewTarget(mImageProfileView) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getApplication().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            mImageProfileView.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        Class destinationClass;
+        switch (menuItem.getItemId()) {
+            case R.id.nav_profile:
+                destinationClass = UserProfileActivity.class;
+                break;
+            case R.id.nav_signin_signup:
+                destinationClass = SignUpActivity.class;
+                break;
+            case R.id.nav_home:
+                destinationClass = MainActivity.class;
+                break;
+            case R.id.nav_signout:
+                destinationClass = null;
+                mAuth.signOut();
+                Toast.makeText(MainActivity.this, "You successfully signed out",
+                        Toast.LENGTH_LONG).show();
+                hideMenuItems();
+                break;
+            default:
+                destinationClass = MainActivity.class;
+        }
+        if (destinationClass != null) {
+            Intent intent = new Intent(getApplicationContext(), destinationClass);
+            startActivity(intent);
+//            menuItem.setChecked(true);
+            setTitle("SportMate");
+            mDrawer.closeDrawers();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

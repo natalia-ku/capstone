@@ -3,27 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
-    <!--<item android:id="@+id/action_settings"-->
-        <!--android:title="Menu"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="never"/>-->
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-
+            android:icon="@drawable/home"
             android:title="HOME" />
         <item
             android:id="@+id/nav_profile"
-
+            android:icon="@drawable/person"
             android:title="Profile" />
         <item
             android:id="@+id/nav_signin_signup"
-
+            android:icon="@drawable/signin"
             android:title="Sign In / Sign Up" />
         <item
             android:id="@+id/nav_signout"
-
+            android:icon="@drawable/signout"
             android:title="Sign Out" />
 
     </group>

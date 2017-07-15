@@ -1,6 +1,9 @@
 package com.example.user.android.capstone.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.user.android.capstone.adapter.EventAdapter;
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.model.Event;
@@ -64,7 +69,6 @@ public class UserProfileActivity extends AppCompatActivity {
     } // END of OnCreate
 
     private void setUpProfileInfo(String userEmail) {
-
         Query userProfileQuery = mUserRef.orderByChild("email").equalTo(userEmail);
         userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -89,7 +93,6 @@ public class UserProfileActivity extends AppCompatActivity {
                          photo = (String) eventSnapshot.child("photo").getValue();
                     }
                     user = new User(currentUserId, email, name, gender, photo, age);
-                    System.out.println("USER INFO:   " + user.getAge() + user.getEmail());
                     setTextToViews(email, name, age, gender, photo);
                     findCreatedByUserEvents(currentUserId);
                     findEventsUserParticipatedIn(currentUserId);
@@ -146,7 +149,6 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void getEventsUserParticipatedIn(List<String> eventIdsList) {
         //TO GET EVENTS USER PARTICIPATED IN:
@@ -236,8 +238,16 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserName.setText(name);
         mUserAge.setText(age);
         mUserGender.setText(gender);
-        // CHANGE TO REAL URL:
-        Picasso.with(getApplicationContext()).load("https://assets.merriam-webster.com/mw/images/article/art-wap-article-main/puppy-3143-7cfb4d6a42dfc7d9d1ae7e23126279e8@1x.jpg").into(mUserPhotoImage);
+        Glide.with(getApplicationContext()).load(photo).asBitmap().centerCrop().into(new BitmapImageViewTarget(mUserPhotoImage) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(getApplication().getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                mUserPhotoImage.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+
     }
 
     private void setUpRecycleView(List<Event> userEvents, boolean eventsCreatedByUser) {
