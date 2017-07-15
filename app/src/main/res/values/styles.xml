@@ -1,11 +1,10 @@
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#673AB7</item>
+        <item name="colorPrimaryDark">#512DA8</item>
+        <item name="colorAccent">#FF4081</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
-
-
     <attr name="sc_corner_radius" format="dimension" />
     <attr name="sc_border_width" format="dimension" />
     <attr name="sc_tint_color" format="color" />

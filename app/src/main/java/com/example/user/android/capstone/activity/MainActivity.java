@@ -2,22 +2,30 @@ package com.example.user.android.capstone.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Geocoder;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -74,10 +82,27 @@ public class MainActivity extends AppCompatActivity {
     boolean listView;
     EventFragment eventFragment;
 
+
+    private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = setupDrawerToggle();
+        mDrawer.addDrawerListener(drawerToggle);
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        setupDrawerContent(nvDrawer);
+
+
         initializeTextViewsAndButtons();
         eventFragment = new EventFragment();
         mAuth = FirebaseAuth.getInstance();
@@ -89,17 +114,63 @@ public class MainActivity extends AppCompatActivity {
         displayListOfEvents(true, false, listView);
         futureEventsFilter();
         setUpSpinner();
-
-
-
-
-
-
-
-
     } // end onCreate
 
 
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        Class destinationClass;
+        switch (menuItem.getItemId()) {
+            case R.id.nav_first_fragment:
+                destinationClass = UserProfileActivity.class;
+                break;
+            case R.id.nav_second_fragment:
+                destinationClass = SignUpActivity.class;
+                break;
+            default:
+                destinationClass = MainActivity.class;
+        }
+
+        Intent intent = new Intent(getApplicationContext(), destinationClass);
+        startActivity(intent);
+        menuItem.setChecked(true);
+        setTitle(menuItem.getTitle());
+        mDrawer.closeDrawers();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter, final boolean listView) {
@@ -137,8 +208,7 @@ public class MainActivity extends AppCompatActivity {
                 if (listView) {
                     initListFragment();
                     updateFragment();
-                }
-                else{
+                } else {
                     setUpMap(eventsListFromDatabase);
                 }
             }
@@ -261,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpMap(final List<Event>eventsList){
+    private void setUpMap(final List<Event> eventsList) {
 //        mEventsOnMapButton.setVisibility(View.GONE);
 //        mEventOnListButton.setVisibility(View.VISIBLE);
         fl.setVisibility(View.GONE);
@@ -301,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (dataSnapshot.exists()) {
                                     Event event = null;
                                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                                         event = createEventFromSnapshot(eventSnapshot);
+                                        event = createEventFromSnapshot(eventSnapshot);
                                     }
                                     if (!event.getId().equals("")) {
                                         Intent intentToGetEventDetailsActivity = new Intent(getApplicationContext(), EventInfoActivity.class);
@@ -310,6 +380,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
                             }
+
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
 
@@ -325,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private Event createEventFromSnapshot(DataSnapshot eventSnapshot){
+    private Event createEventFromSnapshot(DataSnapshot eventSnapshot) {
         String eventId = "";
         String address = "";
         String creatorId = "";
@@ -335,15 +406,15 @@ public class MainActivity extends AppCompatActivity {
         String peopleNeeded = "";
         String title = "";
         String sportCategory = "";
-            eventId = eventSnapshot.getKey();
-            address = (String) eventSnapshot.child("address").getValue();
-            date = (String) eventSnapshot.child("dataTime").getValue();
-            time = (String) eventSnapshot.child("time").getValue();
-            details = (String) eventSnapshot.child("details").getValue();
-            peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
-            sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
-            title = (String) eventSnapshot.child("title").getValue();
-            creatorId = eventSnapshot.child("creatorId").getValue().toString();
+        eventId = eventSnapshot.getKey();
+        address = (String) eventSnapshot.child("address").getValue();
+        date = (String) eventSnapshot.child("dataTime").getValue();
+        time = (String) eventSnapshot.child("time").getValue();
+        details = (String) eventSnapshot.child("details").getValue();
+        peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
+        sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
+        title = (String) eventSnapshot.child("title").getValue();
+        creatorId = eventSnapshot.child("creatorId").getValue().toString();
 
         Event event = new Event(sportCategory, eventId, title, address, date, time, details, peopleNeeded, creatorId);
         return event;
@@ -384,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
         mEventsOnMapButton = (RadioButton) findViewById(R.id.events_map_button);
         mEventOnListButton = (RadioButton) findViewById(R.id.events_list_button);
         mEventOnListButton.setChecked(true);
-         fl = (FrameLayout) findViewById(R.id.frameEvents);
+        fl = (FrameLayout) findViewById(R.id.frameEvents);
 
     }
 
