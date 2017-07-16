@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/layout_item"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/layout_item">
+    android:orientation="vertical">
 
 
     <android.support.v7.widget.CardView
+        android:id="@+id/cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cv"
         android:layout_marginBottom="@dimen/cardview_compat_inset_shadow">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <ImageView
@@ -27,21 +29,43 @@
 
             <TextView
                 android:id="@+id/event_sport_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="bottom"
+                android:textColor="#FFFFFF"
                 android:textSize="30sp"
-                android:textColor="#084887"/>
+                android:textStyle="bold"
+                android:textAlignment="center" />
 
-            <TextView
-                android:id="@+id/event_date"
+            <LinearLayout
+                android:id="@+id/date_city_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/event_sport_title"
-                android:layout_toRightOf="@+id/event_photo"
-                android:textColor="#F9AB55"/>
+                android:layout_gravity="center">
+                <TextView
+                    android:drawableLeft="@drawable/calendar1"
+                    android:drawablePadding="3dp"
+                    android:id="@+id/event_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_sport_title"
+                    android:layout_toRightOf="@+id/event_photo"
+                    android:textColor="#5828C9" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/event_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_sport_title"
+                    android:layout_toRightOf="@+id/event_photo"
+                    android:drawableLeft="@drawable/map"
+                    android:drawablePadding="3dp"
+                    android:textColor="#5828C9" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 

@@ -59,6 +59,7 @@
                         <RadioButton
                             android:id="@+id/events_list_button"
                             style="@style/RadioButton"
+                            android:background="#5828C9"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="List" />
@@ -133,7 +134,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_margin="28dp"
                     android:layout_marginBottom="30dp"
-                    android:backgroundTint="#0090C1"
+                    android:backgroundTint="#825ADD"
                     android:src="@drawable/ic_add_circle_white_24dp"
                     app:borderWidth="0dp"
                     app:elevation="10dp"

@@ -2,12 +2,16 @@ package com.example.user.android.capstone.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.design.widget.TabLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,10 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,8 @@ public class UserProfileActivity extends AppCompatActivity {
     ImageView mUserPhotoImage;
     Button mEditProfileButton;
     final int REQUEST_CODE = 23;
+    TextView eventsUserCreatedTextView;
+    TextView eventsUserParticipatedTextView;
 
     private FirebaseAuth mAuth;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -64,8 +68,6 @@ public class UserProfileActivity extends AppCompatActivity {
         setUpProfileInfo(userEmail);
 
 
-
-
     } // END of OnCreate
 
     private void setUpProfileInfo(String userEmail) {
@@ -75,22 +77,22 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.exists()) {
-                    System.out.println("IN USER PROFILE ACTIVITY" );
+                    System.out.println("IN USER PROFILE ACTIVITY");
                     final User user;
-                    String currentUserId ="";
+                    String currentUserId = "";
                     String name = "";
                     String email = "";
-                    String age ="";
-                    String gender="";
-                    String photo ="";
+                    String age = "";
+                    String gender = "";
+                    String photo = "";
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         findTextViews();
-                         currentUserId = (String) eventSnapshot.getKey();
-                         name = (String) eventSnapshot.child("name").getValue();
-                         email = (String) eventSnapshot.child("email").getValue();
-                         age = (String) eventSnapshot.child("age").getValue();
-                         gender = (String) eventSnapshot.child("gender").getValue();
-                         photo = (String) eventSnapshot.child("photo").getValue();
+                        currentUserId = (String) eventSnapshot.getKey();
+                        name = (String) eventSnapshot.child("name").getValue();
+                        email = (String) eventSnapshot.child("email").getValue();
+                        age = (String) eventSnapshot.child("age").getValue();
+                        gender = (String) eventSnapshot.child("gender").getValue();
+                        photo = (String) eventSnapshot.child("photo").getValue();
                     }
                     user = new User(currentUserId, email, name, gender, photo, age);
                     setTextToViews(email, name, age, gender, photo);
@@ -140,6 +142,8 @@ public class UserProfileActivity extends AppCompatActivity {
                         eventIdsList.add(eventSnapshot.getKey());
                     }
                     getEventsUserParticipatedIn(eventIdsList);
+                } else {
+                    eventsUserParticipatedTextView.setVisibility(View.GONE);
                 }
             }
 
@@ -173,10 +177,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             Event e1 = new Event(sportCategory, id, title, address, date, time, details, peopleNeeded, creatorId);
                             userEvents.add(e1);
                         }
-                        // SET UP LAYOUT FOR SHOWING USER EVENTS:
                         setUpRecycleView(userEvents, false);
-                    } else {
-                        System.out.println("Error: no data was found");
                     }
                 }
 
@@ -212,7 +213,9 @@ public class UserProfileActivity extends AppCompatActivity {
                         userEvents.add(e1);
                     }
                 }
-                // SET UP LAYOUT FOR SHOWING USER EVENTS:
+                if (userEvents.size() == 0) {
+                    eventsUserCreatedTextView.setVisibility(View.GONE);
+                }
                 setUpRecycleView(userEvents, true);
             }
 
@@ -223,7 +226,6 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-
     private void findTextViews() {
         mUserName = (TextView) findViewById(R.id.name_profile_info);
         mUserEmail = (TextView) findViewById(R.id.email_profile_info);
@@ -231,6 +233,8 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserGender = (TextView) findViewById(R.id.gender_profile_info);
         mUserPhotoImage = (ImageView) findViewById(R.id.user_photo);
         mEditProfileButton = (Button) findViewById(R.id.edit_profile);
+        eventsUserCreatedTextView = (TextView) findViewById(R.id.events_user_created_textview);
+        eventsUserParticipatedTextView = (TextView) findViewById(R.id.events_user_participated_textview);
     }
 
     private void setTextToViews(String email, String name, String age, String gender, String photo) {
@@ -260,5 +264,9 @@ public class UserProfileActivity extends AppCompatActivity {
         recyclerView.setAdapter(myAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
+
+
     }
+
+
 }

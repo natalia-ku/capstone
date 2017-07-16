@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-   >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
 
     <ScrollView
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
-            
+
 
 <TableLayout
     android:layout_gravity="center_horizontal"
@@ -132,10 +132,14 @@
                 android:id="@+id/edit_profile"/>
 
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EVENTS, USER CREATED:" />
+                android:textColor= "#563470"
+                android:id="@+id/events_user_created_textview"
+                android:text="EVENTS, USER CREATED" />
+
 
 
             <android.support.v7.widget.RecyclerView
@@ -149,7 +153,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EVENTS, USER PARTICIPATED:" />
+                android:textColor= "#563470"
+                android:id="@+id/events_user_participated_textview"
+                android:text="EVENTS, USER PARTICIPATED" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view_events_user_participated_in"
@@ -157,6 +163,8 @@
                 android:layout_height="match_parent"
                 android:visibility="visible">
             </android.support.v7.widget.RecyclerView>
+
+
 
         </LinearLayout>
 

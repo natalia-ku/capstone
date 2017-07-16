@@ -3,7 +3,8 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -100,17 +101,6 @@
             android:layout_height="wrap_content"
             android:textSize="22sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CREATOR:"
-            android:textSize="22sp" />
-
-        <TextView
-            android:id="@+id/event_creator_id_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="22sp" />
 
         <Button
             android:id="@+id/paticipate_in_event_button"
@@ -139,13 +129,34 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LIST OF PARTICIPANTS:"
+            android:text="CREATOR"
+            android:textSize="22sp" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/event_creator_photo"/>
+
+        <TextView
+            android:id="@+id/event_creator_id_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#682284"
+            android:text="PARTICIPANTS"
             android:textSize="22sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycle_view_event_attendees"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:scrollbars="horizontal"
+
             android:visibility="visible">
 
         </android.support.v7.widget.RecyclerView>

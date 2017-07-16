@@ -165,9 +165,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
             if (!email.equals(currentUser.getEmail())) {
-                System.out.println("EMAIL:");
-                System.out.println(email);
-                System.out.println(currentUser.getEmail());
                 currentUser.updateEmail(email);
                 currentUser.updatePassword(password);
             }

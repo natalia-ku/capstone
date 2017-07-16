@@ -51,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             eventsList = getIntent().getParcelableArrayListExtra("eventList");
             for (Event event : eventsList) {
                 LatLng address = getLocationFromAddress(event.getAddress());
+
                 if (address != null) {
                     mMap.addMarker(new MarkerOptions().position(address)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
@@ -83,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
-    public LatLng getLocationFromAddress(String strAddress) {
+    public   LatLng getLocationFromAddress(String strAddress) {
         Geocoder coder = new Geocoder(this);
         List<android.location.Address> address;
         LatLng p1 = null;
