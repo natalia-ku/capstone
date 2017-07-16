@@ -90,12 +90,6 @@
             android:textSize="22sp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PEOPLE NEEDED:"
-            android:textSize="22sp" />
-
-        <TextView
             android:id="@+id/event_people_needed_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,13 +100,13 @@
             android:id="@+id/paticipate_in_event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Participate in event" />
+            android:text="JOIN" />
 
         <Button
             android:id="@+id/cancel_participation_in_event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel" />
+            android:text="CANCEL" />
 
         <Button
             android:id="@+id/add_to_calendar_button"

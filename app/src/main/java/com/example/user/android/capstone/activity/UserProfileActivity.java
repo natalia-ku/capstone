@@ -59,14 +59,16 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         String userEmail = getIntent().getStringExtra("userEmail"); // when clicked on other user profile
-
+        mEditProfileButton = (Button) findViewById(R.id.edit_profile);
         if (userEmail == null) { // to see  signed in user own profile
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = mAuth.getCurrentUser();
             userEmail = currentUser.getEmail();
         }
+        else{
+            mEditProfileButton.setVisibility(View.GONE);
+        }
         setUpProfileInfo(userEmail);
-
 
     } // END of OnCreate
 
@@ -77,7 +79,6 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.exists()) {
-                    System.out.println("IN USER PROFILE ACTIVITY");
                     final User user;
                     String currentUserId = "";
                     String name = "";
@@ -99,14 +100,20 @@ public class UserProfileActivity extends AppCompatActivity {
                     findCreatedByUserEvents(currentUserId);
                     findEventsUserParticipatedIn(currentUserId);
 
-                    mEditProfileButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intentToUpdateProfile = new Intent(getApplicationContext(), UpdateProfileActivity.class);
-                            intentToUpdateProfile.putExtra("user", (Serializable) user);
-                            startActivityForResult(intentToUpdateProfile, REQUEST_CODE);
-                        }
-                    });
+
+                        mEditProfileButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intentToUpdateProfile = new Intent(getApplicationContext(), UpdateProfileActivity.class);
+                                intentToUpdateProfile.putExtra("user", (Serializable) user);
+                                startActivityForResult(intentToUpdateProfile, REQUEST_CODE);
+                            }
+                        });
+
+
+
+
+
                 }
             }
 
@@ -232,7 +239,7 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserAge = (TextView) findViewById(R.id.age_profile_info);
         mUserGender = (TextView) findViewById(R.id.gender_profile_info);
         mUserPhotoImage = (ImageView) findViewById(R.id.user_photo);
-        mEditProfileButton = (Button) findViewById(R.id.edit_profile);
+
         eventsUserCreatedTextView = (TextView) findViewById(R.id.events_user_created_textview);
         eventsUserParticipatedTextView = (TextView) findViewById(R.id.events_user_participated_textview);
     }

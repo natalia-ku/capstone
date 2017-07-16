@@ -2,6 +2,7 @@ package com.example.user.android.capstone.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
@@ -405,14 +406,22 @@ public class EventInfoActivity extends AppCompatActivity {
         mEventInfoTime.setText(e1.getTime());
         mEventInfoDetails.setText(e1.getDetails());
         if (Integer.parseInt(e1.getPeopleNeeded()) == 0) {
-            mEventInfoPeopleNeeded.setText("We already found all people for this event");
+            mEventInfoPeopleNeeded.setText("FULL");
+            mEventInfoPeopleNeeded.setTextColor(Color.parseColor("#EA5251"));
+            mEventInfoPeopleNeeded.setBackgroundResource(R.drawable.border_full);
         } else {
-            mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded());
+            if (Integer.parseInt(e1.getPeopleNeeded()) == 1) {
+                mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded() + " SPOT");
+            } else {
+                mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded() + " SPOTS");
+            }
+            mEventInfoPeopleNeeded.setTextColor(Color.parseColor("#158452"));
+            mEventInfoPeopleNeeded.setBackgroundResource(R.drawable.border_available);
         }
         findCreatorPhotoAndName(e1);
     }
 
-    private void findCreatorPhotoAndName(Event event){
+    private void findCreatorPhotoAndName(Event event) {
         String userId = event.getCreatorId();
         Query findUserEmailQuery = mUserRef.orderByKey().equalTo(userId);
         findUserEmailQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -422,7 +431,7 @@ public class EventInfoActivity extends AppCompatActivity {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         userPhotoUrl = eventSnapshot.child("photo").getValue().toString();
                         String photo = userPhotoUrl;
-                        mEventInfoCreatorName.setText( eventSnapshot.child("name").getValue().toString());
+                        mEventInfoCreatorName.setText(eventSnapshot.child("name").getValue().toString());
                         Glide.with(getApplicationContext()).load(photo).asBitmap().centerCrop().into(new BitmapImageViewTarget(mEventCreatorImage) {
                             @Override
                             protected void setResource(Bitmap resource) {
