@@ -1,6 +1,7 @@
 package com.example.user.android.capstone.activity;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -39,11 +40,12 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser());
         final Event event = getIntent().getParcelableExtra("event");
+        findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser(), event);
+
         chatTitleTextView = (TextView) findViewById(R.id.chat_title);
         chatTitleTextView.setText(event.getTitle() + " chat");
-        displayChatMessages(event);
+        //displayChatMessages(event);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +72,9 @@ public class ChatActivity extends AppCompatActivity {
                 TextView messageTime = (TextView) v.findViewById(R.id.message_time);
 
                 messageText.setText(model.getMessageText());
+                if (model.getMessageUser().equals(userName)){
+                    messageUser.setTextColor(Color.parseColor("#0B93BF"));
+                }
                 messageUser.setText(model.getMessageUser());
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
                         model.getMessageTime()));
@@ -81,7 +86,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-    private void findUserIdForSignedInUser(FirebaseUser currentUser) {
+    private void findUserIdForSignedInUser(FirebaseUser currentUser, final Event event) {
         Query findUserQuery = mUsersRef.orderByChild("email").equalTo(currentUser.getEmail());
         findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -91,6 +96,7 @@ public class ChatActivity extends AppCompatActivity {
                         userId = eventSnapshot.getKey();
                         userName = eventSnapshot.child("name").getValue().toString();
                         Toast.makeText(getApplicationContext(), "Welcome " + userName, Toast.LENGTH_LONG).show();
+                    displayChatMessages(event);
                     }
                 }
             }

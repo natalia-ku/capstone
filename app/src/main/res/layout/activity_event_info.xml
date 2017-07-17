@@ -2,153 +2,239 @@
 
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/update_event_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Update Event" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TITLE:"
-            android:textSize="22sp" />
-
         <TextView
             android:id="@+id/event_title_textview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="22sp" />
+            android:gravity="center"
+            android:layout_height="200dp"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp" />
 
-        <TextView
+
+        <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CATEGORY:"
-            android:textSize="22sp" />
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="15dp"
+            android:rowCount="3">
 
-        <TextView
-            android:id="@+id/event_category_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="22sp" />
+            <TextView
+                android:id="@+id/event_category_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:drawableLeft="@drawable/sport_icon"
+                android:drawablePadding="3dp"
+                android:paddingBottom="8dp"
+                android:textSize="22sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ADDRESS:"
-            android:textSize="22sp" />
+            <TextView
+                android:id="@+id/event_people_needed_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:layout_marginLeft="100dp"
+                android:textSize="22sp" />
 
-        <TextView
-            android:id="@+id/event_address_textview"
+
+            <TextView
+                android:id="@+id/event_date_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:drawableLeft="@drawable/calendar1"
+                android:drawablePadding="3dp"
+                android:paddingBottom="8dp"
+                android:textSize="22sp" />
+
+
+            <TextView
+                android:id="@+id/event_time_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:paddingBottom="8dp"
+                android:textSize="22sp" />
+
+
+            <TextView
+                android:id="@+id/event_address_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_gravity="fill"
+                android:drawableLeft="@drawable/map"
+                android:drawablePadding="3dp"
+                android:paddingBottom="8dp"
+                android:textSize="22sp" />
+
+        </GridLayout>
+
+
+        <LinearLayout
+            android:paddingLeft="160dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="22sp" />
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/get_directions_button"
+                android:drawableLeft="@drawable/direct"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_gravity="left|top"
+                android:text="Directions"
+                android:textColor="#FFFFFF"
+                android:theme="@style/MyButtonMap" />
+
+            <Button
+                android:id="@+id/event_on_map_button"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_gravity="left|top"
+                android:drawableLeft="@drawable/onmap"
+                android:text="ON MAP"
+                android:textColor="#FFFFFF"
+                android:theme="@style/MyButtonMap" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="7dp"
+            android:background="#F2F2F7" />
 
         <Button
-            android:id="@+id/get_directions_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get directions" />
+            android:layout_marginLeft="20dp"
+            android:id="@+id/paticipate_in_event_button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="JOIN"
+            android:textColor="#FFFFFF"
+            android:theme="@style/MyButtonJoin" />
 
-        <Button
-            android:id="@+id/event_on_map_button"
+
+        <LinearLayout
             android:layout_width="wrap_content"
+            android:paddingLeft="30dp"
             android:layout_height="wrap_content"
-            android:text="Event on map" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel_participation_in_event_button"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="CANCEL"
+                android:textColor="#FFFFFF"
+                android:theme="@style/MyButtonCancel" />
+
+            <Button
+                android:id="@+id/add_to_calendar_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add to calendar"
+                android:textColor="#FFFFFF"
+                android:theme="@style/MyButtonEventInfo" />
+
+            <Button
+                android:id="@+id/open_chat_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open chat"
+                android:textColor="#FFFFFF"
+                android:theme="@style/MyButtonEventInfo" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="15dp"
+            android:background="#F2F2F7" />
 
         <TextView
-            android:id="@+id/event_date_textview"
+            android:paddingLeft="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="EVENT DETAILS"
             android:textSize="22sp" />
 
         <TextView
-            android:id="@+id/event_time_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="22sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DETAILS:"
-            android:textSize="22sp" />
-
-        <TextView
+            android:paddingLeft="16dp"
             android:id="@+id/event_details_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="22sp" />
 
-        <TextView
-            android:id="@+id/event_people_needed_textview"
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="15dp"
+            android:background="#F2F2F7" />
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="22sp" />
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/event_creator_photo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp" />
 
-        <Button
-            android:id="@+id/paticipate_in_event_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="JOIN" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:text="Organized by "
+                android:textSize="22sp" />
 
-        <Button
-            android:id="@+id/cancel_participation_in_event_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CANCEL" />
+            <TextView
+                android:id="@+id/event_creator_id_textview"
+                android:textColor="#40BF7E"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:textSize="22sp" />
 
-        <Button
-            android:id="@+id/add_to_calendar_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add to calendar" />
+            <Button
+                android:id="@+id/update_event_button"
+                android:layout_marginLeft="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Update Event"
+                android:textColor="#FFFFFF"
+                android:theme="@style/MyButtonEventInfo" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/open_chat_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Open chat" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CREATOR"
-            android:textSize="22sp" />
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id="@+id/event_creator_photo"/>
-
-        <TextView
-            android:id="@+id/event_creator_id_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="22sp" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="9dp"
+            android:background="#F2F2F7" />
 
 
         <TextView
+            android:id="@+id/people_going_count_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#682284"
-            android:text="PARTICIPANTS"
-            android:textSize="22sp" />
+            android:paddingLeft="20dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycle_view_event_attendees"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="14dp"
             android:scrollbars="horizontal"
 
             android:visibility="visible">

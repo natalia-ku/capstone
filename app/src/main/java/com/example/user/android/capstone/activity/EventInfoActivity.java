@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.adapter.EventAdapter;
 import com.example.user.android.capstone.model.User;
 import com.example.user.android.capstone.adapter.UserAdapter;
 import com.example.user.android.capstone.model.Event;
@@ -58,6 +60,7 @@ public class EventInfoActivity extends AppCompatActivity {
     TextView mEventInfoDetails;
     TextView mEventInfoPeopleNeeded;
     TextView mEventInfoCreatorName;
+    TextView mPeopleCountTextView;
     Button mGetDirectionsButton;
     Button mParticipateInEventButton;
     Button mCancelParticipationButton;
@@ -90,19 +93,24 @@ public class EventInfoActivity extends AppCompatActivity {
 
         // Find USER ID FOR SIGNED-IN user:
         if (currentUser != null) {
-            findUserIdForSignedInUser(currentUser);
+            findUserIdForSignedInUser(currentUser, event);
         } else {
+            mUpdateEvent.setVisibility(View.GONE);
+            mAddToCalendarButton.setVisibility(View.GONE);
             mParticipateInEventButton.setVisibility(View.GONE);
             mCancelParticipationButton.setVisibility(View.GONE);
         }
         setUpGetDirections();
-        setUpCreatorIdEvent();
+        setUpCreatorIdEvent(event);
         getEventOnMapListener(event);
         listenForChangesInAttendeeList();
         addToCalendarListener(event);
         openChatListener(event);
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
+
+
+
 
 
     } // end of onCreate method
@@ -262,7 +270,7 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
-    private void findUserIdForSignedInUser(FirebaseUser currentUser) {
+    private void findUserIdForSignedInUser(final FirebaseUser currentUser, final Event event) {
         Query findUserQuery = mUserRef.orderByChild("email").equalTo(currentUser.getEmail());
         findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -272,7 +280,7 @@ public class EventInfoActivity extends AppCompatActivity {
                         userId = eventSnapshot.getKey();
                     }
                     checkIfUserAlreadyAttendee();
-                    if (!mEventInfoCreatorName.getText().toString().equals(userId)) {
+                    if (!event.getCreatorId().toString().equals(userId)) {
                         mUpdateEvent.setVisibility(View.GONE);
                     }
                 }
@@ -331,6 +339,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     private void initializeTextViewsAndButtons() {
+        mPeopleCountTextView = (TextView) findViewById(R.id.people_going_count_textview);
         mEventCreatorImage = (ImageView) findViewById(R.id.event_creator_photo);
         mEventOnMap = (Button) findViewById(R.id.event_on_map_button);
         mOpenChatButton = (Button) findViewById(R.id.open_chat_button);
@@ -368,11 +377,11 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
-    private void setUpCreatorIdEvent() {
+    private void setUpCreatorIdEvent(final Event event) {
         mEventInfoCreatorName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userId = mEventInfoCreatorName.getText().toString();
+                String userId = event.getCreatorId();
                 Query findUserEmailQuery = mUserRef.orderByKey().equalTo(userId);
                 findUserEmailQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -401,9 +410,12 @@ public class EventInfoActivity extends AppCompatActivity {
     private void updateEventUI(Event e1) {
         mEventInfoCategory.setText(e1.getSportCategory());
         mEventInfoTitle.setText(e1.getTitle());
+        EventAdapter.setImage(mEventInfoTitle, e1.getSportCategory());
         mEventInfoAddress.setText(e1.getAddress());
         mEventInfoDate.setText(e1.getDataTime());
-        mEventInfoTime.setText(e1.getTime());
+        if (e1.getTime() != null) {
+            mEventInfoTime.setText(" at " + e1.getTime());
+        }
         mEventInfoDetails.setText(e1.getDetails());
         if (Integer.parseInt(e1.getPeopleNeeded()) == 0) {
             mEventInfoPeopleNeeded.setText("FULL");
@@ -454,6 +466,16 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     private void setUpRecycleViewForUserList(List<User> eventUsers) {
+        Integer count = eventUsers.size();
+        if (count == 0){
+            mPeopleCountTextView.setText("Be the first to attend the event");
+        }
+        else if (count == 1){
+            mPeopleCountTextView.setText(count + " person is going");
+        }
+        else {
+            mPeopleCountTextView.setText(count + " people are going");
+        }
         recyclerView = (RecyclerView) findViewById(R.id.recycle_view_event_attendees);
         UserAdapter myAdapter = new UserAdapter(getApplicationContext(), eventUsers);
         recyclerView.setAdapter(myAdapter);
@@ -472,6 +494,7 @@ public class EventInfoActivity extends AppCompatActivity {
                 mAddToCalendarButton.setVisibility(View.VISIBLE);
                 mOpenChatButton.setVisibility(View.VISIBLE);
                 if (currentUser == null) {
+                    mAddToCalendarButton.setVisibility(View.GONE);
                     mOpenChatButton.setVisibility(View.GONE);
                 }
 

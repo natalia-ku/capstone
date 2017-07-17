@@ -10,4 +10,30 @@
     <attr name="sc_tint_color" format="color" />
     <attr name="sc_checked_text_color" format="color" />
 
+
+    <style name="MyButtonJoin" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#10452F</item>
+        <item name="colorButtonNormal">#2AB87D</item>
+    </style>
+
+    <style name="MyButtonCancel" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#E35754</item>
+        <item name="colorButtonNormal">#D85251</item>
+    </style>
+
+
+
+
+    <style name="MyButtonEventInfo" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#63C799</item>
+        <item name="colorButtonNormal">#63C799</item>
+    </style>
+
+
+    <style name="MyButtonMap" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#63C7C3</item>
+        <item name="colorButtonNormal">#63C7C3</item>
+    </style>
+
+
 </resources>

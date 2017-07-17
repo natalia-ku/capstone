@@ -57,72 +57,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(EventAdapter.ViewHolder holder, final int position) {
         holder.eventTitleTextView.setText(events.get(position).getTitle());
+
         if (context.getClass() == MainActivity.class) {
-            switch (events.get(position).getSportCategory()) {
-                case "Tennis":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.tennis);
-                    break;
-                case "Football":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.football);
-                    break;
-                case "Boxing":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.boxing);
-                    break;
-                case "Skiing":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.skiing);
-                    break;
-                case "Cycling":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.cycling);
-                    break;
-                case "Running":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.running);
-                    break;
-                case "Ice Hockey":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.hockey);
-                    break;
-                case "Hiking":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.hiking);
-                    break;
-                case "Climbing":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.climbing);
-                    break;
-                case "Gym Workout":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.workout);
-                    break;
-                case "Swimming":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.swimming);
-                    break;
-                case "Snowboarding":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.snowboarding);
-                    break;
-                case "Skateboarding":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.skateboarding);
-                    break;
-                case "Volleyball":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.volleyball);
-                    break;
-                case "Basketball":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.basketbal);
-                    break;
-                case "Bowling":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.bowling);
-                    break;
-                case "Golf":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.golf);
-                    break;
-                case "Baseball":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.baseball);
-                    break;
-                case "Soccer":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.soccer);
-                    break;
-                case "Other":
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.default_sport1);
-                    break;
-                default:
-                    holder.eventTitleTextView.setBackgroundResource(R.drawable.default_sport1);
-                    break;
-            }
+            setImage(holder.eventTitleTextView, events.get(position).getSportCategory());
+
             holder.eventDateTextView.setText(events.get(position).getDate());
             String address = events.get(position).getAddress();
             LatLng location = getLocationFromAddress(address);
@@ -215,4 +153,75 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return p1;
     }
 
+
+
+
+   public static void setImage(TextView view, String sportCategory) {
+       switch (sportCategory) {
+           case "Tennis":
+               view.setBackgroundResource(R.drawable.tennis);
+               break;
+           case "Football":
+               view.setBackgroundResource(R.drawable.football);
+               break;
+           case "Boxing":
+               view.setBackgroundResource(R.drawable.boxing);
+               break;
+           case "Skiing":
+               view.setBackgroundResource(R.drawable.skiing);
+               break;
+           case "Cycling":
+               view.setBackgroundResource(R.drawable.cycling);
+               break;
+           case "Running":
+               view.setBackgroundResource(R.drawable.running);
+               break;
+           case "Ice Hockey":
+               view.setBackgroundResource(R.drawable.hockey);
+               break;
+           case "Hiking":
+               view.setBackgroundResource(R.drawable.hiking);
+               break;
+           case "Climbing":
+               view.setBackgroundResource(R.drawable.climbing);
+               break;
+           case "Gym Workout":
+               view.setBackgroundResource(R.drawable.workout);
+               break;
+           case "Swimming":
+               view.setBackgroundResource(R.drawable.swimming);
+               break;
+           case "Snowboarding":
+               view.setBackgroundResource(R.drawable.snowboarding);
+               break;
+           case "Skateboarding":
+               view.setBackgroundResource(R.drawable.skateboarding);
+               break;
+           case "Volleyball":
+               view.setBackgroundResource(R.drawable.volleyball);
+               break;
+           case "Basketball":
+               view.setBackgroundResource(R.drawable.basketbal);
+               break;
+           case "Bowling":
+               view.setBackgroundResource(R.drawable.bowling);
+               break;
+           case "Golf":
+               view.setBackgroundResource(R.drawable.golf);
+               break;
+           case "Baseball":
+               view.setBackgroundResource(R.drawable.baseball);
+               break;
+           case "Soccer":
+               view.setBackgroundResource(R.drawable.soccer);
+               break;
+           case "Other":
+               view.setBackgroundResource(R.drawable.default_sport1);
+               break;
+           default:
+               view.setBackgroundResource(R.drawable.default_sport1);
+               break;
+       }
+
+   }
 }
