@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:layout_gravity="center"
+        android:textColor="@color/secondary_text"
+        android:textStyle="bold"
         android:text="UPDATE PROFILE"/>
     <TextView
         android:layout_width="wrap_content"
@@ -96,7 +98,7 @@
             android:id="@+id/update_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#40BF66"
+            android:backgroundTint="@color/primary_dark"
             android:textColor="#FFFFFF"
             android:textSize="18dp"
             android:text="Update" />
@@ -104,7 +106,7 @@
         <Button
             android:id="@+id/delete_profile_button"
             android:layout_width="wrap_content"
-            android:backgroundTint="#B5302F"
+            android:backgroundTint="#EB4B1F"
             android:textColor="#FFFFFF"
             android:textSize="18dp"
             android:layout_height="wrap_content"

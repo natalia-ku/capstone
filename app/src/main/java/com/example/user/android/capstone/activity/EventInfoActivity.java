@@ -427,7 +427,7 @@ public class EventInfoActivity extends AppCompatActivity {
             } else {
                 mEventInfoPeopleNeeded.setText(e1.getPeopleNeeded() + " SPOTS");
             }
-            mEventInfoPeopleNeeded.setTextColor(Color.parseColor("#158452"));
+            mEventInfoPeopleNeeded.setTextColor(Color.parseColor("#FF9800"));
             mEventInfoPeopleNeeded.setBackgroundResource(R.drawable.border_available);
         }
         findCreatorPhotoAndName(e1);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -16,155 +16,151 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_marginTop="30dp"
-                android:layout_gravity="center"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:background="@drawable/back"
-                android:layout_height="280dp">
+                android:layout_height="280dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/userprofile2"
+                android:orientation="vertical">
+
                 <TextView
-                    android:textColor="#FFFFFF"
                     android:id="@+id/user_profile_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="30dp"
-                    android:text="PROFILE" />
+                    android:text="PROFILE"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
 
                 <ImageView
-                    android:layout_gravity="center"
+                    android:id="@+id/user_photo"
                     android:layout_width="190dp"
                     android:layout_height="190dp"
-                    android:id="@+id/user_photo"/>
+                    android:layout_gravity="center" />
 
                 <TextView
-                    android:textColor="#FFFFFF"
-                    android:layout_gravity="center"
-                    android:textSize="30dp"
                     android:id="@+id/name_profile_info"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
             </LinearLayout>
 
 
-<TableLayout
-    android:layout_gravity="center_horizontal"
-    android:layout_width="fill_parent"
-    android:background="@drawable/border"
-    android:layout_height="fill_parent">
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/border">
 
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:padding="2dip" >
-        <TextView
-            android:textColor="#D3D3D3"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:text="Email" />
+                <TableRow
+                    android:id="@+id/tableRow1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:padding="2dip">
 
-        <TextView
-            android:textColor="#D3D3D3"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:layout_width="120dp"
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Email"
+                        android:textColor="#D3D3D3"
+                        android:textSize="20dp" />
 
-            android:layout_height="wrap_content"
-            android:text="Gender" />
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Gender"
 
-        <TextView
-            android:textColor="#D3D3D3"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:text="Age group" />
+                        android:textColor="#D3D3D3"
+                        android:textSize="20dp" />
 
-
-    </TableRow>
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Age group"
+                        android:textColor="#D3D3D3"
+                        android:textSize="20dp" />
 
 
-    <TableRow
-        android:id="@+id/tableRow2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dip" >
+                </TableRow>
 
-        <TextView
-            android:textSize="17dp"
-            android:layout_gravity="center"
-            android:id="@+id/email_profile_info"
-            android:layout_width="wrap_content"
 
-            android:layout_height="wrap_content"/>
+                <TableRow
+                    android:id="@+id/tableRow2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dip">
 
-        <TextView
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:id="@+id/gender_profile_info"
-            android:layout_width="123dp"
-            android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/email_profile_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
 
-        <TextView
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:id="@+id/age_profile_info"
-            android:layout_width="123dp"
-            android:layout_height="wrap_content"/>
+                        android:textSize="17dp" />
 
-    </TableRow>
+                    <TextView
+                        android:id="@+id/gender_profile_info"
+                        android:layout_width="123dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="20dp" />
 
-</TableLayout>
+                    <TextView
+                        android:id="@+id/age_profile_info"
+                        android:layout_width="123dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="20dp" />
 
+                </TableRow>
+
+            </TableLayout>
 
             <Button
-                android:text="Update Profile"
-                android:layout_gravity="center"
-                android:backgroundTint="#966EF4"
-                android:textColor="#FFFFFF"
+                android:id="@+id/edit_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/edit_profile"/>
-
+                android:layout_gravity="center"
+                android:backgroundTint="@color/primary_dark"
+                android:text="Update Profile"
+                android:textColor="#FFFFFF" />
 
 
             <TextView
+                android:id="@+id/events_user_created_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor= "#563470"
                 android:layout_marginLeft="10dp"
-                android:id="@+id/events_user_created_textview"
-                android:text="EVENTS, USER CREATED" />
-
+                android:text="EVENTS, USER CREATED"
+                android:textColor="@color/primary_text" />
 
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view_events_created_by_user"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible">
-            </android.support.v7.widget.RecyclerView>
+                android:visibility="visible"></android.support.v7.widget.RecyclerView>
 
             <TextView
+                android:id="@+id/events_user_participated_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor= "#563470"
                 android:layout_marginLeft="10dp"
-                android:id="@+id/events_user_participated_textview"
-                android:text="EVENTS, USER PARTICIPATED" />
+                android:text="EVENTS, USER PARTICIPATED"
+                android:textColor="@color/primary_text" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view_events_user_participated_in"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible">
-            </android.support.v7.widget.RecyclerView>
-
+                android:visibility="visible"></android.support.v7.widget.RecyclerView>
 
 
         </LinearLayout>

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -78,9 +80,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             }
         } else {
             holder.layoutLinear.setVisibility(View.GONE);
-            holder.eventTitleTextView.setTextColor(Color.parseColor("#513551"));
+            holder.eventTitleTextView.setTextColor(Color.parseColor("#212121"));
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.eventTitleTextView.getLayoutParams();
             params.height = 100;
+            holder.eventTitleTextView.setTypeface(null, Typeface.NORMAL);
             holder.eventTitleTextView.setTextSize(20);
             holder.eventTitleTextView.setLayoutParams(params);
         }

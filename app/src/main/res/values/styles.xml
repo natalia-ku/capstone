@@ -1,10 +1,13 @@
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#673AB7</item>
-        <item name="colorPrimaryDark">#512DA8</item>
-        <item name="colorAccent">#FF4081</item>
+        <item name="colorPrimary">#03A9F4</item>
+        <item name="colorPrimaryDark">#0288D1</item>
+        <item name="colorAccent">#FF9800</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
+
+
+
     <attr name="sc_corner_radius" format="dimension" />
     <attr name="sc_border_width" format="dimension" />
     <attr name="sc_tint_color" format="color" />
@@ -12,8 +15,8 @@
 
 
     <style name="MyButtonJoin" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">#10452F</item>
-        <item name="colorButtonNormal">#2AB87D</item>
+        <item name="colorControlHighlight">@color/primary_dark</item>
+        <item name="colorButtonNormal">@color/primary_dark</item>
     </style>
 
     <style name="MyButtonCancel" parent="Theme.AppCompat.Light">
@@ -25,14 +28,14 @@
 
 
     <style name="MyButtonEventInfo" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">#63C799</item>
-        <item name="colorButtonNormal">#63C799</item>
+        <item name="colorControlHighlight">@color/primary_dark</item>
+        <item name="colorButtonNormal">@color/primary_dark</item>
     </style>
 
 
     <style name="MyButtonMap" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">#63C7C3</item>
-        <item name="colorButtonNormal">#63C7C3</item>
+        <item name="colorControlHighlight">@color/primary</item>
+        <item name="colorButtonNormal">@color/primary</item>
     </style>
 
 
