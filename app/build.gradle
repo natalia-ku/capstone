@@ -81,6 +81,8 @@ dependencies {
     compile 'com.kyleduo.switchbutton:library:1.4.6'
     compile 'info.hoang8f:android-segmented:1.0.6'
 
+    compile 'it.gilvegliach.android:transparent-text-textview:1.0.3'
+
 //
 //
 //    compile 'com.android.support:appcompat-v7:25.3.1'

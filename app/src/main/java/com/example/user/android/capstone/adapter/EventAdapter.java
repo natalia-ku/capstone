@@ -60,7 +60,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         if (context.getClass() == MainActivity.class) {
             setImage(holder.eventTitleTextView, events.get(position).getSportCategory());
-
             holder.eventDateTextView.setText(events.get(position).getDate());
             String address = events.get(position).getAddress();
             LatLng location = getLocationFromAddress(address);
@@ -77,8 +76,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 holder.eventLocationTextView.setText(addressValues[0]);
 
             }
-        }
-        else{
+        } else {
             holder.layoutLinear.setVisibility(View.GONE);
             holder.eventTitleTextView.setTextColor(Color.parseColor("#513551"));
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.eventTitleTextView.getLayoutParams();
@@ -154,74 +152,72 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
 
+    public static void setImage(TextView view, String sportCategory) {
+        switch (sportCategory) {
+            case "Tennis":
+                view.setBackgroundResource(R.drawable.tennis);
+                break;
+            case "Football":
+                view.setBackgroundResource(R.drawable.football);
+                break;
+            case "Boxing":
+                view.setBackgroundResource(R.drawable.boxing);
+                break;
+            case "Skiing":
+                view.setBackgroundResource(R.drawable.skiing);
+                break;
+            case "Cycling":
+                view.setBackgroundResource(R.drawable.cycling);
+                break;
+            case "Running":
+                view.setBackgroundResource(R.drawable.running);
+                break;
+            case "Ice Hockey":
+                view.setBackgroundResource(R.drawable.hockey);
+                break;
+            case "Hiking":
+                view.setBackgroundResource(R.drawable.hiking);
+                break;
+            case "Climbing":
+                view.setBackgroundResource(R.drawable.climbing);
+                break;
+            case "Gym Workout":
+                view.setBackgroundResource(R.drawable.workout);
+                break;
+            case "Swimming":
+                view.setBackgroundResource(R.drawable.swimming);
+                break;
+            case "Snowboarding":
+                view.setBackgroundResource(R.drawable.snowboarding);
+                break;
+            case "Skateboarding":
+                view.setBackgroundResource(R.drawable.skateboarding);
+                break;
+            case "Volleyball":
+                view.setBackgroundResource(R.drawable.volleyball);
+                break;
+            case "Basketball":
+                view.setBackgroundResource(R.drawable.basketbal);
+                break;
+            case "Bowling":
+                view.setBackgroundResource(R.drawable.bowling);
+                break;
+            case "Golf":
+                view.setBackgroundResource(R.drawable.golf);
+                break;
+            case "Baseball":
+                view.setBackgroundResource(R.drawable.baseball);
+                break;
+            case "Soccer":
+                view.setBackgroundResource(R.drawable.soccer);
+                break;
+            case "Other":
+                view.setBackgroundResource(R.drawable.default_sport1);
+                break;
+            default:
+                view.setBackgroundResource(R.drawable.default_sport1);
+                break;
+        }
 
-
-   public static void setImage(TextView view, String sportCategory) {
-       switch (sportCategory) {
-           case "Tennis":
-               view.setBackgroundResource(R.drawable.tennis);
-               break;
-           case "Football":
-               view.setBackgroundResource(R.drawable.football);
-               break;
-           case "Boxing":
-               view.setBackgroundResource(R.drawable.boxing);
-               break;
-           case "Skiing":
-               view.setBackgroundResource(R.drawable.skiing);
-               break;
-           case "Cycling":
-               view.setBackgroundResource(R.drawable.cycling);
-               break;
-           case "Running":
-               view.setBackgroundResource(R.drawable.running);
-               break;
-           case "Ice Hockey":
-               view.setBackgroundResource(R.drawable.hockey);
-               break;
-           case "Hiking":
-               view.setBackgroundResource(R.drawable.hiking);
-               break;
-           case "Climbing":
-               view.setBackgroundResource(R.drawable.climbing);
-               break;
-           case "Gym Workout":
-               view.setBackgroundResource(R.drawable.workout);
-               break;
-           case "Swimming":
-               view.setBackgroundResource(R.drawable.swimming);
-               break;
-           case "Snowboarding":
-               view.setBackgroundResource(R.drawable.snowboarding);
-               break;
-           case "Skateboarding":
-               view.setBackgroundResource(R.drawable.skateboarding);
-               break;
-           case "Volleyball":
-               view.setBackgroundResource(R.drawable.volleyball);
-               break;
-           case "Basketball":
-               view.setBackgroundResource(R.drawable.basketbal);
-               break;
-           case "Bowling":
-               view.setBackgroundResource(R.drawable.bowling);
-               break;
-           case "Golf":
-               view.setBackgroundResource(R.drawable.golf);
-               break;
-           case "Baseball":
-               view.setBackgroundResource(R.drawable.baseball);
-               break;
-           case "Soccer":
-               view.setBackgroundResource(R.drawable.soccer);
-               break;
-           case "Other":
-               view.setBackgroundResource(R.drawable.default_sport1);
-               break;
-           default:
-               view.setBackgroundResource(R.drawable.default_sport1);
-               break;
-       }
-
-   }
+    }
 }
