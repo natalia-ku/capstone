@@ -27,12 +27,9 @@ public class EventFragment extends Fragment  {
     public EventFragment() {
     }
 
-
     public static EventFragment newInstance() {
-
         if (eventFragment == null)
             eventFragment = new EventFragment();
-
         return eventFragment;
     }
 
@@ -44,17 +41,17 @@ public class EventFragment extends Fragment  {
         return view;
     }
 
-
-    public void updateList(List<Event> events) {
+    public void updateList(List<Event> events, boolean filter) {
         EventAdapter myAdapter = new EventAdapter(getContext(), events);
+
+        if (filter){
+            myAdapter.filter(events);
+        }
         recyclerView.setAdapter(myAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setHasFixedSize(true); ////
         recyclerView.setLayoutManager(layoutManager);
     }
-
-
-
 
 
 

@@ -30,6 +30,7 @@ import com.example.user.android.capstone.model.Event;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,8 +40,6 @@ import java.util.Locale;
  */
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
-    ImageView eventPhoto;
-
     List<Event> events;
     Context context;
 
@@ -60,7 +59,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(EventAdapter.ViewHolder holder, final int position) {
         holder.eventTitleTextView.setText(events.get(position).getTitle());
-
         if (context.getClass() == MainActivity.class) {
             setImage(holder.iV, events.get(position).getSportCategory());
             holder.eventDateTextView.setText(events.get(position).getDate());
@@ -111,9 +109,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         TextView eventLocationTextView;
         TextView eventDateTextView;
         LinearLayout layoutLinear;
-
         ImageView iV;
-
         public ViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
@@ -221,4 +217,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
 
     }
+
+    public void filter(List<Event>newList)
+    {
+        this.events=new ArrayList<>();
+        this.events.addAll(newList);
+        notifyDataSetChanged();
+    }
+
+
+
 }
+
+

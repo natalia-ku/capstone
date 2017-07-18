@@ -1,5 +1,7 @@
 package com.example.user.android.capstone.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -20,11 +22,13 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -125,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         initializeTextViewsAndButtons();
         eventFragment = new EventFragment();
         mAuth = FirebaseAuth.getInstance();
-         currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
         setOnClickListeners(null);
         initListFragment();
         listView = true;
@@ -198,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateFragment() {
-        eventFragment.updateList(eventsListFromDatabase);
+        eventFragment.updateList(eventsListFromDatabase, false);
     }
 
     private void futureEventsFilter() {
@@ -234,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 filterByCategory = (String) adapterView.getItemAtPosition(i);
                 filterEventCategory = true;
-                System.out.println("FILTER FUTURE EVENTS:" + filterFutureEvents);
                 displayListOfEvents(filterFutureEvents, filterEventCategory, listView);
             }
 
@@ -277,8 +280,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpMap(final List<Event> eventsList) {
-//        mEventsOnMapButton.setVisibility(View.GONE);
-//        mEventOnListButton.setVisibility(View.VISIBLE);
         fl.setVisibility(View.GONE);
         SupportMapFragment map = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
         map.getMapAsync(new OnMapReadyCallback() {
@@ -360,7 +361,6 @@ public class MainActivity extends AppCompatActivity {
         sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
         title = (String) eventSnapshot.child("title").getValue();
         creatorId = eventSnapshot.child("creatorId").getValue().toString();
-
         Event event = new Event(sportCategory, eventId, title, address, date, time, details, peopleNeeded, creatorId);
         return event;
     }
@@ -399,7 +399,6 @@ public class MainActivity extends AppCompatActivity {
         mEventOnListButton = (RadioButton) findViewById(R.id.events_list_button);
         mEventOnListButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
         mEventsOnMapButton.setBackgroundResource(R.drawable.corner_radio_button);
-
         mEventOnListButton.setChecked(true);
         fl = (FrameLayout) findViewById(R.id.frameEvents);
     }
@@ -429,19 +428,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void findUserByEmail(String email){
+    private void findUserByEmail(String email) {
         Query userProfileQuery = mUsersRef.orderByChild("email").equalTo(email);
         userProfileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     final User user;
-                    String currentUserId ="";
+                    String currentUserId = "";
                     String name = "";
                     String email = "";
-                    String age ="";
-                    String gender="";
-                    String photo ="";
+                    String age = "";
+                    String gender = "";
+                    String photo = "";
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         currentUserId = (String) eventSnapshot.getKey();
                         name = (String) eventSnapshot.child("name").getValue();
@@ -462,7 +461,6 @@ public class MainActivity extends AppCompatActivity {
                             mImageProfileView.setImageDrawable(circularBitmapDrawable);
                         }
                     });
-
 
 
                 }
@@ -528,7 +526,6 @@ public class MainActivity extends AppCompatActivity {
         if (destinationClass != null) {
             Intent intent = new Intent(getApplicationContext(), destinationClass);
             startActivity(intent);
-//            menuItem.setChecked(true);
             setTitle("SportMate");
             mDrawer.closeDrawers();
         }
@@ -542,5 +539,35 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String queryString = query.toLowerCase();
+                List<Event> filteredList = new ArrayList<>();
+                for (Event event : eventsListFromDatabase) {
+                    if (event.getTitle().toLowerCase().contains(queryString) ||
+                            event.getDetails().toLowerCase().contains(queryString) ||
+                            event.getAddress().toLowerCase().contains(queryString)) {
+                        filteredList.add(event);
+                    }
+                }
+                eventFragment.updateList(filteredList, true);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
 
 }

@@ -54,7 +54,7 @@
         android:id="@+id/select_date_button_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_round_create"
+        android:background="@drawable/corner_radio_button_blue"
         android:textColor="#FFFFFF"
         android:padding="3dp"
         android:text="Select date" />
@@ -66,7 +66,7 @@
         android:layout_marginLeft="20dp"
         android:textColor="#FFFFFF"
         android:padding="3dp"
-        android:background="@drawable/button_round_create"
+        android:background="@drawable/corner_radio_button_blue"
         android:text="Select time" />
 
     </LinearLayout>
