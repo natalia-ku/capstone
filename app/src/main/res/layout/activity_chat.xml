@@ -16,7 +16,7 @@
         android:background = "@color/accent"
         android:layout_marginBottom="10dp"
         android:id="@+id/chat_title"/>
-    
+
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

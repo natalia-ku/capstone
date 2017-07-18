@@ -18,6 +18,9 @@
             android:icon="@drawable/signin"
             android:title="Sign In / Sign Up" />
         <item
+            android:id="@+id/nav_user_chats"
+            android:title="Chats" />
+        <item
             android:id="@+id/nav_signout"
             android:icon="@drawable/signout"
             android:title="Sign Out" />

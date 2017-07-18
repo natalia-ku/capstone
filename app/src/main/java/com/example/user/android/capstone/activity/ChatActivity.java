@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ public class ChatActivity extends AppCompatActivity {
     DatabaseReference mUsersRef = mRootRef.child("users");
     String userId;
     String userName;
+    String userEmail;
     TextView chatTitleTextView;
 
     @Override
@@ -45,7 +48,7 @@ public class ChatActivity extends AppCompatActivity {
 
         chatTitleTextView = (TextView) findViewById(R.id.chat_title);
         chatTitleTextView.setText(event.getTitle() + " chat");
-        //displayChatMessages(event);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +56,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EditText input = (EditText) findViewById(R.id.input);
                 DatabaseReference newMessage = mEventsRef.child(event.getId()).child("chat").push();
-                newMessage.setValue(new ChatMessage(input.getText().toString(),userName));
+                newMessage.setValue(new ChatMessage(input.getText().toString(), userName, userEmail));
                 input.setText("");
             }
         });
@@ -62,7 +65,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private void displayChatMessages(Event event) {
         ListView listOfMessages = (ListView) findViewById(R.id.list_of_messages);
-
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, mEventsRef.child(event.getId()).child("chat")) {
             @Override
@@ -70,14 +72,21 @@ public class ChatActivity extends AppCompatActivity {
                 TextView messageText = (TextView) v.findViewById(R.id.message_text);
                 TextView messageUser = (TextView) v.findViewById(R.id.message_user);
                 TextView messageTime = (TextView) v.findViewById(R.id.message_time);
-
                 messageText.setText(model.getMessageText());
-                if (model.getMessageUser().equals(userName)){
+                if (model.getMessageEmail() != null && model.getMessageEmail().equals(userEmail)) {
+                    messageUser.setText("");
                     messageUser.setTextColor(Color.parseColor("#0B93BF"));
+                    messageText.setBackground(getResources().getDrawable(R.drawable.bubble_out));
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(770, 0, 0, 0);
+                    messageText.setLayoutParams(params);
+                } else {
+                    messageText.setBackground(getResources().getDrawable(R.drawable.bubble_in));
+                    messageUser.setText(model.getMessageUser());
                 }
-                messageUser.setText(model.getMessageUser());
-                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                        model.getMessageTime()));
+//                messageUser.setText(model.getMessageUser());
+               // messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
+                 //       model.getMessageTime()));
             }
         };
 
@@ -85,8 +94,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-
-    private void findUserIdForSignedInUser(FirebaseUser currentUser, final Event event) {
+    private void findUserIdForSignedInUser(final FirebaseUser currentUser, final Event event) {
         Query findUserQuery = mUsersRef.orderByChild("email").equalTo(currentUser.getEmail());
         findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -95,11 +103,13 @@ public class ChatActivity extends AppCompatActivity {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         userId = eventSnapshot.getKey();
                         userName = eventSnapshot.child("name").getValue().toString();
+                        userEmail = eventSnapshot.child("email").getValue().toString();
                         Toast.makeText(getApplicationContext(), "Welcome " + userName, Toast.LENGTH_LONG).show();
-                    displayChatMessages(event);
+                        displayChatMessages(event);
                     }
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("ERROR");
