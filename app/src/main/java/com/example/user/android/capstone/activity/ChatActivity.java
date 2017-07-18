@@ -20,6 +20,7 @@ import com.example.user.android.capstone.R;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +33,6 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private static final int SIGN_IN_REQUEST_CODE = 1;
     private FirebaseListAdapter<ChatMessage> adapter;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
@@ -46,21 +46,21 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-            final Event event = getIntent().getParcelableExtra("event");
-            findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser(), event);
-            chatTitleTextView = (TextView) findViewById(R.id.chat_title);
-            chatTitleTextView.setText(event.getTitle() + " chat");
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EditText input = (EditText) findViewById(R.id.input);
-                    DatabaseReference newMessage = mEventsRef.child(event.getId()).child("chat").push();
-                    newMessage.setValue(new ChatMessage(input.getText().toString(), userName, userEmail));
-                    input.setText("");
-                }
-            });
+        final Event event = getIntent().getParcelableExtra("event");
 
+        findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser(), event);
+        chatTitleTextView = (TextView) findViewById(R.id.chat_title);
+        chatTitleTextView.setText(event.getTitle() + " chat");
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText input = (EditText) findViewById(R.id.input);
+                DatabaseReference newMessage = mEventsRef.child(event.getId()).child("chat").push();
+                newMessage.setValue(new ChatMessage(input.getText().toString(), userName, userEmail));
+                input.setText("");
+            }
+        });
 
 
     }
@@ -87,12 +87,65 @@ public class ChatActivity extends AppCompatActivity {
                     messageUser.setText(model.getMessageUser());
                 }
 //                messageUser.setText(model.getMessageUser());
-               // messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                 //       model.getMessageTime()));
+                // messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
+                //       model.getMessageTime()));
             }
         };
 
+        listenForNewMessages(event);
         listOfMessages.setAdapter(adapter);
+    }
+
+    private void listenForNewMessages(final Event event) {
+        Query allMessagesInChatQuery = mEventsRef.child(event.getId()).child("chat");
+        allMessagesInChatQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                System.out.println("NEW MESSAGE IS ADDED!!!!!!!!");
+                Query eventAttendeesQuery = mEventsRef.child(event.getId()).child("attendees");
+                eventAttendeesQuery.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            String userIdInAttendeesList = userSnapshot.getKey().toString();
+                        if (userIdInAttendeesList.equals(userId)){
+                            System.out.println("NEW MESSAGE FOR CURRENT USER!!!");
+                        }
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                System.out.println("CHANGED!!!!!!!");
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
 
