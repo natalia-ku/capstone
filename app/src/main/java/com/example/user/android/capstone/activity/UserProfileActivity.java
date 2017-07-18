@@ -2,6 +2,7 @@ package com.example.user.android.capstone.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -44,7 +45,7 @@ public class UserProfileActivity extends AppCompatActivity {
     TextView mUserAge;
     TextView mUserGender;
     ImageView mUserPhotoImage;
-    Button mEditProfileButton;
+    FloatingActionButton mEditProfileButton;
     final int REQUEST_CODE = 23;
     TextView eventsUserCreatedTextView;
     TextView eventsUserParticipatedTextView;
@@ -59,7 +60,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         String userEmail = getIntent().getStringExtra("userEmail"); // when clicked on other user profile
-        mEditProfileButton = (Button) findViewById(R.id.edit_profile);
+        mEditProfileButton = (FloatingActionButton) findViewById(R.id.edit_profile);
         if (userEmail == null) { // to see  signed in user own profile
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = mAuth.getCurrentUser();

@@ -99,7 +99,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
 
     public  void callMap(GoogleMap googleMap, List<Event> eventsList) {
         mMap = googleMap;
-        System.out.println("MAPS CALL MAPS");
         for (Event event : eventsList) {
             LatLng address = getLocationFromAddress(event.getAddress());
             if (address != null) {

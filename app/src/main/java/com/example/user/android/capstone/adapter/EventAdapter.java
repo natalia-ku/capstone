@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.Resource;
@@ -61,7 +62,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.eventTitleTextView.setText(events.get(position).getTitle());
 
         if (context.getClass() == MainActivity.class) {
-            setImage(holder.eventTitleTextView, events.get(position).getSportCategory());
+            setImage(holder.iV, events.get(position).getSportCategory());
             holder.eventDateTextView.setText(events.get(position).getDate());
             String address = events.get(position).getAddress();
             LatLng location = getLocationFromAddress(address);
@@ -81,11 +82,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         } else {
             holder.layoutLinear.setVisibility(View.GONE);
             holder.eventTitleTextView.setTextColor(Color.parseColor("#212121"));
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.eventTitleTextView.getLayoutParams();
-            params.height = 100;
+            holder.iV.setVisibility(View.GONE);
             holder.eventTitleTextView.setTypeface(null, Typeface.NORMAL);
             holder.eventTitleTextView.setTextSize(20);
-            holder.eventTitleTextView.setLayoutParams(params);
+            holder.eventTitleTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         holder.eventLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +112,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         TextView eventDateTextView;
         LinearLayout layoutLinear;
 
+        ImageView iV;
+
         public ViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
@@ -119,12 +121,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             eventLocationTextView = (TextView) itemView.findViewById(R.id.event_location);
             eventTitleTextView = (TextView) itemView.findViewById(R.id.event_sport_title);
             eventLinearLayout = (LinearLayout) itemView.findViewById(R.id.layout_item);
-            eventPhoto = (ImageView) itemView.findViewById(R.id.event_photo);
-            Uri imageUri = Uri.parse("https://cdn0.iconfinder.com/data/icons/sport-and-fitness/500/Ball_football_game_play_soccer_sport_sports_man-512.png");
-            eventPhoto.setImageURI(imageUri);
             layoutLinear = (LinearLayout) itemView.findViewById(R.id.date_city_layout);
-
-            // Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(eventPhoto);
+            iV = (ImageView) itemView.findViewById(R.id.event_photo);
         }
     }
 
@@ -155,7 +153,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
 
-    public static void setImage(TextView view, String sportCategory) {
+    public static void setImage(View view, String sportCategory) {
         switch (sportCategory) {
             case "Tennis":
                 view.setBackgroundResource(R.drawable.tennis);

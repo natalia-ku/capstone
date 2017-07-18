@@ -12,14 +12,51 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/event_title_textview"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_height="200dp"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textSize="40sp" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearA"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/event_info_photo"
+                android:layout_width="fill_parent"
+                android:layout_height="250dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:maxWidth="100dp"
+                android:scaleType="fitXY" />
+
+
+            <TextView
+                android:id="@+id/event_title_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="#8d000000"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+
+
+
+
 
 
         <GridLayout
@@ -27,8 +64,8 @@
             android:layout_height="wrap_content"
             android:columnCount="2"
             android:orientation="horizontal"
-            android:paddingLeft="16dp"
             android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
             android:paddingTop="15dp"
             android:rowCount="3">
 
@@ -47,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
-                android:layout_marginLeft="100dp"
+
                 android:textSize="22sp" />
 
 
@@ -85,17 +122,42 @@
         </GridLayout>
 
 
-        <LinearLayout
-            android:paddingLeft="160dp"
+
+    </LinearLayout>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/update_event_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+android:layout_marginBottom="150dp"
+            android:layout_marginRight="20dp"
+            android:backgroundTint="@color/accent"
+            android:clickable="true"
+            android:src="@drawable/edit_white"
+            app:layout_anchor="@id/linearA"
+            app:layout_anchorGravity="bottom|right|end" />
+    </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="150dp">
 
             <Button
                 android:id="@+id/get_directions_button"
-                android:drawableLeft="@drawable/direct"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:layout_gravity="left|top"
+                android:drawableLeft="@drawable/direct"
                 android:text="Directions"
                 android:textColor="#FFFFFF"
                 android:theme="@style/MyButtonMap" />
@@ -118,10 +180,10 @@
             android:background="#F2F2F7" />
 
         <Button
-            android:layout_marginLeft="20dp"
             android:id="@+id/paticipate_in_event_button"
             android:layout_width="100dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
             android:text="JOIN"
             android:textColor="#FFFFFF"
             android:theme="@style/MyButtonJoin" />
@@ -129,9 +191,9 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:paddingLeft="30dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="30dp">
 
             <Button
                 android:id="@+id/cancel_participation_in_event_button"
@@ -164,17 +226,17 @@
             android:background="#F2F2F7" />
 
         <TextView
-            android:paddingLeft="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
             android:text="EVENT DETAILS"
             android:textSize="22sp" />
 
         <TextView
-            android:paddingLeft="16dp"
             android:id="@+id/event_details_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
             android:textColor="@color/secondary_text"
             android:textSize="22sp" />
 
@@ -197,26 +259,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
+                android:paddingTop="10dp"
                 android:text="Organized by "
                 android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/event_creator_id_textview"
-                android:textColor="#40BF7E"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
+                android:paddingTop="10dp"
+                android:textColor="#40BF7E"
                 android:textSize="22sp" />
 
-            <Button
-                android:id="@+id/update_event_button"
-                android:layout_marginLeft="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Update Event"
-                android:textColor="#FFFFFF"
-                android:theme="@style/MyButtonEventInfo" />
         </LinearLayout>
 
         <View
@@ -237,10 +291,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="14dp"
             android:scrollbars="horizontal"
-
-            android:visibility="visible">
-
-        </android.support.v7.widget.RecyclerView>
+            android:visibility="visible"></android.support.v7.widget.RecyclerView>
 
 
     </LinearLayout>

@@ -15,122 +15,140 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/userprofile2"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/user_profile_info"
+                <LinearLayout
+                    android:id="@+id/linearA"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="330dp">
+
+                        <FrameLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginTop="30dp"
+                            android:background="@drawable/userprofile2">
+
+                            <ImageView
+                                android:id="@+id/user_photo"
+                                android:layout_width="190dp"
+                                android:layout_height="190dp"
+                                android:layout_gravity="center" />
+                        </FrameLayout>
+
+
+                        <TextView
+                            android:id="@+id/name_profile_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="33dp" />
+
+                    </RelativeLayout>
+
+                    <TableLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/border">
+
+                        <TableRow
+                            android:id="@+id/tableRow1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:padding="2dip">
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Email"
+                                android:textColor="#D3D3D3"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Gender"
+
+                                android:textColor="#D3D3D3"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Age group"
+                                android:textColor="#D3D3D3"
+                                android:textSize="20dp" />
+
+
+                        </TableRow>
+
+
+                        <TableRow
+                            android:id="@+id/tableRow2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dip">
+
+                            <TextView
+                                android:id="@+id/email_profile_info"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+
+                                android:textSize="17dp" />
+
+                            <TextView
+                                android:id="@+id/gender_profile_info"
+                                android:layout_width="123dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:id="@+id/age_profile_info"
+                                android:layout_width="123dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textSize="20dp" />
+
+                        </TableRow>
+
+                    </TableLayout>
+
+                </LinearLayout>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/edit_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="PROFILE"
-                    android:textColor="#FFFFFF"
-                    android:textSize="30dp" />
-
-                <ImageView
-                    android:id="@+id/user_photo"
-                    android:layout_width="190dp"
-                    android:layout_height="190dp"
-                    android:layout_gravity="center" />
-
-                <TextView
-                    android:id="@+id/name_profile_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="30dp" />
-            </LinearLayout>
+                    android:layout_marginBottom="73dp"
+                    android:layout_marginRight="20dp"
+                    android:backgroundTint="@color/accent"
+                    android:clickable="true"
+                    android:src="@drawable/edit_white"
+                    app:layout_anchor="@id/linearA"
+                    app:layout_anchorGravity="bottom|right|end" />
+            </android.support.design.widget.CoordinatorLayout>
 
 
-            <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/border">
 
-                <TableRow
-                    android:id="@+id/tableRow1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:padding="2dip">
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Email"
-                        android:textColor="#D3D3D3"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Gender"
-
-                        android:textColor="#D3D3D3"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Age group"
-                        android:textColor="#D3D3D3"
-                        android:textSize="20dp" />
-
-
-                </TableRow>
-
-
-                <TableRow
-                    android:id="@+id/tableRow2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dip">
-
-                    <TextView
-                        android:id="@+id/email_profile_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-
-                        android:textSize="17dp" />
-
-                    <TextView
-                        android:id="@+id/gender_profile_info"
-                        android:layout_width="123dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/age_profile_info"
-                        android:layout_width="123dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="20dp" />
-
-                </TableRow>
-
-            </TableLayout>
-
-            <Button
-                android:id="@+id/edit_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="@color/primary_dark"
-                android:text="Update Profile"
-                android:textColor="#FFFFFF" />
 
 
             <TextView

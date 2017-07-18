@@ -4,12 +4,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
@@ -47,6 +54,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableResource;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.fragment.EventFragment;
@@ -106,11 +114,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         frameLayout = (LinearLayout) findViewById(R.id.main_layout);
-
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setupDrawerToggle();
@@ -167,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 setOnClickListeners(eventsListFromDatabase);
 
-
                 if (listView) {
                     initListFragment();
                     updateFragment();
@@ -201,15 +205,18 @@ public class MainActivity extends AppCompatActivity {
         mAllEventsNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mAllEventsNewButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
+                mFutureEventsNewButton.setBackgroundResource(R.drawable.corner_radio_button);
                 filterFutureEvents = false;
                 displayListOfEvents(filterFutureEvents, filterEventCategory, listView);
                 spinner.setSelection(0);
             }
         });
-        // Back to future events button:
         mFutureEventsNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mFutureEventsNewButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
+                mAllEventsNewButton.setBackgroundResource(R.drawable.corner_radio_button);
                 filterFutureEvents = true;
                 displayListOfEvents(filterFutureEvents, filterEventCategory, listView);
                 spinner.setSelection(0);
@@ -251,6 +258,8 @@ public class MainActivity extends AppCompatActivity {
         mEventOnListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mEventOnListButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
+                mEventsOnMapButton.setBackgroundResource(R.drawable.corner_radio_button);
                 fl.setVisibility(View.VISIBLE);
                 listView = true;
             }
@@ -259,6 +268,8 @@ public class MainActivity extends AppCompatActivity {
         mEventsOnMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mEventOnListButton.setBackgroundResource(R.drawable.corner_radio_button);
+                mEventsOnMapButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
                 listView = false;
                 setUpMap(eventsList);
             }
@@ -377,6 +388,8 @@ public class MainActivity extends AppCompatActivity {
     private void initializeTextViewsAndButtons() {
         mAllEventsNewButton = (RadioButton) findViewById(R.id.all_events_button);
         mFutureEventsNewButton = (RadioButton) findViewById(R.id.future_events_button);
+        mFutureEventsNewButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
+        mAllEventsNewButton.setBackgroundResource(R.drawable.corner_radio_button);
         mFutureEventsNewButton.setChecked(true);
         filterEventCategory = false;
         filterFutureEvents = true;
@@ -384,6 +397,9 @@ public class MainActivity extends AppCompatActivity {
         mCreateNewEventButton = (FloatingActionButton) findViewById(R.id.create_event_button);
         mEventsOnMapButton = (RadioButton) findViewById(R.id.events_map_button);
         mEventOnListButton = (RadioButton) findViewById(R.id.events_list_button);
+        mEventOnListButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
+        mEventsOnMapButton.setBackgroundResource(R.drawable.corner_radio_button);
+
         mEventOnListButton.setChecked(true);
         fl = (FrameLayout) findViewById(R.id.frameEvents);
     }

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -61,10 +62,11 @@ public class EventInfoActivity extends AppCompatActivity {
     TextView mEventInfoPeopleNeeded;
     TextView mEventInfoCreatorName;
     TextView mPeopleCountTextView;
+    ImageView mEventPhoto;
     Button mGetDirectionsButton;
     Button mParticipateInEventButton;
     Button mCancelParticipationButton;
-    Button mUpdateEvent;
+    FloatingActionButton mUpdateEvent;
     Button mAddToCalendarButton;
     Button mOpenChatButton;
     Button mEventOnMap;
@@ -339,12 +341,13 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     private void initializeTextViewsAndButtons() {
+        mEventPhoto = (ImageView) findViewById(R.id.event_info_photo);
         mPeopleCountTextView = (TextView) findViewById(R.id.people_going_count_textview);
         mEventCreatorImage = (ImageView) findViewById(R.id.event_creator_photo);
         mEventOnMap = (Button) findViewById(R.id.event_on_map_button);
         mOpenChatButton = (Button) findViewById(R.id.open_chat_button);
         mAddToCalendarButton = (Button) findViewById(R.id.add_to_calendar_button);
-        mUpdateEvent = (Button) findViewById(R.id.update_event_button);
+        mUpdateEvent = (FloatingActionButton) findViewById(R.id.update_event_button);
         mEventInfoTitle = (TextView) findViewById(R.id.event_title_textview);
         mEventInfoCategory = (TextView) findViewById(R.id.event_category_textview);
         mEventInfoAddress = (TextView) findViewById(R.id.event_address_textview);
@@ -410,7 +413,7 @@ public class EventInfoActivity extends AppCompatActivity {
     private void updateEventUI(Event e1) {
         mEventInfoCategory.setText(e1.getSportCategory());
         mEventInfoTitle.setText(e1.getTitle());
-        EventAdapter.setImage(mEventInfoTitle, e1.getSportCategory());
+        EventAdapter.setImage(mEventPhoto, e1.getSportCategory());
         mEventInfoAddress.setText(e1.getAddress());
         mEventInfoDate.setText(e1.getDataTime());
         if (e1.getTime() != null) {

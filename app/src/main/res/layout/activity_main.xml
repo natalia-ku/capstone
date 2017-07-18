@@ -21,10 +21,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ImageView android:src="@drawable/logonew"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="72dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logonew" />
 
         <FrameLayout
             android:id="@+id/flContent"
@@ -38,22 +39,15 @@
                 android:layout_height="fill_parent"
                 android:orientation="vertical">
 
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Spinner
-                        android:id="@+id/sport_types_spinner"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:gravity="center"
-                        android:paddingTop="15dp" />
-
-                </LinearLayout>
-
+                <Spinner
+                    android:id="@+id/sport_types_spinner"
+                    android:layout_width="300dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/border_spinner"
+                    android:elevation="5dp"
+                    android:spinnerMode="dropdown"
+                    android:textAlignment="viewStart" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -65,25 +59,25 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:orientation="horizontal"
-                        android:paddingLeft="40dp"
+                        android:paddingLeft="8dp"
                         segmentedgroup:sc_border_width="2dp"
                         segmentedgroup:sc_corner_radius="10dp">
 
                         <RadioButton
                             android:id="@+id/events_list_button"
                             style="@style/RadioButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/accent"
-                            android:text="List" />
+                            android:layout_width="80dp"
+                            android:layout_height="48dp"
+                            android:text="List"
+                            android:textSize="22dp" />
 
                         <RadioButton
                             android:id="@+id/events_map_button"
                             style="@style/RadioButton"
-                            android:layout_width="wrap_content"
-                            android:background="@color/accent"
-                            android:layout_height="wrap_content"
-                            android:text="Map" />
+                            android:layout_width="80dp"
+                            android:layout_height="48dp"
+                            android:text="Map"
+                            android:textSize="22dp" />
                     </info.hoang8f.android.segmented.SegmentedGroup>
 
 
@@ -99,16 +93,18 @@
                         <RadioButton
                             android:id="@+id/future_events_button"
                             style="@style/RadioButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Upcoming" />
+                            android:layout_width="120dp"
+                            android:layout_height="48dp"
+                            android:text="Upcoming"
+                            android:textSize="22dp" />
 
                         <RadioButton
                             android:id="@+id/all_events_button"
                             style="@style/RadioButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="All" />
+                            android:layout_width="80dp"
+                            android:layout_height="48dp"
+                            android:text="All"
+                            android:textSize="22dp" />
                     </info.hoang8f.android.segmented.SegmentedGroup>
 
 
@@ -118,7 +114,8 @@
                 <FrameLayout
                     android:id="@+id/frameEvents"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></FrameLayout>
+                    android:layout_height="match_parent"
+                    android:background="#e9e7e7"></FrameLayout>
 
 
                 <fragment
@@ -151,7 +148,7 @@
                     android:backgroundTint="@color/primary"
                     android:src="@drawable/ic_add_circle_white_24dp"
                     app:borderWidth="0dp"
-                    app:elevation="0dp"
+                    app:elevation="5dp"
                     app:fabSize="normal"
                     app:layout_anchorGravity="bottom|right|end"
                     app:pressedTranslationZ="0dp" />
