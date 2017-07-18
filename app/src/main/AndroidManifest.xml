@@ -59,7 +59,8 @@
         <activity
             android:name=".activity.ChatActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.SplashActivity"></activity>
+        <activity android:name=".activity.SplashActivity" />
+        <activity android:name=".activity.UserChatsActivity"></activity>
     </application>
 
 </manifest>

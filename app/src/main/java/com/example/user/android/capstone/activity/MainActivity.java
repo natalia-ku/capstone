@@ -410,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
         Menu navMenu = nvDrawer.getMenu();
         navMenu.findItem(R.id.nav_profile).setVisible(false);
         navMenu.findItem(R.id.nav_signout).setVisible(false);
+        navMenu.findItem(R.id.nav_user_chats).setVisible(false);
         navMenu.findItem(R.id.nav_signin_signup).setVisible(true);
         nvDrawer.getHeaderView(0).setVisibility(View.GONE);
         mCreateNewEventButton.setVisibility(View.GONE);
@@ -420,6 +421,7 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_profile).setVisible(true);
         navMenu.findItem(R.id.nav_signout).setVisible(true);
         navMenu.findItem(R.id.nav_signin_signup).setVisible(false);
+        navMenu.findItem(R.id.nav_user_chats).setVisible(true);
         mCreateNewEventButton.setVisibility(View.VISIBLE);
         View headerLayout = nvDrawer.getHeaderView(0);
         headerLayout.setVisibility(View.VISIBLE);
@@ -520,6 +522,9 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
                 hideMenuItems();
                 break;
+            case R.id.nav_user_chats:
+                destinationClass = UserChatsActivity.class;
+                        break;
             default:
                 destinationClass = MainActivity.class;
         }

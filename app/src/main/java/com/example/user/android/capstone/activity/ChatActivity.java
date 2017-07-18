@@ -27,6 +27,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChatActivity extends AppCompatActivity {
 
     private static final int SIGN_IN_REQUEST_CODE = 1;
@@ -43,25 +46,24 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        final Event event = getIntent().getParcelableExtra("event");
-        findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser(), event);
+            final Event event = getIntent().getParcelableExtra("event");
+            findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser(), event);
+            chatTitleTextView = (TextView) findViewById(R.id.chat_title);
+            chatTitleTextView.setText(event.getTitle() + " chat");
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditText input = (EditText) findViewById(R.id.input);
+                    DatabaseReference newMessage = mEventsRef.child(event.getId()).child("chat").push();
+                    newMessage.setValue(new ChatMessage(input.getText().toString(), userName, userEmail));
+                    input.setText("");
+                }
+            });
 
-        chatTitleTextView = (TextView) findViewById(R.id.chat_title);
-        chatTitleTextView.setText(event.getTitle() + " chat");
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText input = (EditText) findViewById(R.id.input);
-                DatabaseReference newMessage = mEventsRef.child(event.getId()).child("chat").push();
-                newMessage.setValue(new ChatMessage(input.getText().toString(), userName, userEmail));
-                input.setText("");
-            }
-        });
     }
-
 
     private void displayChatMessages(Event event) {
         ListView listOfMessages = (ListView) findViewById(R.id.list_of_messages);
@@ -105,7 +107,9 @@ public class ChatActivity extends AppCompatActivity {
                         userName = eventSnapshot.child("name").getValue().toString();
                         userEmail = eventSnapshot.child("email").getValue().toString();
                         Toast.makeText(getApplicationContext(), "Welcome " + userName, Toast.LENGTH_LONG).show();
-                        displayChatMessages(event);
+                        if (event != null) {
+                            displayChatMessages(event);
+                        }
                     }
                 }
             }
