@@ -19,6 +19,7 @@
             android:title="Sign In / Sign Up" />
         <item
             android:id="@+id/nav_user_chats"
+            android:icon="@drawable/chat_icon"
             android:title="Chats" />
         <item
             android:id="@+id/nav_signout"
