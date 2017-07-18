@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/user_chats_listview"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<android.support.v7.widget.RecyclerView android:id="@+id/recycle_view_chat_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible">
+
+</android.support.v7.widget.RecyclerView>
+
+
+
+
+</LinearLayout>

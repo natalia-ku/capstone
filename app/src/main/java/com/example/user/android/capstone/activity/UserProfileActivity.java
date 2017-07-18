@@ -268,7 +268,7 @@ public class UserProfileActivity extends AppCompatActivity {
         } else {
             recyclerView = (RecyclerView) findViewById(R.id.recycle_view_events_user_participated_in);
         }
-        EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents);
+        EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents, null);
         recyclerView.setAdapter(myAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);

@@ -1,5 +1,6 @@
 package com.example.user.android.capstone.adapter;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -23,13 +24,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.Resource;
 import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.activity.ChatActivity;
 import com.example.user.android.capstone.activity.EventInfoActivity;
 import com.example.user.android.capstone.activity.MainActivity;
 import com.example.user.android.capstone.activity.MapsActivity;
+import com.example.user.android.capstone.activity.UserChatsActivity;
 import com.example.user.android.capstone.model.Event;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -42,11 +46,13 @@ import java.util.Locale;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     List<Event> events;
     Context context;
+    Class currentActivity;
 
 
-    public EventAdapter(Context context, List<Event> events) {
+    public EventAdapter(Context context, List<Event> events, Class currentActivityClass) {
         this.events = events;
         this.context = context;
+        this.currentActivity = currentActivityClass;
     }
 
 
@@ -89,10 +95,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.eventLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Class destinationClass = EventInfoActivity.class;
-                Intent intentToStartEventInfoActivity = new Intent(context, destinationClass);
-                intentToStartEventInfoActivity.putExtra("event", (Parcelable) events.get(position));
-                context.startActivity(intentToStartEventInfoActivity);
+
+                if (currentActivity != null && currentActivity == UserChatsActivity.class) {
+                    Intent intentToOpenChat = new Intent(context, ChatActivity.class);
+                    intentToOpenChat.putExtra("event", (Parcelable) events.get(position));
+                    context.startActivity(intentToOpenChat);
+                } else {
+                    Class destinationClass = EventInfoActivity.class;
+                    Intent intentToStartEventInfoActivity = new Intent(context, destinationClass);
+                    intentToStartEventInfoActivity.putExtra("event", (Parcelable) events.get(position));
+                    context.startActivity(intentToStartEventInfoActivity);
+                }
             }
         });
     }
@@ -110,6 +123,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         TextView eventDateTextView;
         LinearLayout layoutLinear;
         ImageView iV;
+
         public ViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
@@ -218,13 +232,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     }
 
-    public void filter(List<Event>newList)
-    {
-        this.events=new ArrayList<>();
+    public void filter(List<Event> newList) {
+        this.events = new ArrayList<>();
         this.events.addAll(newList);
         notifyDataSetChanged();
     }
-
 
 
 }

@@ -42,14 +42,13 @@ public class EventFragment extends Fragment  {
     }
 
     public void updateList(List<Event> events, boolean filter) {
-        EventAdapter myAdapter = new EventAdapter(getContext(), events);
-
+        EventAdapter myAdapter = new EventAdapter(getContext(), events, null);
         if (filter){
             myAdapter.filter(events);
         }
         recyclerView.setAdapter(myAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setHasFixedSize(true); ////
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
     }
 
