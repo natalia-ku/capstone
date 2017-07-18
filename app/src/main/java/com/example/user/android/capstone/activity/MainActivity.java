@@ -558,7 +558,11 @@ public class MainActivity extends AppCompatActivity {
                         filteredList.add(event);
                     }
                 }
-                eventFragment.updateList(filteredList, true);
+                if (filteredList.size() == 0) {
+                    Toast.makeText(MainActivity.this, "Nothing was found", Toast.LENGTH_LONG).show();
+                } else {
+                    eventFragment.updateList(filteredList, true);
+                }
                 return false;
             }
 

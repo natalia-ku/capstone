@@ -13,138 +13,123 @@
         android:orientation="vertical">
 
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearA"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/event_info_photo"
-                android:layout_width="fill_parent"
-                android:layout_height="250dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:maxWidth="100dp"
-                android:scaleType="fitXY" />
-
-
-            <TextView
-                android:id="@+id/event_title_textview"
+            <LinearLayout
+                android:id="@+id/linearA"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:background="#8d000000"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/event_info_photo"
+                        android:layout_width="fill_parent"
+                        android:layout_height="250dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:maxWidth="100dp"
+                        android:scaleType="fitXY" />
 
 
+                    <TextView
+                        android:id="@+id/event_title_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:background="#8d000000"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
 
 
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="15dp"
+                    android:rowCount="3">
 
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="16dp"
-            android:paddingTop="15dp"
-            android:rowCount="3">
+                    <TextView
+                        android:id="@+id/event_category_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:drawableLeft="@drawable/sport_icon"
+                        android:drawablePadding="3dp"
+                        android:paddingBottom="8dp"
+                        android:textSize="22sp" />
 
-            <TextView
-                android:id="@+id/event_category_textview"
+                    <TextView
+                        android:id="@+id/event_people_needed_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:textSize="22sp" />
+
+
+                    <TextView
+                        android:id="@+id/event_date_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:drawableLeft="@drawable/calendar1"
+                        android:drawablePadding="3dp"
+                        android:paddingBottom="8dp"
+                        android:textSize="22sp" />
+
+
+                    <TextView
+                        android:id="@+id/event_time_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:paddingBottom="8dp"
+                        android:textSize="22sp" />
+
+
+                    <TextView
+                        android:id="@+id/event_address_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_columnSpan="2"
+                        android:layout_gravity="fill"
+                        android:drawableLeft="@drawable/map"
+                        android:drawablePadding="3dp"
+                        android:textSize="22sp" />
+
+                </GridLayout>
+
+
+            </LinearLayout>
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/update_event_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-                android:drawableLeft="@drawable/sport_icon"
-                android:drawablePadding="3dp"
-                android:paddingBottom="8dp"
-                android:textSize="22sp" />
-
-            <TextView
-                android:id="@+id/event_people_needed_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-
-                android:textSize="22sp" />
-
-
-            <TextView
-                android:id="@+id/event_date_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-                android:drawableLeft="@drawable/calendar1"
-                android:drawablePadding="3dp"
-                android:paddingBottom="8dp"
-                android:textSize="22sp" />
-
-
-            <TextView
-                android:id="@+id/event_time_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-                android:paddingBottom="8dp"
-                android:textSize="22sp" />
-
-
-            <TextView
-                android:id="@+id/event_address_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnSpan="2"
-                android:layout_gravity="fill"
-                android:drawableLeft="@drawable/map"
-                android:drawablePadding="3dp"
-                android:paddingBottom="8dp"
-                android:textSize="22sp" />
-
-        </GridLayout>
-
-
-
-    </LinearLayout>
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/update_event_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-android:layout_marginBottom="150dp"
-            android:layout_marginRight="20dp"
-            android:backgroundTint="@color/accent"
-            android:clickable="true"
-            android:src="@drawable/edit_white"
-            app:layout_anchor="@id/linearA"
-            app:layout_anchorGravity="bottom|right|end" />
-    </android.support.design.widget.CoordinatorLayout>
-
-
-
-
-
-
-
+                android:layout_marginBottom="150dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/accent"
+                android:clickable="true"
+                android:src="@drawable/edit_white"
+                app:layout_anchor="@id/linearA"
+                app:layout_anchorGravity="bottom|right|end" />
+        </android.support.design.widget.CoordinatorLayout>
 
 
         <LinearLayout

@@ -12,12 +12,11 @@
         android:paddingTop="20dp"
         android:textSize="30dp"
         android:paddingLeft="5dp"
-        android:background = "#E3F7BE"
+        android:textColor="#FFFFFF"
+        android:background = "@color/accent"
         android:layout_marginBottom="10dp"
         android:id="@+id/chat_title"/>
-
-
-
+    
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
