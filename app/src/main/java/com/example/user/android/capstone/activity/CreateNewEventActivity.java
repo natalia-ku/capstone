@@ -82,7 +82,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
                 String userEmail = currentUser.getEmail();
 
                 Query findUserQuery = mUserRef.orderByChild("email").equalTo(userEmail);
-
+                System.out.println(userEmail);
                 findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -95,7 +95,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                 String sportDate = monthString + "/" + dayString + "/" + yearString;
                                 String sportTime = hoursString + " : " + minutesString;
                                 String sportDetails = mSportDetailsEdit.getText().toString();
-
+                                System.out.println("I AM HERE");
                                 if (sportTitle.equals("") ||
                                         sportDetails.equals("") || sportCategory.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();

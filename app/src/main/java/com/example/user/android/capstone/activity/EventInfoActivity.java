@@ -254,6 +254,7 @@ public class EventInfoActivity extends AppCompatActivity {
                 mCancelParticipationButton.setVisibility(View.GONE);
                 updateAttendeesCount(true, event);
 
+
             }
         });
     }
