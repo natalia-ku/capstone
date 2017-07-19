@@ -32,13 +32,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private MapUtils mapUtil;
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mEventsRef = mRootRef.child("events");
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mEventsRef = mRootRef.child("events");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); // in onCreateView in MapFragment
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        mapUtil = new MapUtils(getApplicationContext());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -86,30 +87,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
-//    public   LatLng getLocationFromAddress(String strAddress) {
-//        Geocoder coder = new Geocoder(this);
-//        List<android.location.Address> address;
-//        LatLng p1 = null;
-//        try {
-//            if (strAddress != null) {
-//                address = coder.getFromLocationName(strAddress, 5);
-//                if (address == null || address.size() == 0) {
-//                    return null;
-//                }
-//                double latit = address.get(0).getLatitude();
-//                double longit = address.get(0).getLongitude();
-//                p1 = new LatLng(latit, longit);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return p1;
-//    }
-
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        System.out.println("IN INTENT!!");
         String markerTitle = marker.getTitle();
         Query findEventByTitleQuery = mEventsRef.orderByChild("title").equalTo(markerTitle);
         findEventByTitleQuery.addListenerForSingleValueEvent(new ValueEventListener() {

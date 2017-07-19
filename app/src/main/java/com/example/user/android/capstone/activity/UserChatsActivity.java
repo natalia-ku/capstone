@@ -108,11 +108,10 @@ public class UserChatsActivity extends AppCompatActivity {
                             userEvents.add(event);
 
                         }
-                        EventAdapter myAdapter = new EventAdapter(getApplicationContext(),userEvents, UserChatsActivity.class );
+                        EventAdapter myAdapter = new EventAdapter(getApplicationContext(),userEvents, UserChatsActivity.class);
                         recycleView.setAdapter(myAdapter);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         recycleView.setLayoutManager(layoutManager);
-
                     }
                 }
 

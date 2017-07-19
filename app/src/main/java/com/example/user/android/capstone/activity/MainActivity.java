@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Event> eventsListFromDatabase = new ArrayList<>();
     private FirebaseAuth mAuth;
-    FirebaseUser currentUser;
+    private FirebaseUser currentUser;
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mEventsRef = mRootRef.child("events");
     private DatabaseReference mUsersRef = mRootRef.child("users");
@@ -366,27 +366,6 @@ public class MainActivity extends AppCompatActivity {
         Event event = new Event(sportCategory, eventId, title, address, date, time, details, peopleNeeded, creatorId);
         return event;
     }
-//
-//    private LatLng getLocationFromAddress(String strAddress) {
-//        Geocoder coder = new Geocoder(this);
-//        List<android.location.Address> address;
-//        LatLng p1 = null;
-//        try {
-//            if (strAddress != null) {
-//                address = coder.getFromLocationName(strAddress, 5);
-//                if (address == null || address.size() == 0) {
-//                    return null;
-//                }
-//                double latit = address.get(0).getLatitude();
-//                double longit = address.get(0).getLongitude();
-//                p1 = new LatLng(latit, longit);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return p1;
-//    }
-
 
     private void initializeTextViewsAndButtons() {
         mAllEventsNewButton = (RadioButton) findViewById(R.id.all_events_button);
@@ -405,7 +384,6 @@ public class MainActivity extends AppCompatActivity {
         mEventOnListButton.setChecked(true);
         fl = (FrameLayout) findViewById(R.id.frameEvents);
     }
-
 
 // ---------------NAVIGATION:---------------
 
@@ -476,7 +454,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);

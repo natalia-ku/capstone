@@ -43,9 +43,9 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private TextView showDateTextView;
     private Button selectDateButton;
     private Button selectTimeButton;
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mEventsRef = mRootRef.child("events");
-    DatabaseReference mUserRef = mRootRef.child("users");
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mEventsRef = mRootRef.child("events");
+    private DatabaseReference mUserRef = mRootRef.child("users");
 
     public String dayString;
     public String yearString;
@@ -61,14 +61,11 @@ public class CreateNewEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_event);
-
-
         setUpSpinnerForCategory();
         setUpSpinnerForPeopleCount();
         setUpTime();
         setUpDate();
         initializeTextViewAndButtons();
-
         getAddress();
         createNewEvent();
     }
@@ -89,13 +86,11 @@ public class CreateNewEventActivity extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                                 String sportCreatorId = eventSnapshot.getKey();// find user's id to create event
-
                                 String sportTitle = mSportTitleEdit.getText().toString();
                                 String sportAddress = placeAddress;
                                 String sportDate = monthString + "/" + dayString + "/" + yearString;
                                 String sportTime = hoursString + " : " + minutesString;
                                 String sportDetails = mSportDetailsEdit.getText().toString();
-                                System.out.println("I AM HERE");
                                 if (sportTitle.equals("") ||
                                         sportDetails.equals("") || sportCategory.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();

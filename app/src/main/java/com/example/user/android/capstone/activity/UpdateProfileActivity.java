@@ -28,19 +28,17 @@ import java.io.Serializable;
 
 public class UpdateProfileActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mUserRef = mRootRef.child("users");
-
-    EditText mEmailUpdateProfile;
-    EditText mPasswordUpdateProfile;
-    EditText mNameUpdateProfile;
-    EditText mGenderUpdateProfile;
-    EditText mPhotoUpdateProfile;
-    Button mUpdateProfileButton;
-    Button mDeleteProfileButton;
-    Spinner mAgeUpdateSpinner;
-    String userAgeFromSpinner;
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mUserRef = mRootRef.child("users");
+    private EditText mEmailUpdateProfile;
+    private EditText mPasswordUpdateProfile;
+    private EditText mNameUpdateProfile;
+    private EditText mGenderUpdateProfile;
+    private EditText mPhotoUpdateProfile;
+    private Button mUpdateProfileButton;
+    private Button mDeleteProfileButton;
+    private Spinner mAgeUpdateSpinner;
+    private String userAgeFromSpinner;
     private ArrayAdapter<CharSequence> adapter;
     private String userId;
 
@@ -53,14 +51,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mUpdateProfileButton = (Button) findViewById(R.id.update_button);
         mDeleteProfileButton = (Button) findViewById(R.id.delete_profile_button);
         getUserData(user);
-
         deleteProfileEventListener(user);
         updateProfileEventListener(user);
-
     }
 
-
-    private void  updateProfileEventListener(final User user) {
+    private void updateProfileEventListener(final User user) {
         mUpdateProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +100,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         });
 
     }
+
     private void deleteProfileEventListener(final User user){
         mDeleteProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,10 +180,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mNameUpdateProfile = (EditText) findViewById(R.id.update_field_name);
         mGenderUpdateProfile = (EditText) findViewById(R.id.update_field_gender);
         mPhotoUpdateProfile = (EditText) findViewById(R.id.update_field_photo);
-
         int position = adapter.getPosition(user.getAge());
         mAgeUpdateSpinner.setSelection(position);
-
         mEmailUpdateProfile.setText(user.getEmail());
         mNameUpdateProfile.setText(user.getName());
         mGenderUpdateProfile.setText(user.getGender());

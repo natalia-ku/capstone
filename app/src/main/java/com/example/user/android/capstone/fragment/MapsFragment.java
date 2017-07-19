@@ -14,6 +14,7 @@ import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.activity.EventInfoActivity;
 import com.example.user.android.capstone.fragment.EventsFragmentInterface;
 import com.example.user.android.capstone.model.Event;
+import com.example.user.android.capstone.utils.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -37,11 +38,10 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class MapsFragment extends Fragment implements OnMapReadyCallback, EventsFragmentInterface, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
-    MapView mapView;
-
     GoogleMap mMap;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
+    MapUtils mapUtils;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -51,37 +51,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        System.out.println("MAPS ON CREATE VIEW");
-
+        mapUtils = new MapUtils(getContext());
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-
-
-
-//        mapView = (MapView) view.findViewById(R.id.map_view);
-//        mapView.getMapAsync(this);
-       // updateList(new ArrayList<Event>());
         return view;
+
     }
 
-        @Override
+    @Override
     public void onMapReady(GoogleMap googleMap) {
-            System.out.println("ON MAP READY");
-            mMap = googleMap;
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.6101, -122.2015),
-                    Math.max(10, mMap.getCameraPosition().zoom)));
-
-
-        }
+        mMap = googleMap;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.6101, -122.2015),
+                Math.max(10, mMap.getCameraPosition().zoom)));
+    }
 
 
     @Override
     public void updateList(final List<Event> events) {
         System.out.println("MAPS UPDATE LIST");
-
-
         for (Event event : events) {
-            LatLng address = getLocationFromAddress(event.getAddress());
+            LatLng address = mapUtils.getLocationFromAddress(event.getAddress());
             if (address != null) {
 //                mMap.addMarker(new MarkerOptions().position(address)
 //                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
@@ -89,18 +77,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
             }
         }
 
-
-
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
 
     }
 
 
-    public  void callMap(GoogleMap googleMap, List<Event> eventsList) {
+    public void callMap(GoogleMap googleMap, List<Event> eventsList) {
         mMap = googleMap;
         for (Event event : eventsList) {
-            LatLng address = getLocationFromAddress(event.getAddress());
+            LatLng address = mapUtils.getLocationFromAddress(event.getAddress());
             if (address != null) {
                 mMap.addMarker(new MarkerOptions().position(address)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
@@ -121,25 +107,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
         return false;
     }
 
-    public LatLng getLocationFromAddress(String strAddress) {
-        Geocoder coder = new Geocoder(getContext());
-        List<android.location.Address> address;
-        LatLng p1 = null;
-        try {
-            if (strAddress != null) {
-                address = coder.getFromLocationName(strAddress, 5);
-                if (address == null || address.size() == 0) {
-                    return null;
-                }
-                double latit = address.get(0).getLatitude();
-                double longit = address.get(0).getLongitude();
-                p1 = new LatLng(latit, longit);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return p1;
-    }
+//    public LatLng getLocationFromAddress(String strAddress) {
+//        Geocoder coder = new Geocoder(getContext());
+//        List<android.location.Address> address;
+//        LatLng p1 = null;
+//        try {
+//            if (strAddress != null) {
+//                address = coder.getFromLocationName(strAddress, 5);
+//                if (address == null || address.size() == 0) {
+//                    return null;
+//                }
+//                double latit = address.get(0).getLatitude();
+//                double longit = address.get(0).getLongitude();
+//                p1 = new LatLng(latit, longit);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return p1;
+//    }
 
 
     @Override
@@ -189,7 +175,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
             }
         });
     }
-
 
 
 }

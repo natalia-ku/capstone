@@ -42,33 +42,30 @@ import java.util.List;
 
 public class UpdateEventActivity extends AppCompatActivity {
 
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mEventsRef = mRootRef.child("events");
-    DatabaseReference mUsersRef = mRootRef.child("users");
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mEventsRef = mRootRef.child("events");
+    private DatabaseReference mUsersRef = mRootRef.child("users");
     private String placeAddress;
-
-    EditText mTitleUpdateEvent;
-    EditText mDetailsUpdateEvent;
-    Button mUpdateEventButton;
-    Button mDeleteEventButton;
-    Button mSelectDateButton;
-    Button selectTimeButton;
-    TextView showDateTextView;
-    static TextView showTimeTextView;
-
+    private EditText mTitleUpdateEvent;
+    private EditText mDetailsUpdateEvent;
+    private Button mUpdateEventButton;
+    private Button mDeleteEventButton;
+    private Button mSelectDateButton;
+    private Button selectTimeButton;
+    private TextView showDateTextView;
+    private static TextView showTimeTextView;
     private String dayString;
     private String yearString;
     private String monthString;
     private static String hoursString;
     private static String minutesString;
-
     private String sportCategory;
     private String peopleNeeded;
-    Spinner spinner;
-    Spinner spinnerPeopleNeeded;
-    ArrayAdapter<CharSequence> adapter;
-    ArrayAdapter<CharSequence> adapterPeople;
-    Calendar calendar;
+    private Spinner spinner;
+    private Spinner spinnerPeopleNeeded;
+    private ArrayAdapter<CharSequence> adapter;
+    private ArrayAdapter<CharSequence> adapterPeople;
+    private Calendar calendar;
 
 
 
@@ -78,7 +75,6 @@ public class UpdateEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_event);
         initializeButtonsAndTextView();
         final Event event = (Event) getIntent().getSerializableExtra("event");
-
         displayDateAndTime(event);
         updatEventListener(event);
         setUpSpinnerForCategory();
@@ -89,8 +85,6 @@ public class UpdateEventActivity extends AppCompatActivity {
         getEventData(event);
         deleteEventListener(event);
     }
-
-
 
 
     private void updatEventListener(final Event event) {
@@ -133,7 +127,6 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
-
     private void deleteEventFromUsersEventList(final String eventId) {
         // GET list of participants IDs:
         final List<String> userIdsList = new ArrayList<>();
@@ -156,7 +149,6 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
-
     private void removeFromList(List<String> userIdsList, final String eventId) {
         for (String userID : userIdsList) {
             Query eventUsersQuery = mUsersRef.orderByKey().equalTo(userID);
@@ -177,12 +169,10 @@ public class UpdateEventActivity extends AppCompatActivity {
         }
     }
 
-
     private void displayDateAndTime(Event event) {
         showDateTextView.setText(event.getDate());
         showTimeTextView.setText(event.getTime());
     }
-
 
     private void getEventData(Event event) {
         mTitleUpdateEvent.setText(event.getTitle());
@@ -210,7 +200,6 @@ public class UpdateEventActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void setUpDate(final Event event) {
         final String date = event.getDate();

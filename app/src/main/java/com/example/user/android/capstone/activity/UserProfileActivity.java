@@ -137,7 +137,6 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
-
     private void findEventsUserParticipatedIn(String currentUserId) {
         // GET list of user event IDs:
         final List<String> eventIdsList = new ArrayList<>();
@@ -196,7 +195,6 @@ public class UserProfileActivity extends AppCompatActivity {
             });
         }
     }
-
 
     private void findCreatedByUserEvents(String currentUserId) {
         final List<Event> userEvents = new ArrayList<>();

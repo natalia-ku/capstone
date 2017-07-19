@@ -110,11 +110,6 @@ public class EventInfoActivity extends AppCompatActivity {
         openChatListener(event);
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
-
-
-
-
-
     } // end of onCreate method
 
 

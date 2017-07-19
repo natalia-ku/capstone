@@ -26,7 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity implements
         View.OnClickListener {
-    String userAgeFromSpinner;
+    private String userAgeFromSpinner;
     private static final String TAG = "EmailPassword";
     private TextView mStatusTextView;
     private EditText mEmailField;
@@ -34,12 +34,11 @@ public class SignUpActivity extends AppCompatActivity implements
     private EditText mEmailSignUpField;
     private EditText mPasswordSignUpField;
     private FirebaseAuth mAuth;
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mUserRef = mRootRef.child("users");
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mUserRef = mRootRef.child("users");
     private EditText mNameSignUpField;
     private EditText mGenderSignUpField;
     private EditText mPhotoSignUpField;
-
     private Spinner mAgeSignUpSpinner;
 
 
@@ -52,19 +51,11 @@ public class SignUpActivity extends AppCompatActivity implements
         mAuth = FirebaseAuth.getInstance();
         setUpSpinner();
     }
-
-
-
-
-
-
     
     private void initializeViewsElements(){
         mStatusTextView = (TextView) findViewById(R.id.status);
-        // SIGN IN:
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
-        // SIGN UP:
         mEmailSignUpField = (EditText) findViewById(R.id.signup_field_email);
         mPasswordSignUpField = (EditText) findViewById(R.id.signup_field_password);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -100,7 +91,6 @@ public class SignUpActivity extends AppCompatActivity implements
 
 
     private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
         if (!validateForm("signUp")) {
             return;
         }
@@ -152,7 +142,6 @@ public class SignUpActivity extends AppCompatActivity implements
     }
 
     private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
         if (!validateForm("signIn")) {
             return;
         }

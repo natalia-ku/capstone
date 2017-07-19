@@ -44,6 +44,7 @@ public class Event  implements Parcelable, Serializable{
     public void setSportCategory(String sportCategory) {
         this.sportCategory = sportCategory;
     }
+
     public String getAddress() {
         return address;
     }
