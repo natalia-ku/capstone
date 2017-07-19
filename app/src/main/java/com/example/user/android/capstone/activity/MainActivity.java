@@ -64,6 +64,7 @@ import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.fragment.EventFragment;
 import com.example.user.android.capstone.model.Event;
 import com.example.user.android.capstone.model.User;
+import com.example.user.android.capstone.utils.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mImageProfileView;
     private TextView mUserNameTextView;
     protected LinearLayout frameLayout;
+    private MapUtils mapUtil;
 
 
     @Override
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         frameLayout = (LinearLayout) findViewById(R.id.main_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        mapUtil = new MapUtils(getApplicationContext());
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
@@ -289,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
                 mMap.clear();
                 if (eventsList != null) {
                     for (Event event : eventsList) {
-                        LatLng address = getLocationFromAddress(event.getAddress());
+                        LatLng address = mapUtil.getLocationFromAddress(event.getAddress());
                         if (address != null) {
                             mMap.addMarker(new MarkerOptions().position(address)
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
@@ -364,26 +366,27 @@ public class MainActivity extends AppCompatActivity {
         Event event = new Event(sportCategory, eventId, title, address, date, time, details, peopleNeeded, creatorId);
         return event;
     }
+//
+//    private LatLng getLocationFromAddress(String strAddress) {
+//        Geocoder coder = new Geocoder(this);
+//        List<android.location.Address> address;
+//        LatLng p1 = null;
+//        try {
+//            if (strAddress != null) {
+//                address = coder.getFromLocationName(strAddress, 5);
+//                if (address == null || address.size() == 0) {
+//                    return null;
+//                }
+//                double latit = address.get(0).getLatitude();
+//                double longit = address.get(0).getLongitude();
+//                p1 = new LatLng(latit, longit);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return p1;
+//    }
 
-    private LatLng getLocationFromAddress(String strAddress) {
-        Geocoder coder = new Geocoder(this);
-        List<android.location.Address> address;
-        LatLng p1 = null;
-        try {
-            if (strAddress != null) {
-                address = coder.getFromLocationName(strAddress, 5);
-                if (address == null || address.size() == 0) {
-                    return null;
-                }
-                double latit = address.get(0).getLatitude();
-                double longit = address.get(0).getLongitude();
-                p1 = new LatLng(latit, longit);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return p1;
-    }
 
     private void initializeTextViewsAndButtons() {
         mAllEventsNewButton = (RadioButton) findViewById(R.id.all_events_button);
@@ -524,7 +527,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_user_chats:
                 destinationClass = UserChatsActivity.class;
-                        break;
+                break;
             default:
                 destinationClass = MainActivity.class;
         }

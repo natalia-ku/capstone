@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.activity.EventInfoActivity;
 import com.example.user.android.capstone.model.Event;
+import com.example.user.android.capstone.utils.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +31,7 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
+    private MapUtils mapUtil;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mEventsRef = mRootRef.child("events");
 
@@ -50,7 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<Event> eventsList;
             eventsList = getIntent().getParcelableArrayListExtra("eventList");
             for (Event event : eventsList) {
-                LatLng address = getLocationFromAddress(event.getAddress());
+                LatLng address = mapUtil.getLocationFromAddress(event.getAddress());
 
                 if (address != null) {
                     mMap.addMarker(new MarkerOptions().position(address)
@@ -62,7 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else{ // get Event from intent
             Event event;
             event = getIntent().getParcelableExtra("event");
-            LatLng address = getLocationFromAddress(event.getAddress());
+            LatLng address = mapUtil.getLocationFromAddress(event.getAddress());
             if (address != null) {
                 mMap.addMarker(new MarkerOptions().position(address)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
@@ -84,25 +86,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
-    public   LatLng getLocationFromAddress(String strAddress) {
-        Geocoder coder = new Geocoder(this);
-        List<android.location.Address> address;
-        LatLng p1 = null;
-        try {
-            if (strAddress != null) {
-                address = coder.getFromLocationName(strAddress, 5);
-                if (address == null || address.size() == 0) {
-                    return null;
-                }
-                double latit = address.get(0).getLatitude();
-                double longit = address.get(0).getLongitude();
-                p1 = new LatLng(latit, longit);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return p1;
-    }
+//    public   LatLng getLocationFromAddress(String strAddress) {
+//        Geocoder coder = new Geocoder(this);
+//        List<android.location.Address> address;
+//        LatLng p1 = null;
+//        try {
+//            if (strAddress != null) {
+//                address = coder.getFromLocationName(strAddress, 5);
+//                if (address == null || address.size() == 0) {
+//                    return null;
+//                }
+//                double latit = address.get(0).getLatitude();
+//                double longit = address.get(0).getLongitude();
+//                p1 = new LatLng(latit, longit);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return p1;
+//    }
 
 
     @Override
