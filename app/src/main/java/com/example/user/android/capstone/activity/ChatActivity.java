@@ -109,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                             String userIdInAttendeesList = userSnapshot.getKey().toString();
                         if (userIdInAttendeesList.equals(userId)){
-                            System.out.println("NEW MESSAGE FOR CURRENT USER!!!");
+                            System.out.println("NEW MESSAGE FOR " + userName);
                         }
 
 
