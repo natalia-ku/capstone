@@ -76,7 +76,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private void createNewEvent() {
         mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                System.out.println("CREATE EVENT");
                 mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 String userEmail = currentUser.getEmail();
@@ -95,7 +94,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
                                 String sportDate = monthString + "/" + dayString + "/" + yearString;
                                 String sportTime = hoursString + " : " + minutesString;
                                 String sportDetails = mSportDetailsEdit.getText().toString();
-                                System.out.println("I AM HERE");
                                 if (sportTitle.equals("") ||
                                         sportDetails.equals("") || sportCategory.equals("")) {
                                     Toast.makeText(getApplicationContext(), "Fill out all fields, please!", Toast.LENGTH_LONG).show();
@@ -148,8 +146,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     private void setUpDate() {

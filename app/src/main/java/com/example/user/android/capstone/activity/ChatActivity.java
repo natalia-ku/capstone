@@ -1,9 +1,15 @@
 package com.example.user.android.capstone.activity;
 
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -32,21 +38,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
-
+    private ChatMessage chatMessage;
     private FirebaseListAdapter<ChatMessage> adapter;
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mEventsRef = mRootRef.child("events");
-    DatabaseReference mUsersRef = mRootRef.child("users");
-    String userId;
-    String userName;
-    String userEmail;
-    TextView chatTitleTextView;
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mUsersRef = mRootRef.child("users");
+    private String userId;
+    private String userName;
+    private String userEmail;
+    private DatabaseReference mEventsRef = mRootRef.child("events");
+    private TextView chatTitleTextView;
+    int messagesCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         final Event event = getIntent().getParcelableExtra("event");
+        DatabaseReference chatMessages = mEventsRef.child(event.getId()).child("chat");
+        chatMessages.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println("CHILD COUNT" + dataSnapshot.getChildrenCount());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser(), event);
         chatTitleTextView = (TextView) findViewById(R.id.chat_title);
@@ -75,20 +96,17 @@ public class ChatActivity extends AppCompatActivity {
                 TextView messageUser = (TextView) v.findViewById(R.id.message_user);
                 TextView messageTime = (TextView) v.findViewById(R.id.message_time);
                 messageText.setText(model.getMessageText());
+                System.out.println("MESSAGE: " + position);
                 if (model.getMessageEmail() != null && model.getMessageEmail().equals(userEmail)) {
                     messageUser.setText("");
-//                    messageUser.setTextColor(Color.parseColor("#0B93BF"));
                     messageText.setBackground(getResources().getDrawable(R.drawable.bubble_out));
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(770, 0, 0, 0);
+                    params.setMargins(500, 0, 0, 0);
                     messageText.setLayoutParams(params);
                 } else {
                     messageText.setBackground(getResources().getDrawable(R.drawable.bubble_in));
                     messageUser.setText(model.getMessageUser());
                 }
-//                messageUser.setText(model.getMessageUser());
-                // messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                //       model.getMessageTime()));
             }
         };
 
@@ -97,20 +115,21 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void listenForNewMessages(final Event event) {
-        Query allMessagesInChatQuery = mEventsRef.child(event.getId()).child("chat");
+        final Query allMessagesInChatQuery = mEventsRef.child(event.getId()).child("chat");
+
         allMessagesInChatQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                System.out.println("NEW MESSAGE IS ADDED!!!!!!!!");
                 Query eventAttendeesQuery = mEventsRef.child(event.getId()).child("attendees");
                 eventAttendeesQuery.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                             String userIdInAttendeesList = userSnapshot.getKey().toString();
-                        if (userIdInAttendeesList.equals(userId)){
-                            System.out.println("NEW MESSAGE FOR " + userName);
-                        }
+                            if (userIdInAttendeesList.equals(userId)) {
+                                showNotification(chatMessage);
+                                System.out.println("NEW MESSAGE FOR " + userName);
+                            }
 
 
                         }
@@ -122,6 +141,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 });
             }
+
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -146,7 +166,37 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
+        allMessagesInChatQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                    chatMessage = new ChatMessage(messageSnapshot.child("messageText").getValue().toString(),
+                            messageSnapshot.child("messageUser").getValue().toString(),
+                            messageSnapshot.child("messageTime").getValue().toString());
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
     private void findUserIdForSignedInUser(final FirebaseUser currentUser, final Event event) {
@@ -173,4 +223,30 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void showNotification(ChatMessage chatMessage) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.icon)
+                        .setContentTitle(chatMessage.getMessageUser())
+                        .setContentText(chatMessage.getMessageText());
+
+        Intent resultIntent = new Intent(this, ChatActivity.class);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(ChatActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(123, mBuilder.build());
+    }
+
+
 }
