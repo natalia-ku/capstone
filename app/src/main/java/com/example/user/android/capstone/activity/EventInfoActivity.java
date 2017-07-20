@@ -213,7 +213,6 @@ public class EventInfoActivity extends AppCompatActivity {
         mUserRef.child(userId).child("userEvents").child(eventId).removeValue();
     }
 
-
     private void setUpParticipateInEventButton(final Event event) {
         mParticipateInEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,7 +270,6 @@ public class EventInfoActivity extends AppCompatActivity {
             updateEventUI(event);
         }
     }
-
 
     private void findUserIdForSignedInUser(final FirebaseUser currentUser, final Event event) {
         Query findUserQuery = mUserRef.orderByChild("email").equalTo(currentUser.getEmail());
@@ -340,7 +338,6 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
-
     private void initializeTextViewsAndButtons() {
         mEventPhoto = (ImageView) findViewById(R.id.event_info_photo);
         mPeopleCountTextView = (TextView) findViewById(R.id.people_going_count_textview);
@@ -381,7 +378,6 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
-
     private void setUpCreatorIdEvent(final Event event) {
         mEventInfoCreatorName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -410,7 +406,6 @@ public class EventInfoActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void updateEventUI(Event e1) {
         mEventInfoCategory.setText(e1.getSportCategory());
@@ -469,7 +464,6 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
-
     private void setUpRecycleViewForUserList(List<User> eventUsers) {
         Integer count = eventUsers.size();
         if (count == 0) {
@@ -485,7 +479,6 @@ public class EventInfoActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
-
 
     private void listenForChangesInAttendeeList() {
         DatabaseReference attendeeRef = mEventsRef.child(eventId).child("attendees");
@@ -529,7 +522,6 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
-
     private void addToCalendarListener(final Event event) {
         mAddToCalendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -567,14 +559,36 @@ public class EventInfoActivity extends AppCompatActivity {
 
     public void addListenerOnRatingBar() {
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        txtRatingValue = (TextView) findViewById(R.id.txtRatingValue);
+        DatabaseReference currentEvent = mEventsRef.child(eventId);
+        currentEvent.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                txtRatingValue = (TextView) findViewById(R.id.txtRatingValue);
+                if (dataSnapshot.hasChild("rating")) {
+                    String currentRatingString = dataSnapshot.child("rating").getValue().toString();
+                    float currentRating = Float.parseFloat(currentRatingString);
+                    ratingBar.setRating(currentRating);
+                    String formattedValue = String.format("%.2f", currentRating);
+                    txtRatingValue.setText("Current rating: " + formattedValue);
+                    ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                        public void onRatingChanged(RatingBar ratingBar, float rating,
+                                                    boolean fromUser) {
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating,
-                                        boolean fromUser) {
-                txtRatingValue.setText(String.valueOf(rating));
+                        }
+                    });
+                } else {
+                    ratingBar.setRating(0);
+                    txtRatingValue.setText("Be the first to rate this event!");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
+
+
     }
 
     public void addListenerOnButton() {
@@ -582,9 +596,34 @@ public class EventInfoActivity extends AppCompatActivity {
         mRateEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EventInfoActivity.this,
-                        String.valueOf(ratingBar.getRating()),
-                        Toast.LENGTH_SHORT).show();
+                final float ratingValue = ratingBar.getRating();
+                DatabaseReference currentEvent = mEventsRef.child(eventId);
+                currentEvent.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        float newRatingValue = 0;
+                        float currentRating;
+                        if (!dataSnapshot.hasChild("rating")) {
+                            mEventsRef.child(eventId).child("rating").setValue(ratingValue);
+                        } else if (dataSnapshot.hasChild("rating")) {
+                            String currentRatingString = dataSnapshot.child("rating").getValue().toString();
+                            currentRating = Float.parseFloat(currentRatingString);
+                            newRatingValue = (currentRating + ratingValue) / 2;
+                            mEventsRef.child(eventId).child("rating").setValue(newRatingValue);
+                        }
+                        Toast.makeText(EventInfoActivity.this,
+                                "Thanks for rating this event",
+                                Toast.LENGTH_SHORT).show();
+                        String formattedValue = String.format("%.2f", newRatingValue);
+                        txtRatingValue.setText("Current rating: " + formattedValue);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
 

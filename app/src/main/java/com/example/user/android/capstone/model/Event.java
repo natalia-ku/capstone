@@ -23,6 +23,7 @@ public class Event  implements Parcelable, Serializable{
     private  String peopleNeeded;
     private  String creatorId;
     private String sportCategory;
+    private float rating;
 
 
     public String getDate() {
@@ -73,6 +74,14 @@ public class Event  implements Parcelable, Serializable{
         return id;
     }
 
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
     public  static String placeAddress;
 
     public Event(String sportCategory, String id, String title, String address, String date, String time, String details, String peopleNeeded, String creatorId) {
@@ -97,8 +106,6 @@ public class Event  implements Parcelable, Serializable{
         this.details = details;
         this.peopleNeeded = peopleNeeded;
         this.creatorId = creatorId;
-
-
     }
 
     public   boolean checkIfDateInFuture(String date) {
@@ -114,6 +121,9 @@ public class Event  implements Parcelable, Serializable{
         }
         return false;
     }
+
+
+
 
 
 
@@ -174,6 +184,7 @@ public class Event  implements Parcelable, Serializable{
             return new Event[size];
         }
     };
+
 
 
 }

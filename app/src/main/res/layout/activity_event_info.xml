@@ -284,11 +284,16 @@
             android:scrollbars="horizontal"
             android:visibility="visible"></android.support.v7.widget.RecyclerView>
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="15dp"
+            android:background="#F2F2F7" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
+            android:textSize="20dp"
             android:text="Rate this sporting event"/>
 
         <LinearLayout
