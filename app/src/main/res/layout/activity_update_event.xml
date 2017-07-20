@@ -9,6 +9,9 @@
     <TextView
         android:id="@+id/update_textview"
         android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="30dp"
+        android:paddingTop="30dp"
         android:layout_height="wrap_content"
         android:text="UPDATE EVENT DETAILS"/>
 
@@ -37,7 +40,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Sport Event Address:" />
+        android:text="Enter Event Address:" />
 
     <fragment
         android:id="@+id/place_autocomplete_fragment_update"
@@ -70,17 +73,26 @@
         android:text="Select time" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/show_date_update"
+        android:textColor="@color/accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
 
     <TextView
         android:id="@+id/show_time_update"
+        android:layout_marginLeft="50dp"
+        android:textColor="@color/accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+</LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"

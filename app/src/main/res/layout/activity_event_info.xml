@@ -46,12 +46,15 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="20dp"
                         android:background="#8d000000"
-                        android:textAlignment="center"
+                        android:gravity="left"
+                        android:paddingLeft="15dp"
+                        android:textAlignment="viewStart"
                         android:textColor="#FFFFFF"
                         android:textSize="30sp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
+
 
 
                 <GridLayout
@@ -72,6 +75,7 @@
                         android:drawableLeft="@drawable/sport_icon"
                         android:drawablePadding="3dp"
                         android:paddingBottom="8dp"
+                        android:paddingLeft="3dp"
                         android:textSize="22sp" />
 
                     <TextView
@@ -81,7 +85,6 @@
                         android:layout_gravity="left|top"
                         android:textSize="22sp" />
 
-
                     <TextView
                         android:id="@+id/event_date_textview"
                         android:layout_width="wrap_content"
@@ -90,8 +93,8 @@
                         android:drawableLeft="@drawable/calendar1"
                         android:drawablePadding="3dp"
                         android:paddingBottom="8dp"
+                        android:paddingLeft="3dp"
                         android:textSize="22sp" />
-
 
                     <TextView
                         android:id="@+id/event_time_textview"
@@ -122,20 +125,20 @@
                 android:id="@+id/update_event_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="150dp"
-                android:layout_marginRight="20dp"
+
+                android:layout_marginRight="10dp"
                 android:backgroundTint="@color/accent"
                 android:clickable="true"
                 android:src="@drawable/edit_white"
                 app:layout_anchor="@id/linearA"
-                app:layout_anchorGravity="bottom|right|end" />
+                app:layout_anchorGravity="center|right|end" />
         </android.support.design.widget.CoordinatorLayout>
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="140dp">
+            android:layout_gravity="center">
 
             <Button
                 android:id="@+id/get_directions_button"
@@ -215,6 +218,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="16dp"
             android:text="EVENT DETAILS"
+            android:textColor="@color/accent"
             android:textSize="22sp" />
 
         <TextView
@@ -244,8 +248,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
                 android:paddingLeft="10dp"
+                android:paddingTop="10dp"
                 android:text="Organized by "
                 android:textSize="22sp" />
 
@@ -253,8 +257,8 @@
                 android:id="@+id/event_creator_id_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
                 android:paddingLeft="1dp"
+                android:paddingTop="10dp"
                 android:textColor="@color/accent"
                 android:textSize="22sp" />
 
