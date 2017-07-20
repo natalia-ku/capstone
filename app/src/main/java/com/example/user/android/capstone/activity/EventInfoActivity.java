@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +81,7 @@ public class EventInfoActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 23;
     private RatingBar ratingBar;
     private TextView txtRatingValue;
+    private LinearLayout mRatingLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +115,43 @@ public class EventInfoActivity extends AppCompatActivity {
         openChatListener(event);
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
-        addListenerOnRatingBar();
-        addListenerOnButton();
+
+//        checkIfDisplayRating();
+
     } // end of onCreate method
 
+    private void checkIfDisplayRating() {
+        Query checkIfUserAttendsEventQuery = mEventsRef.child(eventId).child("attendees");
+        checkIfUserAttendsEventQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean userIsAttendee = false;
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        if (eventSnapshot.getKey().equals(userId)) {
+                            userIsAttendee = true;
+                        }
+                    }
+                    if (eventInPast && userIsAttendee) {
+                        mRatingLayout.setVisibility(View.VISIBLE);
+                        addListenerOnRatingBar();
+                        addListenerOnButton();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        addListenerOnRatingBar();
+        addListenerOnButton();
+
+    }
 
     private void updateEventListener(final Event event) {
         mUpdateEvent.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +315,7 @@ public class EventInfoActivity extends AppCompatActivity {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         userId = eventSnapshot.getKey();
                     }
+                    checkIfDisplayRating();
                     checkIfUserAlreadyAttendee();
                     if (!event.getCreatorId().toString().equals(userId)) {
                         mUpdateEvent.setVisibility(View.GONE);
@@ -358,6 +394,7 @@ public class EventInfoActivity extends AppCompatActivity {
         mParticipateInEventButton = (Button) findViewById(R.id.paticipate_in_event_button);
         mCancelParticipationButton = (Button) findViewById(R.id.cancel_participation_in_event_button);
         mRateEventButton = (Button) findViewById(R.id.submit_rating_button);
+        mRatingLayout = (LinearLayout) findViewById(R.id.rating_layout);
     }
 
     private void setUpGetDirections() {

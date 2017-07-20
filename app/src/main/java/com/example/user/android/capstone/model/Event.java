@@ -108,7 +108,7 @@ public class Event  implements Parcelable, Serializable{
         this.creatorId = creatorId;
     }
 
-    public   boolean checkIfDateInFuture(String date) {
+    public boolean checkIfDateInFuture(String date) {
         Date today = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         try {
