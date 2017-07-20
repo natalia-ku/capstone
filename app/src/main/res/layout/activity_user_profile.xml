@@ -155,7 +155,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="20dp"
                 android:text="EVENTS, USER CREATED"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/accent" />
 
 
             <android.support.v7.widget.RecyclerView
@@ -171,7 +171,7 @@
                 android:textSize="20dp"
                 android:layout_marginLeft="10dp"
                 android:text="EVENTS, USER PARTICIPATED"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/accent" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view_events_user_participated_in"

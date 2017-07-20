@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -82,12 +83,11 @@ public class ChatActivity extends AppCompatActivity {
                 input.setText("");
             }
         });
-
-
     }
 
+
     private void displayChatMessages(Event event) {
-        ListView listOfMessages = (ListView) findViewById(R.id.list_of_messages);
+        final ListView listOfMessages = (ListView) findViewById(R.id.list_of_messages);
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, mEventsRef.child(event.getId()).child("chat")) {
             @Override
@@ -96,7 +96,6 @@ public class ChatActivity extends AppCompatActivity {
                 TextView messageUser = (TextView) v.findViewById(R.id.message_user);
                 TextView messageTime = (TextView) v.findViewById(R.id.message_time);
                 messageText.setText(model.getMessageText());
-                System.out.println("MESSAGE: " + position);
                 if (model.getMessageEmail() != null && model.getMessageEmail().equals(userEmail)) {
                     messageUser.setText("");
                     messageText.setBackground(getResources().getDrawable(R.drawable.bubble_out));
@@ -109,14 +108,22 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         };
-
         listenForNewMessages(event);
         listOfMessages.setAdapter(adapter);
+
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                listOfMessages.setSelection(adapter.getCount() - 1);
+            }
+        });
     }
+
+
 
     private void listenForNewMessages(final Event event) {
         final Query allMessagesInChatQuery = mEventsRef.child(event.getId()).child("chat");
-
         allMessagesInChatQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -130,8 +137,6 @@ public class ChatActivity extends AppCompatActivity {
                                 showNotification(chatMessage);
                                 System.out.println("NEW MESSAGE FOR " + userName);
                             }
-
-
                         }
                     }
 
@@ -140,6 +145,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     }
                 });
+
             }
 
 
@@ -186,15 +192,6 @@ public class ChatActivity extends AppCompatActivity {
 
 
     }
-
-
-
-
-
-
-
-
-
 
 
 
