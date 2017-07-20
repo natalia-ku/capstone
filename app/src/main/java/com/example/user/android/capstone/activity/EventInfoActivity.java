@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,35 +49,37 @@ import java.util.List;
 public class EventInfoActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    FirebaseUser currentUser = mAuth.getCurrentUser();
-    DatabaseReference mEventsRef = mRootRef.child("events");
-    DatabaseReference mUserRef = mRootRef.child("users");
     private RecyclerView recyclerView;
-    TextView mEventInfoTitle;
-    TextView mEventInfoCategory;
-    TextView mEventInfoAddress;
-    TextView mEventInfoDate;
-    TextView mEventInfoTime;
-    TextView mEventInfoDetails;
-    TextView mEventInfoPeopleNeeded;
-    TextView mEventInfoCreatorName;
-    TextView mPeopleCountTextView;
-    ImageView mEventPhoto;
-    Button mGetDirectionsButton;
-    Button mParticipateInEventButton;
-    Button mCancelParticipationButton;
-    FloatingActionButton mUpdateEvent;
-    Button mAddToCalendarButton;
-    Button mOpenChatButton;
-    Button mEventOnMap;
-    boolean eventInPast;
-    ImageView mEventCreatorImage;
-    String userPhotoUrl;
-
-    String eventId;
-    String userId;
-    final int REQUEST_CODE = 23;
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
+    private DatabaseReference mEventsRef = mRootRef.child("events");
+    private DatabaseReference mUserRef = mRootRef.child("users");
+    private TextView mEventInfoCategory;
+    private TextView mEventInfoTitle;
+    private TextView mEventInfoDate;
+    private TextView mEventInfoTime;
+    private TextView mEventInfoDetails;
+    private TextView mEventInfoPeopleNeeded;
+    private TextView mEventInfoCreatorName;
+    private TextView mPeopleCountTextView;
+    private ImageView mEventPhoto;
+    private TextView mEventInfoAddress;
+    private Button mParticipateInEventButton;
+    private Button mGetDirectionsButton;
+    private Button mCancelParticipationButton;
+    private FloatingActionButton mUpdateEvent;
+    private Button mAddToCalendarButton;
+    private Button mRateEventButton;
+    private Button mOpenChatButton;
+    private Button mEventOnMap;
+    private boolean eventInPast;
+    private ImageView mEventCreatorImage;
+    private String userPhotoUrl;
+    private String eventId;
+    private String userId;
+    private final int REQUEST_CODE = 23;
+    private RatingBar ratingBar;
+    private TextView txtRatingValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,8 @@ public class EventInfoActivity extends AppCompatActivity {
         openChatListener(event);
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
+        addListenerOnRatingBar();
+        addListenerOnButton();
     } // end of onCreate method
 
 
@@ -355,6 +360,7 @@ public class EventInfoActivity extends AppCompatActivity {
         mGetDirectionsButton = (Button) findViewById(R.id.get_directions_button);
         mParticipateInEventButton = (Button) findViewById(R.id.paticipate_in_event_button);
         mCancelParticipationButton = (Button) findViewById(R.id.cancel_participation_in_event_button);
+        mRateEventButton = (Button) findViewById(R.id.submit_rating_button);
     }
 
     private void setUpGetDirections() {
@@ -466,13 +472,11 @@ public class EventInfoActivity extends AppCompatActivity {
 
     private void setUpRecycleViewForUserList(List<User> eventUsers) {
         Integer count = eventUsers.size();
-        if (count == 0){
+        if (count == 0) {
             mPeopleCountTextView.setText("Be the first to attend the event");
-        }
-        else if (count == 1){
+        } else if (count == 1) {
             mPeopleCountTextView.setText(count + " person is going");
-        }
-        else {
+        } else {
             mPeopleCountTextView.setText(count + " people are going");
         }
         recyclerView = (RecyclerView) findViewById(R.id.recycle_view_event_attendees);
@@ -560,4 +564,31 @@ public class EventInfoActivity extends AppCompatActivity {
 
     }
 
+
+    public void addListenerOnRatingBar() {
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        txtRatingValue = (TextView) findViewById(R.id.txtRatingValue);
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            public void onRatingChanged(RatingBar ratingBar, float rating,
+                                        boolean fromUser) {
+                txtRatingValue.setText(String.valueOf(rating));
+            }
+        });
+    }
+
+    public void addListenerOnButton() {
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        mRateEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EventInfoActivity.this,
+                        String.valueOf(ratingBar.getRating()),
+                        Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+    }
 }
