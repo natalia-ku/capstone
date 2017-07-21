@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -40,20 +41,21 @@ import java.util.List;
 public class UserProfileActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    TextView mUserName;
-    TextView mUserEmail;
-    TextView mUserAge;
-    TextView mUserGender;
-    ImageView mUserPhotoImage;
-    FloatingActionButton mEditProfileButton;
-    final int REQUEST_CODE = 23;
-    TextView eventsUserCreatedTextView;
-    TextView eventsUserParticipatedTextView;
-
+    private TextView mUserAge;
+    private TextView mUserGender;
+    private ImageView mUserPhotoImage;
+    private TextView mUserName;
+    private TextView mUserEmail;
+    private FloatingActionButton mEditProfileButton;
+    private final int REQUEST_CODE = 23;
+    private TextView eventsUserCreatedTextView;
+    private TextView eventsUserParticipatedTextView;
+    private TextView userRatingTextView;
     private FirebaseAuth mAuth;
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mUserRef = mRootRef.child("users");
-    DatabaseReference mEventRef = mRootRef.child("events");
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mUserRef = mRootRef.child("users");
+    private DatabaseReference mEventRef = mRootRef.child("events");
+    private RatingBar userRatingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +67,12 @@ public class UserProfileActivity extends AppCompatActivity {
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = mAuth.getCurrentUser();
             userEmail = currentUser.getEmail();
-        }
-        else{
+        } else {
             mEditProfileButton.setVisibility(View.GONE);
         }
         setUpProfileInfo(userEmail);
 
-    } // END of OnCreate
+    }
 
     private void setUpProfileInfo(String userEmail) {
         Query userProfileQuery = mUserRef.orderByChild("email").equalTo(userEmail);
@@ -102,17 +103,14 @@ public class UserProfileActivity extends AppCompatActivity {
                     findEventsUserParticipatedIn(currentUserId);
 
 
-                        mEditProfileButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intentToUpdateProfile = new Intent(getApplicationContext(), UpdateProfileActivity.class);
-                                intentToUpdateProfile.putExtra("user", (Serializable) user);
-                                startActivityForResult(intentToUpdateProfile, REQUEST_CODE);
-                            }
-                        });
-
-
-
+                    mEditProfileButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intentToUpdateProfile = new Intent(getApplicationContext(), UpdateProfileActivity.class);
+                            intentToUpdateProfile.putExtra("user", (Serializable) user);
+                            startActivityForResult(intentToUpdateProfile, REQUEST_CODE);
+                        }
+                    });
 
 
                 }
@@ -197,11 +195,14 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void findCreatedByUserEvents(String currentUserId) {
         final List<Event> userEvents = new ArrayList<>();
+
         //TO GET EVENTS USER CREATED
         Query createdByUserEventsQuery = mEventRef.orderByChild("creatorId").equalTo(currentUserId);
         createdByUserEventsQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                double userRating = 0;
+                int eventWithRatingCount = 0;
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         String id = eventSnapshot.getKey();
@@ -213,13 +214,21 @@ public class UserProfileActivity extends AppCompatActivity {
                         String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                         String title = (String) eventSnapshot.child("title").getValue();
                         String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
-
+                        if (eventSnapshot.hasChild("rating")) {
+                            eventWithRatingCount++;
+                            userRating += (Double) eventSnapshot.child("rating").getValue();
+                        }
                         Event e1 = new Event(sportCategory, id, title, address, date, time, details, peopleNeeded, creatorId);
                         userEvents.add(e1);
                     }
                 }
                 if (userEvents.size() == 0) {
                     eventsUserCreatedTextView.setVisibility(View.GONE);
+                } else {
+                    if (eventWithRatingCount > 0) {
+                        String formattedRating = String.format("%.2f", userRating / eventWithRatingCount);
+                        float userRatingValue =  (float) userRating / eventWithRatingCount;
+                        userRatingBar.setRating(userRatingValue);}
                 }
                 setUpRecycleView(userEvents, true);
             }
@@ -237,9 +246,10 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserAge = (TextView) findViewById(R.id.age_profile_info);
         mUserGender = (TextView) findViewById(R.id.gender_profile_info);
         mUserPhotoImage = (ImageView) findViewById(R.id.user_photo);
-
+//        userRatingTextView = (TextView) findViewById(R.id.user_rating);
         eventsUserCreatedTextView = (TextView) findViewById(R.id.events_user_created_textview);
         eventsUserParticipatedTextView = (TextView) findViewById(R.id.events_user_participated_textview);
+        userRatingBar = (RatingBar) findViewById(R.id.rating_user_profile);
     }
 
     private void setTextToViews(String email, String name, String age, String gender, String photo) {

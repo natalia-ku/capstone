@@ -6,7 +6,6 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -52,7 +51,6 @@
                         android:textColor="#FFFFFF"
                         android:textSize="30sp"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
 
 
@@ -113,7 +111,6 @@
                         android:drawableLeft="@drawable/map"
                         android:drawablePadding="3dp"
                         android:textSize="22sp" />
-
                 </GridLayout>
 
 
@@ -124,7 +121,6 @@
                 android:id="@+id/update_event_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginRight="10dp"
                 android:backgroundTint="@color/accent"
                 android:clickable="true"
@@ -268,7 +264,6 @@
             android:layout_height="9dp"
             android:background="#F2F2F7" />
 
-
         <TextView
             android:id="@+id/people_going_count_textview"
             android:layout_width="wrap_content"
@@ -333,11 +328,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You already voted"
+                    android:layout_gravity="center_vertical"
                     android:textSize="15dp"
                     android:visibility="gone" />
             </LinearLayout>
 
             <TextView
+                android:paddingLeft="15dp"
+                android:textColor="@color/accent"
                 android:id="@+id/txtRatingValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

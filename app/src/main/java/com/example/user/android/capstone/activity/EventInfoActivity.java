@@ -100,7 +100,6 @@ public class EventInfoActivity extends AppCompatActivity {
         updateEventListener(event);
         getEventParticipants(eventId);
 
-        // Find USER ID FOR SIGNED-IN user:
         if (currentUser != null) {
             findUserIdForSignedInUser(currentUser, event);
         } else {
@@ -131,6 +130,9 @@ public class EventInfoActivity extends AppCompatActivity {
                             userIsAttendee = true;
                         }
                     }
+                    if (eventInPast){
+                        addListenerOnRatingBar();
+                    }
                     if (eventInPast && userIsAttendee) {
                         mRatingLayout.setVisibility(View.VISIBLE);
                         Query votedUsersQuery = mEventsRef.child(eventId).child("votedUsers");
@@ -143,7 +145,6 @@ public class EventInfoActivity extends AppCompatActivity {
                                     mRateEventButton.setVisibility(View.GONE);
                                 }
                                 else {
-                                    addListenerOnRatingBar();
                                     addListenerOnButton();
                                 }
 
@@ -611,9 +612,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
     }
 
-
     public void addListenerOnRatingBar() {
-
         DatabaseReference currentEvent = mEventsRef.child(eventId);
         currentEvent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -669,6 +668,7 @@ public class EventInfoActivity extends AppCompatActivity {
                         Toast.makeText(EventInfoActivity.this,
                                 "Thanks for rating this event",
                                 Toast.LENGTH_SHORT).show();
+                        mRateEventButton.setVisibility(View.GONE);
                         String formattedValue = String.format("%.2f", newRatingValue);
                         txtRatingValue.setText("Current rating: " + formattedValue);
                     }
@@ -678,8 +678,6 @@ public class EventInfoActivity extends AppCompatActivity {
 
                     }
                 });
-
-
             }
 
         });

@@ -28,7 +28,7 @@
 
                     <RelativeLayout
                         android:layout_width="fill_parent"
-                        android:layout_height="330dp">
+                        android:layout_height="300dp">
 
                         <FrameLayout
                             android:layout_width="fill_parent"
@@ -147,31 +147,50 @@
                     app:layout_anchorGravity="bottom|right|end" />
             </android.support.design.widget.CoordinatorLayout>
 
+                <TextView
+                    android:id="@+id/events_user_created_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="EVENTS, USER ORGANIZED"
+                    android:textColor="@color/accent"
+                    android:textSize="25dp" />
 
-            <TextView
-                android:id="@+id/events_user_created_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RatingBar
                 android:layout_marginLeft="10dp"
-                android:textSize="20dp"
-                android:text="EVENTS, USER CREATED"
-                android:textColor="@color/accent" />
-
+                android:id="@+id/rating_user_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:layout_gravity="center_vertical"
+                android:stepSize="0.1" />
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+                android:text=" (based on past events, you organized)"
+            android:id="@+id/user_rating"/>
+        </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view_events_created_by_user"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible"></android.support.v7.widget.RecyclerView>
-
             <TextView
                 android:id="@+id/events_user_participated_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
                 android:layout_marginLeft="10dp"
-                android:text="EVENTS, USER PARTICIPATED"
-                android:textColor="@color/accent" />
+                android:text="EVENTS, USER PARTICIPATED IN"
+                android:textColor="@color/accent"
+                android:textSize="25dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view_events_user_participated_in"
