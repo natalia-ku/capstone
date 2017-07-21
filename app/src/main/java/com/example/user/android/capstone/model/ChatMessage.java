@@ -24,7 +24,6 @@ public class ChatMessage {
 
     }
 
-
     public String getMessageEmail() {
         return messageEmail;
     }

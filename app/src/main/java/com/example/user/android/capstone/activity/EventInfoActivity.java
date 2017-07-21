@@ -82,6 +82,8 @@ public class EventInfoActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private TextView txtRatingValue;
     private LinearLayout mRatingLayout;
+    private TextView alreadyVotedTextView;
+    private TextView ratingBarTitleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,9 +117,6 @@ public class EventInfoActivity extends AppCompatActivity {
         openChatListener(event);
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
-
-//        checkIfDisplayRating();
-
     } // end of onCreate method
 
     private void checkIfDisplayRating() {
@@ -134,8 +133,27 @@ public class EventInfoActivity extends AppCompatActivity {
                     }
                     if (eventInPast && userIsAttendee) {
                         mRatingLayout.setVisibility(View.VISIBLE);
-                        addListenerOnRatingBar();
-                        addListenerOnButton();
+                        Query votedUsersQuery = mEventsRef.child(eventId).child("votedUsers");
+                        votedUsersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.hasChild(userId)){
+                                    alreadyVotedTextView.setVisibility(View.VISIBLE);
+                                    ratingBarTitleTextView.setVisibility(View.GONE);
+                                    mRateEventButton.setVisibility(View.GONE);
+                                }
+                                else {
+                                    addListenerOnRatingBar();
+                                    addListenerOnButton();
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                     }
 
                 }
@@ -146,10 +164,6 @@ public class EventInfoActivity extends AppCompatActivity {
 
             }
         });
-
-
-        addListenerOnRatingBar();
-        addListenerOnButton();
 
     }
 
@@ -395,6 +409,10 @@ public class EventInfoActivity extends AppCompatActivity {
         mCancelParticipationButton = (Button) findViewById(R.id.cancel_participation_in_event_button);
         mRateEventButton = (Button) findViewById(R.id.submit_rating_button);
         mRatingLayout = (LinearLayout) findViewById(R.id.rating_layout);
+        alreadyVotedTextView = (TextView) findViewById(R.id.already_voted_textview);
+        ratingBarTitleTextView = (TextView) findViewById(R.id.rating_layout_title);
+        txtRatingValue = (TextView) findViewById(R.id.txtRatingValue);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
     }
 
     private void setUpGetDirections() {
@@ -595,12 +613,11 @@ public class EventInfoActivity extends AppCompatActivity {
 
 
     public void addListenerOnRatingBar() {
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+
         DatabaseReference currentEvent = mEventsRef.child(eventId);
         currentEvent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                txtRatingValue = (TextView) findViewById(R.id.txtRatingValue);
                 if (dataSnapshot.hasChild("rating")) {
                     String currentRatingString = dataSnapshot.child("rating").getValue().toString();
                     float currentRating = Float.parseFloat(currentRatingString);
@@ -647,6 +664,7 @@ public class EventInfoActivity extends AppCompatActivity {
                             currentRating = Float.parseFloat(currentRatingString);
                             newRatingValue = (currentRating + ratingValue) / 2;
                             mEventsRef.child(eventId).child("rating").setValue(newRatingValue);
+                            mEventsRef.child(eventId).child("votedUsers").child(userId).setValue("true");
                         }
                         Toast.makeText(EventInfoActivity.this,
                                 "Thanks for rating this event",

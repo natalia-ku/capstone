@@ -71,12 +71,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
         for (Event event : events) {
             LatLng address = mapUtils.getLocationFromAddress(event.getAddress());
             if (address != null) {
-//                mMap.addMarker(new MarkerOptions().position(address)
-//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-//                        .title(event.getTitle()));
             }
         }
-
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
 

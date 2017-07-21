@@ -180,7 +180,6 @@ public class UserProfileActivity extends AppCompatActivity {
                             String peopleNeeded = eventSnapshot.child("peopleNeeded").getValue().toString();
                             String title = (String) eventSnapshot.child("title").getValue();
                             String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
-
                             Event e1 = new Event(sportCategory, id, title, address, date, time, details, peopleNeeded, creatorId);
                             userEvents.add(e1);
                         }

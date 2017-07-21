@@ -52,7 +52,6 @@ public class UserChatsActivity extends AppCompatActivity {
         recycleView = (RecyclerView) findViewById(R.id.recycle_view_chat_list);
     }
 
-
     private void findUserIdForSignedInUser(final FirebaseUser currentUser) {
         Query findUserQuery = mUsersRef.orderByChild("email").equalTo(currentUser.getEmail());
         findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -83,7 +82,6 @@ public class UserChatsActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-//                        final Event event;
                         String eventId = "";
                         String eventCategory = "";
                         String eventPeopleNeeded = "";

@@ -76,9 +76,6 @@ public class User implements Serializable {
         this.photo = photo;
         this.age = age;
     }
-
-
-
 }
 
 
