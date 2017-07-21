@@ -34,7 +34,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.SignUpActivity">
+        <activity android:name=".activity.SignInActivity">
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -60,7 +60,8 @@
             android:name=".activity.ChatActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activity.SplashActivity" />
-        <activity android:name=".activity.UserChatsActivity"></activity>
+        <activity android:name=".activity.UserChatsActivity" />
+        <activity android:name=".activity.SignUpActivity"></activity>
     </application>
 
 </manifest>

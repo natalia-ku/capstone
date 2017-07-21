@@ -216,7 +216,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
                         if (eventSnapshot.hasChild("rating")) {
                             eventWithRatingCount++;
-                            userRating += (Double) eventSnapshot.child("rating").getValue();
+                            userRating += Double.parseDouble(eventSnapshot.child("rating").getValue().toString());
                         }
                         Event e1 = new Event(sportCategory, id, title, address, date, time, details, peopleNeeded, creatorId);
                         userEvents.add(e1);
@@ -226,7 +226,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     eventsUserCreatedTextView.setVisibility(View.GONE);
                 } else {
                     if (eventWithRatingCount > 0) {
-                        String formattedRating = String.format("%.2f", userRating / eventWithRatingCount);
                         float userRatingValue =  (float) userRating / eventWithRatingCount;
                         userRatingBar.setRating(userRatingValue);}
                 }
@@ -246,7 +245,6 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserAge = (TextView) findViewById(R.id.age_profile_info);
         mUserGender = (TextView) findViewById(R.id.gender_profile_info);
         mUserPhotoImage = (ImageView) findViewById(R.id.user_photo);
-//        userRatingTextView = (TextView) findViewById(R.id.user_rating);
         eventsUserCreatedTextView = (TextView) findViewById(R.id.events_user_created_textview);
         eventsUserParticipatedTextView = (TextView) findViewById(R.id.events_user_participated_textview);
         userRatingBar = (RatingBar) findViewById(R.id.rating_user_profile);
