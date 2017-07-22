@@ -1,13 +1,16 @@
 package com.example.user.android.capstone.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -135,7 +138,7 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void findEventsUserParticipatedIn(String currentUserId) {
+    private void findEventsUserParticipatedIn(final String currentUserId) {
         // GET list of user event IDs:
         final List<String> eventIdsList = new ArrayList<>();
         Query getUserEventIdsQuery = mUserRef.child(currentUserId).child("userEvents");
@@ -146,7 +149,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         eventIdsList.add(eventSnapshot.getKey());
                     }
-                    getEventsUserParticipatedIn(eventIdsList);
+                    getEventsUserParticipatedIn(eventIdsList, currentUserId);
                 } else {
                     eventsUserParticipatedTextView.setVisibility(View.GONE);
                 }
@@ -159,7 +162,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void getEventsUserParticipatedIn(List<String> eventIdsList) {
+    private void getEventsUserParticipatedIn(List<String> eventIdsList, final String currentUserId) {
         //TO GET EVENTS USER PARTICIPATED IN:
         final List<Event> userEvents = new ArrayList<>();
         for (String eventID : eventIdsList) {
@@ -167,6 +170,7 @@ public class UserProfileActivity extends AppCompatActivity {
             eventsUserAttendsQuery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<Event> notRatedEvents = new ArrayList<Event>();
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                             String id = eventSnapshot.getKey();
@@ -180,6 +184,35 @@ public class UserProfileActivity extends AppCompatActivity {
                             String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
                             Event e1 = new Event(sportCategory, id, title, address, date, time, details, peopleNeeded, creatorId);
                             userEvents.add(e1);
+
+                            if (!e1.checkIfDateInFuture(e1.getDate()) &&
+                                    !eventSnapshot.child("votedUsers").hasChild(currentUserId)) {
+                                notRatedEvents.add(e1);
+                            }
+                            if (notRatedEvents.size() > 0) {
+                                System.out.println("NOT RATED EVENTS!!!!");
+                                AlertDialog.Builder builder;
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    builder = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+                                } else {
+                                    builder = new AlertDialog.Builder(getApplicationContext());
+                                }
+                                builder.setTitle("Delete entry")
+                                        .setMessage("Are you sure you want to delete this entry?")
+                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // continue with delete
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // do nothing
+                                            }
+                                        })
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .show();
+                            }
+
                         }
                         setUpRecycleView(userEvents, false);
                     }
@@ -226,8 +259,9 @@ public class UserProfileActivity extends AppCompatActivity {
                     eventsUserCreatedTextView.setVisibility(View.GONE);
                 } else {
                     if (eventWithRatingCount > 0) {
-                        float userRatingValue =  (float) userRating / eventWithRatingCount;
-                        userRatingBar.setRating(userRatingValue);}
+                        float userRatingValue = (float) userRating / eventWithRatingCount;
+                        userRatingBar.setRating(userRatingValue);
+                    }
                 }
                 setUpRecycleView(userEvents, true);
             }

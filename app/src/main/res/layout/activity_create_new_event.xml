@@ -50,6 +50,7 @@
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
