@@ -2,23 +2,21 @@ package com.example.user.android.capstone.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+//import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -54,12 +52,14 @@ public class UserProfileActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 23;
     private TextView eventsUserCreatedTextView;
     private TextView eventsUserParticipatedTextView;
-    private TextView userRatingTextView;
     private FirebaseAuth mAuth;
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mUserRef = mRootRef.child("users");
     private DatabaseReference mEventRef = mRootRef.child("events");
     private RatingBar userRatingBar;
+    View checkBoxView;
+    CheckBox checkBox;
+    final String DONT_SHOW_AGAIN = "DontShowAgain";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +171,7 @@ public class UserProfileActivity extends AppCompatActivity {
             eventsUserAttendsQuery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<Event> notRatedEvents = new ArrayList<Event>();
+                    final List<Event> notRatedEvents = new ArrayList<Event>();
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                             String id = eventSnapshot.getKey();
@@ -185,43 +185,70 @@ public class UserProfileActivity extends AppCompatActivity {
                             String sportCategory = (String) eventSnapshot.child("sportCategory").getValue();
                             Event e1 = new Event(sportCategory, id, title, address, date, time, details, peopleNeeded, creatorId);
                             userEvents.add(e1);
-
                             if (!e1.checkIfDateInFuture(e1.getDate()) &&
                                     !eventSnapshot.child("votedUsers").hasChild(currentUserId)) {
                                 notRatedEvents.add(e1);
                             }
-                            if (notRatedEvents.size() > 0) {
-                                AlertDialog.Builder builder;
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    builder = new AlertDialog.Builder(UserProfileActivity.this);
-                                } else {
-                                    builder = new AlertDialog.Builder(getApplicationContext());
-                                }
-                                List<String> eventsTitles = new ArrayList<String>();
-                                for (Event event : notRatedEvents) {
-                                    eventsTitles.add(event.getTitle());
-                                }
-                                final CharSequence[] charSequencesItems = eventsTitles.toArray(new CharSequence[eventsTitles.size()]);
-                                builder.setTitle("Rate your past trips")
-                                        .setItems(charSequencesItems, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int item) {
-//                                                Intent intentToEventDetails
-                                            }
-                                        })
-                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                // continue with delete
-                                            }
-                                        })
-                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                // do nothing
-                                            }
-                                        })
-                                        .setIcon(android.R.drawable.ic_dialog_info)
-                                        .show();
-                            }
 
+                        }
+
+                        if (notRatedEvents.size() > 0) {
+                            AlertDialog.Builder builder;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                builder = new AlertDialog.Builder(UserProfileActivity.this);
+                            } else {
+                                builder = new AlertDialog.Builder(getApplicationContext());
+                            }
+                            final List<String> eventsTitles = new ArrayList<String>();
+                            for (Event event : notRatedEvents) {
+                                eventsTitles.add(event.getTitle());
+                            }
+                            final CharSequence[] charSequencesItems = eventsTitles.toArray(new CharSequence[eventsTitles.size()]);
+                            LayoutInflater adbInflater = LayoutInflater.from(getApplicationContext());
+                            View layoutCheckbox = adbInflater.inflate(R.layout.checkbox, null);
+                            SharedPreferences settings = getSharedPreferences(DONT_SHOW_AGAIN, 0);
+                            String skipMessage = settings.getString("skipMessage", "NOT checked");
+
+                            checkBox = (CheckBox) layoutCheckbox.findViewById(R.id.skip);
+                            builder.setView(layoutCheckbox);
+                            builder.setTitle("Rate your past trips")
+                                    .setItems(charSequencesItems, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int item) {
+                                            Intent intentToEventDetails = new Intent(getApplicationContext(), EventInfoActivity.class);
+                                            intentToEventDetails.putExtra("event", (Serializable) notRatedEvents.get(item));
+                                            startActivity(intentToEventDetails);
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_info)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String checkBoxResult = "NOT checked";
+                                            if (checkBox.isChecked()) {
+                                                checkBoxResult = "checked";
+                                            }
+                                            SharedPreferences settings = getSharedPreferences(DONT_SHOW_AGAIN, 0);
+                                            SharedPreferences.Editor editor = settings.edit();
+                                            editor.putString("skipMessage", checkBoxResult);
+                                            editor.commit();
+                                            return;
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String checkBoxResult = "NOT checked";
+                                            if (checkBox.isChecked()) {
+                                                checkBoxResult = "checked";
+                                            }
+                                            SharedPreferences settings = getSharedPreferences(DONT_SHOW_AGAIN, 0);
+                                            SharedPreferences.Editor editor = settings.edit();
+                                            editor.putString("skipMessage", checkBoxResult);
+                                            editor.commit();
+                                            return;
+                                        }
+                                    });
+                            if (!skipMessage.equals("checked")) {
+                                builder.show();
+                            }
                         }
                         setUpRecycleView(userEvents, false);
                     }
@@ -291,6 +318,18 @@ public class UserProfileActivity extends AppCompatActivity {
         eventsUserCreatedTextView = (TextView) findViewById(R.id.events_user_created_textview);
         eventsUserParticipatedTextView = (TextView) findViewById(R.id.events_user_participated_textview);
         userRatingBar = (RatingBar) findViewById(R.id.rating_user_profile);
+        checkBoxView = View.inflate(this, R.layout.checkbox, null);
+//        checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
+//        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//
+//                // Save to shared preferences
+//            }
+//        });
+//        checkBox.setTextColor(getResources().getColor(R.color.accent));
+//        checkBox.setText("Do not ask me again");
+
     }
 
     private void setTextToViews(String email, String name, String age, String gender, String photo) {
