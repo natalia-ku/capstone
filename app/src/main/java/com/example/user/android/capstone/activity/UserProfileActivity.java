@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -190,15 +191,23 @@ public class UserProfileActivity extends AppCompatActivity {
                                 notRatedEvents.add(e1);
                             }
                             if (notRatedEvents.size() > 0) {
-                                System.out.println("NOT RATED EVENTS!!!!");
                                 AlertDialog.Builder builder;
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    builder = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+                                    builder = new AlertDialog.Builder(UserProfileActivity.this);
                                 } else {
                                     builder = new AlertDialog.Builder(getApplicationContext());
                                 }
-                                builder.setTitle("Delete entry")
-                                        .setMessage("Are you sure you want to delete this entry?")
+                                List<String> eventsTitles = new ArrayList<String>();
+                                for (Event event : notRatedEvents) {
+                                    eventsTitles.add(event.getTitle());
+                                }
+                                final CharSequence[] charSequencesItems = eventsTitles.toArray(new CharSequence[eventsTitles.size()]);
+                                builder.setTitle("Rate your past trips")
+                                        .setItems(charSequencesItems, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int item) {
+//                                                Intent intentToEventDetails
+                                            }
+                                        })
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 // continue with delete
@@ -209,7 +218,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                                 // do nothing
                                             }
                                         })
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setIcon(android.R.drawable.ic_dialog_info)
                                         .show();
                             }
 
