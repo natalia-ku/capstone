@@ -68,6 +68,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 Class destinationClass = UserProfileActivity.class;
                 Intent intentToStartEventInfoActivity = new Intent(context, destinationClass);
                 intentToStartEventInfoActivity.putExtra("userEmail", users.get(position).getEmail());
+                intentToStartEventInfoActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intentToStartEventInfoActivity);
             }
         });

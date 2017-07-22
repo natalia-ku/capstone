@@ -139,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="73dp"
                     android:layout_marginRight="20dp"
-                    android:backgroundTint="@color/accent"
+
                     android:clickable="true"
                     android:elevation="14dp"
                     android:src="@drawable/edit_white"

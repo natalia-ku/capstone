@@ -61,7 +61,11 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activity.SplashActivity" />
         <activity android:name=".activity.UserChatsActivity" />
-        <activity android:name=".activity.SignUpActivity"></activity>
+        <activity android:name=".activity.SignUpActivity" />
+
+        <service
+            android:name=".ChatService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
