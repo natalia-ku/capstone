@@ -42,7 +42,6 @@ public class ChatService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             currentUserEmail = intent.getStringExtra("currentUserEmail");
-            System.out.println(currentUserEmail);
             findAndlistenToUserChats(currentUserEmail);
         }
     }
@@ -71,7 +70,6 @@ public class ChatService extends IntentService {
         });
     }
 
-
     private void listenForNewMessages(final String eventId) {
         final Query allMessagesInChatQuery = mEventsRef.child(eventId).child("chat").limitToLast(1);
         allMessagesInChatQuery.addValueEventListener(new ValueEventListener() {
@@ -91,14 +89,11 @@ public class ChatService extends IntentService {
 
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
-
-
     }
 
 
@@ -108,7 +103,6 @@ public class ChatService extends IntentService {
                         .setSmallIcon(R.drawable.icon)
                         .setContentTitle(chatMessage.getMessageUser())
                         .setContentText(chatMessage.getMessageText());
-
         Intent resultIntent = new Intent(this, ChatActivity.class);
         resultIntent.putExtra("eventID", chatMessage.getEventId());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

@@ -40,7 +40,7 @@
             android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:hint="Input"
+            android:hint="Enter message"
             android:id="@+id/input" />
     </android.support.design.widget.TextInputLayout>
 

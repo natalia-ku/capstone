@@ -134,7 +134,7 @@ public class ChatActivity extends AppCompatActivity {
                         userId = eventSnapshot.getKey();
                         userName = eventSnapshot.child("name").getValue().toString();
                         userEmail = eventSnapshot.child("email").getValue().toString();
-                        Toast.makeText(getApplicationContext(), "Welcome " + userName, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "Welcome " + userName, Toast.LENGTH_LONG).show();
                         if (event != null) {
                             displayChatMessages(event);
                         }
