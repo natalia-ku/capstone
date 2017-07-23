@@ -1,5 +1,6 @@
 package com.example.user.android.capstone;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,8 +8,12 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.user.android.capstone.activity.ChatActivity;
@@ -26,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class ChatService extends IntentService {
@@ -33,16 +39,51 @@ public class ChatService extends IntentService {
     private DatabaseReference mUsersRef = mRootRef.child("users");
     private DatabaseReference mEventsRef = mRootRef.child("events");
     String currentUserEmail;
+    private final String TAG = "myLogs";
+
     public ChatService() {
         super("ChatService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
+    }
+
+    @Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        Log.d(TAG, "IN ON START  OLD COMMAND!!!!" );
         if (intent != null) {
-            currentUserEmail = intent.getStringExtra("currentUserEmail");
+            Log.d(TAG, "INTENT IS NOT NULL HERE");
+            currentUserEmail =            intent.getStringExtra("currentUserEmail");
             findAndlistenToUserChats(currentUserEmail);
         }
+
+
+        return START_STICKY;
+//        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG,"onDestroy service");
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        // TODO Auto-generated method stub
+        Log.d(TAG, "IN ONTASK REMOVED!!!!");
+
+        Intent restartService = new Intent(getApplicationContext(),
+                this.getClass());
+        restartService.putExtra("currentUserEmail", currentUserEmail);
+        restartService.setPackage(getPackageName());
+        PendingIntent restartServicePI = PendingIntent.getService(
+                getApplicationContext(), 1, restartService,
+                PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 100, restartServicePI);
+
     }
 
     private void findAndlistenToUserChats(String currentUserEmail) {
@@ -101,7 +142,7 @@ public class ChatService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.icon)
-                        .setContentTitle(chatMessage.getMessageUser() + " sent you a message: ")
+                        .setContentTitle(chatMessage.getMessageUser() + " " + " sent you a message: ")
                         .setColor(Color.parseColor("#EE5622"))
                         .setContentText(chatMessage.getMessageText());
         Intent resultIntent = new Intent(this, ChatActivity.class);

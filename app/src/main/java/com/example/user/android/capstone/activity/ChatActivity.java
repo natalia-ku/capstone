@@ -149,6 +149,12 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), UserChatsActivity.class);
+        startActivity(intent);
+    }
 
     private void   setUpSendMessageTextViewAndButton(final Event event) {
         chatTitleTextView.setText(event.getTitle() + " chat");

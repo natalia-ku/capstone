@@ -25,6 +25,16 @@ public class Event  implements Parcelable, Serializable{
     private String sportCategory;
     private float rating;
 
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
+    private boolean isNew;
+
 
     public String getDate() {
         return date;
@@ -185,6 +195,19 @@ public class Event  implements Parcelable, Serializable{
         }
     };
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Event event = (Event) o;
 
+        return id.equals(event.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

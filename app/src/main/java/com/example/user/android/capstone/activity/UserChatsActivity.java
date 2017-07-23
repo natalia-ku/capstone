@@ -32,7 +32,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class UserChatsActivity extends AppCompatActivity {
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -43,6 +46,7 @@ public class UserChatsActivity extends AppCompatActivity {
     RecyclerView recycleView;
     String userID;
     long lastVisitTime;
+    EventAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,7 @@ public class UserChatsActivity extends AppCompatActivity {
         recycleView = (RecyclerView) findViewById(R.id.recycle_view_chat_list);
     }
 
+
     private void findUserIdForSignedInUser(final FirebaseUser currentUser) {
         Query findUserQuery = mUsersRef.orderByChild("email").equalTo(currentUser.getEmail());
         findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -62,14 +67,11 @@ public class UserChatsActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         userID = userSnapshot.getKey();
-                        lastVisitTime = new Date().getTime();
-                        mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
                         for (DataSnapshot userEvent : userSnapshot.child("userEvents").getChildren()) {
                             userEventsList.add(userEvent.getKey().toString());
                         }
                     }
                     setUpAdapterForUserList(userEventsList);
-
                 }
             }
 
@@ -81,8 +83,9 @@ public class UserChatsActivity extends AppCompatActivity {
     }
 
 
-    private void setUpAdapterForUserList(List<String> userEventsList) {
+    private void setUpAdapterForUserList(final List<String> userEventsList) {
         for (final String userEventKey : userEventsList) {
+            System.out.println("key" + userEventKey);
             Query eventQuery = mEventsRef.orderByKey().equalTo(userEventKey);
             eventQuery.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -99,14 +102,35 @@ public class UserChatsActivity extends AppCompatActivity {
                                     eventSnapshot.child("peopleNeeded").getValue().toString(),
                                     (String) eventSnapshot.child("creatorId").getValue());
                             userEvents.add(event);
+                            System.out.println("user events size:  " +userEvents.size());
+//                            Set<Event> events = new HashSet<Event>();
+//                            events.addAll(userEvents);
+//                            userEvents.clear();
+//                            userEvents.addAll(events);
+
+//                            List<Event> temp = new ArrayList<Event>();
+//                            for (int i = 0; i <userEvents.size(); i++){
+//                                if(!temp.contains(userEvents.get(i))) {
+//                                    temp.add(userEvents.get(i));
+//                                }
+//                            }
+//                            System.out.println("TEMP LIST: " );
+//                            for (Event e : temp){
+//                                System.out.println("Event in Temp : " + e);
+//                            }
+//                            userEvents = temp;
                         }
+                    }
+                    if (userEvents.size() == userEventsList.size()) {
                         listenForNewMessagesInUserChats(userEvents);
-                        EventAdapter myAdapter = new EventAdapter(getApplicationContext(),userEvents, UserChatsActivity.class);
+                        myAdapter = new EventAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);
+
                         recycleView.setAdapter(myAdapter);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         recycleView.setLayoutManager(layoutManager);
                     }
                 }
+
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -117,26 +141,60 @@ public class UserChatsActivity extends AppCompatActivity {
     }
 
 
-    private void listenForNewMessagesInUserChats(List<Event> userEvents){
-        for (Event event : userEvents){
+    private void listenForNewMessagesInUserChats(final List<Event> userEvents) {
+        for (final Event event : userEvents) {
+//            final Event event = userEvents.get(i);
+//            final int ii = i;
             String eventID = event.getId();
-            Query eventChat =  mEventsRef.child(eventID).child("chat").limitToLast(1);
+            Query eventChat = mEventsRef.child(eventID).child("chat").limitToLast(1);
             eventChat.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot messageSnapsot : dataSnapshot.getChildren() ){
-                            if ( messageSnapsot.child("messageUser").getValue() != null &&
+                        System.out.println("in listen for new: " + event.getTitle());
+                        System.out.println("_______________ NEW CHAT __________________");
+                        System.out.println(dataSnapshot);
+                        for (final DataSnapshot messageSnapsot : dataSnapshot.getChildren()) {
+                            if (messageSnapsot.child("messageUser").getValue() != null &&
                                     messageSnapsot.child("messageTime").getValue() != null &&
                                     messageSnapsot.child("messageText").getValue() != null) {
-                                long messageSentTime = Long.parseLong(messageSnapsot.child("messageTime").getValue().toString());
-                                System.out.println(lastVisitTime +"   "+ messageSentTime);
-                                if (lastVisitTime < messageSentTime){
-                                     System.out.println("*********");
-                                     System.out.println(lastVisitTime   + "  " + messageSentTime);
-                                     System.out.println(" YOU HAVE NEW UNOPENED MESSAGE IN CHAT!!");
 
-                                 }
+                                final long messageSentTime = Long.parseLong(messageSnapsot.child("messageTime").getValue().toString());
+                                Query lastVisitTimeQuery = mUsersRef.child(userID).child("lastTimeVisitedChats");
+
+                                lastVisitTimeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
+                                        if (lastVisitTime < messageSentTime) {
+                                            System.out.println("*********");
+                                            System.out.println("MESSAGE: " + messageSnapsot.child("messageText").getValue().toString());
+                                            System.out.println(lastVisitTime + "  " + messageSentTime);
+                                            System.out.println(" YOU HAVE NEW UNOPENED MESSAGE IN CHAT!!");
+
+                                            int position = userEvents.indexOf(event);
+                                            System.out.println(position);
+//                                            myAdapter.notifyDataSetChanged();
+
+                                            View view = recycleView.getLayoutManager().findViewByPosition(position);
+
+                                            view.setBackgroundColor(getResources().getColor(R.color.accent));
+                                        }
+                                        if (event.equals(userEvents.get(userEvents.size() - 1))) {
+                                            lastVisitTime = new Date().getTime();
+                                            mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
+
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+//
                             }
                         }
 
@@ -151,7 +209,6 @@ public class UserChatsActivity extends AppCompatActivity {
 
 
         }
-
 
 
     }

@@ -122,12 +122,20 @@ public class MainActivity extends AppCompatActivity {
         } else {
             showMenuItems();
             findUserByEmail(currentUser.getEmail());
+
             Intent intentTostartService = new Intent(getApplicationContext(), ChatService.class);
             intentTostartService.putExtra("currentUserEmail", currentUser.getEmail());
             startService(intentTostartService);
+
+//            Intent intent = new Intent(getApplicationContext(), ChatService.class);
+//            PendingIntent sender = PendingIntent.getService(getApplicationContext(), 0, intent, 0);
+//            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+//            am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                    1, 1, sender);
         }
     } // end onCreate
-
+//
+//
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter, final boolean listView) {
         eventsListFromDatabase = new ArrayList<>();
