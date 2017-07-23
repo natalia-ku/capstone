@@ -1,8 +1,30 @@
 package com.example.user.android.capstone;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.widget.TextView;
+
+import com.example.user.android.capstone.activity.ChatActivity;
+import com.example.user.android.capstone.activity.MainActivity;
+import com.example.user.android.capstone.model.ChatMessage;
+import com.example.user.android.capstone.model.Event;
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -12,80 +34,108 @@ import android.content.Context;
  * helper methods.
  */
 public class ChatService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.example.user.android.capstone.action.FOO";
-    private static final String ACTION_BAZ = "com.example.user.android.capstone.action.BAZ";
-
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.example.user.android.capstone.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.example.user.android.capstone.extra.PARAM2";
+    private ChatMessage chatMessage;
+    private FirebaseListAdapter<ChatMessage> adapter;
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mUsersRef = mRootRef.child("users");
+    private String userId;
+    private String userName;
+    private String userEmail;
+    private DatabaseReference mEventsRef = mRootRef.child("events");
+    private TextView chatTitleTextView;
+    int messagesCount;
+    String currentUserEmail;
 
     public ChatService() {
         super("ChatService");
     }
 
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionFoo(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, ChatService.class);
-        intent.setAction(ACTION_FOO);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
-
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, ChatService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
-            }
+            currentUserEmail = intent.getStringExtra("currentUserEmail");
+            System.out.println(currentUserEmail);
+            findAndlistenToUserChats(currentUserEmail);
         }
     }
 
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionFoo(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
+
+    private void findAndlistenToUserChats(String currentUserEmail) {
+        Query userQuery = mUsersRef.orderByChild("email").equalTo(currentUserEmail);
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                        for (DataSnapshot userEvent : eventSnapshot.child("userEvents").getChildren()) {
+                            String userEventId = userEvent.getKey().toString();
+                            listenForNewMessages( userEventId);
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
+
+    private void listenForNewMessages(final String eventId) {
+        final Query allMessagesInChatQuery = mEventsRef.child(eventId).child("chat").limitToLast(1);
+        allMessagesInChatQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot messageSnapsot : dataSnapshot.getChildren() ){
+                        if ( messageSnapsot.child("messageUser").getValue() != null &&
+                                messageSnapsot.child("messageTime").getValue() != null &&
+                                messageSnapsot.child("messageText").getValue() != null) {
+                            ChatMessage chatMessage = new ChatMessage(messageSnapsot.child("messageText").getValue().toString(),
+                                    messageSnapsot.child("messageUser").getValue().toString(),
+                                    messageSnapsot.child("messageTime").getValue().toString(), eventId);
+                        showNotification(chatMessage);
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
+
+
+    private void showNotification(ChatMessage chatMessage) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.icon)
+                        .setContentTitle(chatMessage.getMessageUser())
+                        .setContentText(chatMessage.getMessageText());
+
+        Intent resultIntent = new Intent(this, ChatActivity.class);
+        resultIntent.putExtra("eventID", chatMessage.getEventId());
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(ChatActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =  PendingIntent.getActivity(this.getApplicationContext(),
+                (int)(Math.random() * 100), resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(chatMessage.getEventId().hashCode(), mBuilder.build());
+//
+    }
+
+
 }

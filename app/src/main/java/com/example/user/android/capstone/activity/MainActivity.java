@@ -39,6 +39,7 @@ import java.util.List;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.example.user.android.capstone.ChatService;
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.fragment.EventFragment;
 import com.example.user.android.capstone.model.Event;
@@ -121,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             showMenuItems();
             findUserByEmail(currentUser.getEmail());
+            Intent intentTostartService = new Intent(getApplicationContext(), ChatService.class);
+            intentTostartService.putExtra("currentUserEmail", currentUser.getEmail());
+            startService(intentTostartService);
         }
     } // end onCreate
 
