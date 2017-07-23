@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +41,8 @@ public class UserChatsActivity extends AppCompatActivity {
     List<String> userEventsList;
     List<Event> userEvents;
     RecyclerView recycleView;
-
+    String userID;
+    long lastVisitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +60,16 @@ public class UserChatsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                        for (DataSnapshot userEvent : eventSnapshot.child("userEvents").getChildren()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        userID = userSnapshot.getKey();
+                        lastVisitTime = new Date().getTime();
+                        mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
+                        for (DataSnapshot userEvent : userSnapshot.child("userEvents").getChildren()) {
                             userEventsList.add(userEvent.getKey().toString());
                         }
-                        setUpAdapterForUserList(userEventsList);
                     }
+                    setUpAdapterForUserList(userEventsList);
+
                 }
             }
 
@@ -82,30 +88,19 @@ public class UserChatsActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        String eventId = "";
-                        String eventCategory = "";
-                        String eventPeopleNeeded = "";
-                        String eventDetails = "";
-                        String eventTitle = "";
-                        String eventAddress = "";
-                        String eventDate = "";
-                        String eventTime = "";
-                        String eventCreatorId = "";
                         for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                            eventId = (String) eventSnapshot.getKey().toString();
-                            eventCategory = (String) eventSnapshot.child("sportCategory").getValue();
-                            eventPeopleNeeded = (String) eventSnapshot.child("peopleNeeded").getValue().toString();
-                            eventDetails = (String) eventSnapshot.child("details").getValue();
-                            eventTitle = (String) eventSnapshot.child("title").getValue();
-                            eventAddress = (String) eventSnapshot.child("address").getValue();
-                            eventDate = (String) eventSnapshot.child("date").getValue();
-                            eventTime = (String) eventSnapshot.child("time").getValue();
-                            eventCreatorId = (String) eventSnapshot.child("creatorId").getValue();
-                            Event event = new Event(eventCategory, eventId, eventTitle, eventAddress,
-                                    eventDate, eventTime, eventDetails, eventPeopleNeeded, eventCreatorId);
+                            Event event = new Event((String) eventSnapshot.child("sportCategory").getValue(),
+                                    eventSnapshot.getKey().toString(),
+                                    (String) eventSnapshot.child("title").getValue(),
+                                    (String) eventSnapshot.child("address").getValue(),
+                                    (String) eventSnapshot.child("date").getValue(),
+                                    (String) eventSnapshot.child("time").getValue(),
+                                    (String) eventSnapshot.child("details").getValue(),
+                                    eventSnapshot.child("peopleNeeded").getValue().toString(),
+                                    (String) eventSnapshot.child("creatorId").getValue());
                             userEvents.add(event);
-
                         }
+                        listenForNewMessagesInUserChats(userEvents);
                         EventAdapter myAdapter = new EventAdapter(getApplicationContext(),userEvents, UserChatsActivity.class);
                         recycleView.setAdapter(myAdapter);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -121,6 +116,45 @@ public class UserChatsActivity extends AppCompatActivity {
 
     }
 
+
+    private void listenForNewMessagesInUserChats(List<Event> userEvents){
+        for (Event event : userEvents){
+            String eventID = event.getId();
+            Query eventChat =  mEventsRef.child(eventID).child("chat").limitToLast(1);
+            eventChat.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChildren()) {
+                        for (DataSnapshot messageSnapsot : dataSnapshot.getChildren() ){
+                            if ( messageSnapsot.child("messageUser").getValue() != null &&
+                                    messageSnapsot.child("messageTime").getValue() != null &&
+                                    messageSnapsot.child("messageText").getValue() != null) {
+                                long messageSentTime = Long.parseLong(messageSnapsot.child("messageTime").getValue().toString());
+                                System.out.println(lastVisitTime +"   "+ messageSentTime);
+                                if (lastVisitTime < messageSentTime){
+                                     System.out.println("*********");
+                                     System.out.println(lastVisitTime   + "  " + messageSentTime);
+                                     System.out.println(" YOU HAVE NEW UNOPENED MESSAGE IN CHAT!!");
+
+                                 }
+                            }
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+
+
+
+    }
 
 }
 

@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.TextView;
@@ -32,11 +33,9 @@ public class ChatService extends IntentService {
     private DatabaseReference mUsersRef = mRootRef.child("users");
     private DatabaseReference mEventsRef = mRootRef.child("events");
     String currentUserEmail;
-
     public ChatService() {
         super("ChatService");
     }
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -45,7 +44,6 @@ public class ChatService extends IntentService {
             findAndlistenToUserChats(currentUserEmail);
         }
     }
-
 
     private void findAndlistenToUserChats(String currentUserEmail) {
         Query userQuery = mUsersRef.orderByChild("email").equalTo(currentUserEmail);
@@ -56,7 +54,7 @@ public class ChatService extends IntentService {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                         for (DataSnapshot userEvent : eventSnapshot.child("userEvents").getChildren()) {
                             String userEventId = userEvent.getKey().toString();
-                            listenForNewMessages( userEventId);
+                            listenForNewMessages(userEventId);
                         }
 
                     }
@@ -80,9 +78,11 @@ public class ChatService extends IntentService {
                         if ( messageSnapsot.child("messageUser").getValue() != null &&
                                 messageSnapsot.child("messageTime").getValue() != null &&
                                 messageSnapsot.child("messageText").getValue() != null) {
-                            ChatMessage chatMessage = new ChatMessage(messageSnapsot.child("messageText").getValue().toString(),
+                            ChatMessage chatMessage = new ChatMessage(
+                                    messageSnapsot.child("messageText").getValue().toString(),
                                     messageSnapsot.child("messageUser").getValue().toString(),
-                                    messageSnapsot.child("messageTime").getValue().toString(), eventId);
+                                    messageSnapsot.child("messageTime").getValue().toString(),
+                                    eventId);
                         showNotification(chatMessage);
                         }
                     }
@@ -101,7 +101,8 @@ public class ChatService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.icon)
-                        .setContentTitle(chatMessage.getMessageUser())
+                        .setContentTitle(chatMessage.getMessageUser() + " sent you a message: ")
+                        .setColor(Color.parseColor("#EE5622"))
                         .setContentText(chatMessage.getMessageText());
         Intent resultIntent = new Intent(this, ChatActivity.class);
         resultIntent.putExtra("eventID", chatMessage.getEventId());
