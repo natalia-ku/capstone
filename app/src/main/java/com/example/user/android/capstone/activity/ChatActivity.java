@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
-    private ChatMessage chatMessage;
     private FirebaseListAdapter<ChatMessage> adapter;
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mUsersRef = mRootRef.child("users");
@@ -48,7 +47,6 @@ public class ChatActivity extends AppCompatActivity {
     private String userEmail;
     private DatabaseReference mEventsRef = mRootRef.child("events");
     private TextView chatTitleTextView;
-    int messagesCount;
     String eventID;
 
     @Override
@@ -59,13 +57,11 @@ public class ChatActivity extends AppCompatActivity {
         final Event event = getIntent().getParcelableExtra("event");
         if (event == null){
             eventID = getIntent().getStringExtra("eventID");
-            System.out.println("EVENT ID!!!!!!!  " + eventID);
             Query findEventQuery = mEventsRef.child(eventID);
             findEventQuery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        System.out.println("DATASNAPHOT:!!!!!!!!" + dataSnapshot);
                         Event event = new Event(dataSnapshot.child("sportCategory").getValue().toString(),
                                 dataSnapshot.getKey(),
                                 dataSnapshot.child("title").getValue().toString(),
@@ -116,7 +112,6 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         };
-        listenForNewMessages(event);
         listOfMessages.setAdapter(adapter);
 
         adapter.registerDataSetObserver(new DataSetObserver() {
@@ -129,100 +124,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-
-    private void listenForNewMessages(final Event event) {
-        final Query allMessagesInChatQuery = mEventsRef.child(event.getId()).child("chat");
-        allMessagesInChatQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("valueeventlistener");
-                System.out.println(dataSnapshot.getChildrenCount());
-                for (DataSnapshot messageSnapsot : dataSnapshot.getChildren() ){
-                    System.out.println("MESSAGE SNAP SHOT" + messageSnapsot);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        allMessagesInChatQuery.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                System.out.println("CHILD IS ADDED   " + s );
-                Query eventAttendeesQuery = mEventsRef.child(event.getId()).child("attendees");
-                eventAttendeesQuery.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            String userIdInAttendeesList = userSnapshot.getKey().toString();
-                            if (userIdInAttendeesList.equals(userId)) {
-                                showNotification(chatMessage);
-                                System.out.println("NEW MESSAGE FOR " + userName);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-            }
-
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                System.out.println("CHANGED!!!!!!!");
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        allMessagesInChatQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                    chatMessage = new ChatMessage(messageSnapshot.child("messageText").getValue().toString(),
-                            messageSnapshot.child("messageUser").getValue().toString(),
-                            messageSnapshot.child("messageTime").getValue().toString());
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
-
-
-
-
     private void findUserIdForSignedInUser(final FirebaseUser currentUser, final Event event) {
         Query findUserQuery = mUsersRef.orderByChild("email").equalTo(currentUser.getEmail());
-//        Query findUserQuery = mUsersRef.orderByChild("email").equalTo(currentUser.getEmail());
         findUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -244,30 +147,6 @@ public class ChatActivity extends AppCompatActivity {
                 System.out.println("ERROR");
             }
         });
-    }
-
-
-    private void showNotification(ChatMessage chatMessage) {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.icon)
-                        .setContentTitle(chatMessage.getMessageUser() + "OLENI")
-                        .setContentText(chatMessage.getMessageText());
-
-        Intent resultIntent = new Intent(this, ChatActivity.class);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(ChatActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(1821, mBuilder.build());
     }
 
 
