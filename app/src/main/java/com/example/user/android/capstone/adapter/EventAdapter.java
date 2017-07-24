@@ -50,9 +50,19 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
 
     public EventAdapter(Context context, List<Event> events, Class currentActivityClass) {
-        this.events = events;
+        this.events = removeDuplicates(events);
         this.context = context;
         this.currentActivity = currentActivityClass;
+    }
+
+    private List<Event> removeDuplicates(List<Event> userEvents) {
+        List<Event> temp = new ArrayList<Event>();
+        for (int i = 0; i < userEvents.size(); i++) {
+            if (!temp.contains(userEvents.get(i))) {
+                temp.add(userEvents.get(i));
+            }
+        }
+        return temp;
     }
 
 

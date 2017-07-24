@@ -103,28 +103,30 @@ public class UserChatsActivity extends AppCompatActivity {
                                     (String) eventSnapshot.child("creatorId").getValue());
                             userEvents.add(event);
                             System.out.println("user events size:  " +userEvents.size());
-//                            Set<Event> events = new HashSet<Event>();
+//
+                        }
+                    }
+                    if (userEvents.size() == userEventsList.size()) {
+
+                        Set<Event> events = new HashSet<Event>();
 //                            events.addAll(userEvents);
 //                            userEvents.clear();
 //                            userEvents.addAll(events);
 
-//                            List<Event> temp = new ArrayList<Event>();
-//                            for (int i = 0; i <userEvents.size(); i++){
-//                                if(!temp.contains(userEvents.get(i))) {
-//                                    temp.add(userEvents.get(i));
-//                                }
-//                            }
-//                            System.out.println("TEMP LIST: " );
-//                            for (Event e : temp){
-//                                System.out.println("Event in Temp : " + e);
-//                            }
-//                            userEvents = temp;
-                        }
-                    }
-                    if (userEvents.size() == userEventsList.size()) {
+                            List<Event> temp = new ArrayList<Event>();
+                            for (int i = 0; i <userEvents.size(); i++){
+                                if(!temp.contains(userEvents.get(i))) {
+                                    temp.add(userEvents.get(i));
+                                }
+                            }
+                            System.out.println("TEMP LIST: " );
+                            for (Event e : temp){
+                                System.out.println("Event in Temp : " + e);
+                            }
+                            userEvents = temp;
+
                         listenForNewMessagesInUserChats(userEvents);
                         myAdapter = new EventAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);
-
                         recycleView.setAdapter(myAdapter);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         recycleView.setLayoutManager(layoutManager);
@@ -143,8 +145,6 @@ public class UserChatsActivity extends AppCompatActivity {
 
     private void listenForNewMessagesInUserChats(final List<Event> userEvents) {
         for (final Event event : userEvents) {
-//            final Event event = userEvents.get(i);
-//            final int ii = i;
             String eventID = event.getId();
             Query eventChat = mEventsRef.child(eventID).child("chat").limitToLast(1);
             eventChat.addValueEventListener(new ValueEventListener() {
