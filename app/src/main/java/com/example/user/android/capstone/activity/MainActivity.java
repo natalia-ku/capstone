@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -212,6 +214,8 @@ public class MainActivity extends AppCompatActivity {
                                         Menu navMenu = nvDrawer.getMenu();
                                         if (lastVisitTime < messageSentTime) {
                                             navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.envelope6);
+                                            navMenu.findItem(R.id.nav_user_chats).getIcon().setColorFilter(Color.parseColor("#FF8C00"), PorterDuff.Mode.SRC_ATOP);;
+
                                         }
                                         else{
                                             navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.chat_icon);

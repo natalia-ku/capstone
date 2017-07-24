@@ -2,6 +2,8 @@ package com.example.user.android.capstone.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -141,11 +143,11 @@ public class UserChatsActivity extends AppCompatActivity {
 
                                 lastVisitTimeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
+                                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                                         long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
+                                        int position = userEvents.indexOf(event);
+                                        View view = recycleView.getLayoutManager().findViewByPosition(position);
                                         if (lastVisitTime < messageSentTime) {
-                                            int position = userEvents.indexOf(event);
-                                            View view = recycleView.getLayoutManager().findViewByPosition(position);
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
                                         }
 
@@ -174,6 +176,14 @@ public class UserChatsActivity extends AppCompatActivity {
             });
         }
     }
+
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//        startActivity(intent);
+//    }
 
 }
 
