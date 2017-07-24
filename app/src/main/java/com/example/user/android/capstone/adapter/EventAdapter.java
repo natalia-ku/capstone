@@ -107,6 +107,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             public void onClick(View view) {
                 if (currentActivity != null && currentActivity == UserChatsActivity.class) {
                     view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    view.findViewById(R.id.new_message_icon).setVisibility(View.GONE);
                     Intent intentToOpenChat = new Intent(context, ChatActivity.class);
                     intentToOpenChat.putExtra("event", (Parcelable) events.get(position));
                     context.startActivity(intentToOpenChat);

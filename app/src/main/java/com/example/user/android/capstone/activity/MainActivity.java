@@ -123,19 +123,49 @@ public class MainActivity extends AppCompatActivity {
             showMenuItems();
             findUserByEmail(currentUser.getEmail());
 
+
             Intent intentTostartService = new Intent(getApplicationContext(), ChatService.class);
             intentTostartService.putExtra("currentUserEmail", currentUser.getEmail());
             startService(intentTostartService);
-
-//            Intent intent = new Intent(getApplicationContext(), ChatService.class);
-//            PendingIntent sender = PendingIntent.getService(getApplicationContext(), 0, intent, 0);
-//            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-//            am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                    1, 1, sender);
         }
-    } // end onCreate
-//
-//
+    }
+
+
+    private void listenToNewMessagesInChats(User user){
+        final List <String> userEventsIdsList = new ArrayList<>();
+        Query findUserEventdQuery = mUsersRef.child(user.getId()).child("userEvents");
+        findUserEventdQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                            userEventsIdsList.add(eventSnapshot.getKey().toString());
+                    }
+                    findUserEventsById(userEventsIdsList);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("ERROR");
+            }
+        });
+    }
+
+    private void findUserEventsById(List<String>userEventsIdsList ){
+
+
+
+
+
+
+
+        
+    }
+
+
+
+
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter, final boolean listView) {
         eventsListFromDatabase = new ArrayList<>();
@@ -393,6 +423,9 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_signout).setVisible(true);
         navMenu.findItem(R.id.nav_signin_signup).setVisible(false);
         navMenu.findItem(R.id.nav_user_chats).setVisible(true);
+
+        navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.envelope6);
+
         mCreateNewEventButton.setVisibility(View.VISIBLE);
         View headerLayout = nvDrawer.getHeaderView(0);
         headerLayout.setVisibility(View.VISIBLE);
@@ -424,6 +457,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     user = new User(currentUserId, email, name, gender, photo, age);
                     String photoUrl = user.getPhoto();
+                    listenToNewMessagesInChats(user);
                     mUserNameTextView.setText("Hello, " + user.getName());
                     Glide.with(getApplicationContext()).load(photoUrl).asBitmap().centerCrop().into(new BitmapImageViewTarget(mImageProfileView) {
                         @Override

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,7 @@ public class UserChatsActivity extends AppCompatActivity {
     List<Event> userEvents;
     RecyclerView recycleView;
     String userID;
-    long lastVisitTime;
+    ImageView mNewMessageIcon;
     EventAdapter myAdapter;
 
     @Override
@@ -55,6 +56,7 @@ public class UserChatsActivity extends AppCompatActivity {
         findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser());
         userEventsList = new ArrayList();
         userEvents = new ArrayList<>();
+        mNewMessageIcon = (ImageView) findViewById(R.id.new_message_icon);
         recycleView = (RecyclerView) findViewById(R.id.recycle_view_chat_list);
     }
 
@@ -112,7 +114,6 @@ public class UserChatsActivity extends AppCompatActivity {
                     }
                 }
 
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                 }
@@ -130,9 +131,6 @@ public class UserChatsActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChildren()) {
-                        System.out.println("in listen for new: " + event.getTitle());
-                        System.out.println("_______________ NEW CHAT __________________");
-                        System.out.println(dataSnapshot);
                         for (final DataSnapshot messageSnapsot : dataSnapshot.getChildren()) {
                             if (messageSnapsot.child("messageUser").getValue() != null &&
                                     messageSnapsot.child("messageTime").getValue() != null &&
@@ -146,19 +144,14 @@ public class UserChatsActivity extends AppCompatActivity {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
                                         if (lastVisitTime < messageSentTime) {
-                                            System.out.println("*********");
-                                            System.out.println("MESSAGE: " + messageSnapsot.child("messageText").getValue().toString());
-                                            System.out.println(lastVisitTime + "  " + messageSentTime);
-                                            System.out.println(" YOU HAVE NEW UNOPENED MESSAGE IN CHAT!!");
-
                                             int position = userEvents.indexOf(event);
                                             View view = recycleView.getLayoutManager().findViewByPosition(position);
-                                            view.setBackgroundColor(getResources().getColor(R.color.accent));
+                                            view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
+//                                            view.setBackgroundColor(getResources().getColor(R.color.accent));
                                         }
                                         if (event.equals(userEvents.get(userEvents.size() - 1))) {
                                             lastVisitTime = new Date().getTime();
                                             mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
-
                                         }
 
 
