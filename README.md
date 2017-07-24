@@ -5,7 +5,7 @@
 Help people create their own or find sporting activities events (football game, basketball game, tennis or hiking) that was organized by other people, but need more players.
 
 ## DESCRIPTION
-Looking for a pickup soccer game? A tennis partner? A substitute player for your volleyball team? Looking for sport activities in your area? Sportmate is perfect in connecting you with people to play sporting games with. Need sport mate to play tennis with? Or you need 3 more players to complete a team for football game? Or maybe you like playing  basketball, but don’t have a friends to play with? Sportmate App will help you!
+Looking for sport activities in your area? Sportmate is perfect in connecting you with people to play sporting games with. Need sport mate to play tennis with? Or you need 3 more players to complete a team for football game? Or maybe you like playing  basketball, but don’t have a friends to play with? Sportmate App is right here for you!
 Sportmate is created to match you sporting games that are organized by others, but need more players. 
 Sportmate will help you stay active, have fun and make friends while  participating in sport activities.
 
