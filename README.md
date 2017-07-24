@@ -13,46 +13,46 @@ Sportmate will help you stay active, have fun and make friends while  participat
 * Search for activities near you
 * Search by name/description/sport type etc.
 * Filter activities by sport type (more than 20 different sport types)
-Filter by upcoming and past activities
-See events on list and map
-Singed in users can  easily create new sporting events
-Sportmate can add activities to your calendar
-Sportmate provides direction to sport events using Google Maps
-Easily Sign in / Sign up using email and password
-For signed in users event Info page provides detailed info about event details and people who are attending event.
-Event attendees can chat with others event’s participants in Event Chat
-Event Chat may send you push notification, so you will never miss important information
-Signed in users can see other people profile with user info and events, he/she organized and attended
-You can rate your past events.
-Event’s organized can get average rating of events he created
-Event organizer can edit info or delete event
+* Filter by upcoming and past activities
+* See events on list and map
+* Singed in users can  easily create new sporting events
+* Sportmate can add activities to your calendar
+* Sportmate provides direction to sport events using Google Maps
+* Easily Sign in / Sign up using email and password
+* For signed in users event Info page provides detailed info about event details and people who are attending event.
+* Event attendees can chat with others event’s participants in Event Chat
+* Event Chat may send you push notification, so you will never miss important information
+* Signed in users can see other people profile with user info and events, he/she organized and attended
+* User can rate your past events.
+* Event’s organized can get average rating of events he created
+* Event organizer can edit info or delete event
 
 
 
 ### Personal Learning Goals
- improve knowledge of Java
+ *  improve knowledge of Java
  
- learn how to build app for mobile phones (android)
+ *  learn how to build app for mobile phones (android)
  
- improve knowledge in backend
+ *  improve knowledge in backend
  
- learn NoSQL Database (Firebase Realtime Database)
+ *  learn NoSQL Database (Firebase Realtime Database)
  
- learn more about Google Maps API 
+ * learn more about Google Maps API 
 
  __Technology selections__:
  
-  Android (using Java)
+ * Android (using Java)
   
- Firebase Realtime Database
+ * Firebase Realtime Database
  
- Firebase Auth
+ * Firebase Auth
  
- Firebase Messanger 
+ * Firebase Messanger 
  
- Google Maps API
+ * Google Maps API
  
- Deployment to Google Play Store
+ * Deployment to Google Play Store
  
 
 
