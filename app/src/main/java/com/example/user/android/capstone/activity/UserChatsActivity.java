@@ -147,8 +147,8 @@ public class UserChatsActivity extends AppCompatActivity {
                                             int position = userEvents.indexOf(event);
                                             View view = recycleView.getLayoutManager().findViewByPosition(position);
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
-//                                            view.setBackgroundColor(getResources().getColor(R.color.accent));
                                         }
+
                                         if (event.equals(userEvents.get(userEvents.size() - 1))) {
                                             lastVisitTime = new Date().getTime();
                                             mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
@@ -162,23 +162,17 @@ public class UserChatsActivity extends AppCompatActivity {
 
                                     }
                                 });
-//
                             }
                         }
 
                     }
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
             });
-
-
         }
-
-
     }
 
 }

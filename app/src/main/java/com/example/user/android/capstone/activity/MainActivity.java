@@ -18,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,6 +43,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.user.android.capstone.ChatService;
 import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.adapter.EventAdapter;
 import com.example.user.android.capstone.fragment.EventFragment;
 import com.example.user.android.capstone.model.Event;
 import com.example.user.android.capstone.model.User;
@@ -123,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
             showMenuItems();
             findUserByEmail(currentUser.getEmail());
 
-
             Intent intentTostartService = new Intent(getApplicationContext(), ChatService.class);
             intentTostartService.putExtra("currentUserEmail", currentUser.getEmail());
             startService(intentTostartService);
@@ -131,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void listenToNewMessagesInChats(User user){
+    private void listenToNewMessagesInChats(final User user){
         final List <String> userEventsIdsList = new ArrayList<>();
         Query findUserEventdQuery = mUsersRef.child(user.getId()).child("userEvents");
         findUserEventdQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -141,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                             userEventsIdsList.add(eventSnapshot.getKey().toString());
                     }
-                    findUserEventsById(userEventsIdsList);
+                    findUserEventsById(userEventsIdsList, user);
                 }
             }
 
@@ -152,16 +154,101 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void findUserEventsById(List<String>userEventsIdsList ){
+    private void findUserEventsById(final List<String>userEventsIdsList,final  User user ) {
+        final List<Event> userEvents = new ArrayList<>();
+        for (final String userEventKey : userEventsIdsList) {
+            Query eventQuery = mEventsRef.orderByKey().equalTo(userEventKey);
+            eventQuery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                            Event event = new Event((String) eventSnapshot.child("sportCategory").getValue(),
+                                    eventSnapshot.getKey().toString(),
+                                    (String) eventSnapshot.child("title").getValue(),
+                                    (String) eventSnapshot.child("address").getValue(),
+                                    (String) eventSnapshot.child("date").getValue(),
+                                    (String) eventSnapshot.child("time").getValue(),
+                                    (String) eventSnapshot.child("details").getValue(),
+                                    eventSnapshot.child("peopleNeeded").getValue().toString(),
+                                    (String) eventSnapshot.child("creatorId").getValue());
+                            userEvents.add(event);
+                        }
+                    }
+                    if (userEvents.size() == userEventsIdsList.size()) {
+                        listenForNewMessagesInUserChats(userEvents, user);
+                    }
+                }
 
-
-
-
-
-
-
-        
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
     }
+
+
+
+    private void listenForNewMessagesInUserChats(final List<Event> userEvents, final User user) {
+        for (final Event event : userEvents) {
+            String eventID = event.getId();
+            Query eventChat = mEventsRef.child(eventID).child("chat").limitToLast(1);
+            eventChat.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChildren()) {
+                        for (final DataSnapshot messageSnapsot : dataSnapshot.getChildren()) {
+                            if (messageSnapsot.child("messageUser").getValue() != null &&
+                                    messageSnapsot.child("messageTime").getValue() != null &&
+                                    messageSnapsot.child("messageText").getValue() != null) {
+
+                                final long messageSentTime = Long.parseLong(messageSnapsot.child("messageTime").getValue().toString());
+                                Query lastVisitTimeQuery = mUsersRef.child(user.getId()).child("lastTimeVisitedChats");
+
+                                lastVisitTimeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
+                                        Menu navMenu = nvDrawer.getMenu();
+                                        if (lastVisitTime < messageSentTime) {
+                                            navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.envelope6);
+                                        }
+                                        else{
+                                            navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.chat_icon);
+                                        }
+//                                        if (event.equals(userEvents.get(userEvents.size() - 1))) {
+//                                            lastVisitTime = new Date().getTime();
+//                                            mUsersRef.child(user.getId()).child("lastTimeVisitedChats").setValue(lastVisitTime);
+//                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -423,8 +510,7 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_signout).setVisible(true);
         navMenu.findItem(R.id.nav_signin_signup).setVisible(false);
         navMenu.findItem(R.id.nav_user_chats).setVisible(true);
-
-        navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.envelope6);
+        navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.chat_icon);
 
         mCreateNewEventButton.setVisibility(View.VISIBLE);
         View headerLayout = nvDrawer.getHeaderView(0);
