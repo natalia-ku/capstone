@@ -36,6 +36,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
@@ -130,15 +131,16 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                        userId = eventSnapshot.getKey();
-                        userName = eventSnapshot.child("name").getValue().toString();
-                        userEmail = eventSnapshot.child("email").getValue().toString();
-                        //Toast.makeText(getApplicationContext(), "Welcome " + userName, Toast.LENGTH_LONG).show();
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        userId = userSnapshot.getKey();
+                        userName = userSnapshot.child("name").getValue().toString();
+                        userEmail = userSnapshot.child("email").getValue().toString();
                         if (event != null) {
                             displayChatMessages(event);
                         }
                     }
+                    long lastVisitedChatTime = new Date().getTime();
+                    mUsersRef.child(userId).child("userEvents").child(event.getId()).setValue(lastVisitedChatTime);
                 }
             }
 

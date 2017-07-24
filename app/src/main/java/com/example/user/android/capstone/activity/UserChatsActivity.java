@@ -32,8 +32,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -127,7 +131,7 @@ public class UserChatsActivity extends AppCompatActivity {
 
     private void listenForNewMessagesInUserChats(final List<Event> userEvents) {
         for (final Event event : userEvents) {
-            String eventID = event.getId();
+            final String eventID = event.getId();
             Query eventChat = mEventsRef.child(eventID).child("chat").limitToLast(1);
             eventChat.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -139,24 +143,36 @@ public class UserChatsActivity extends AppCompatActivity {
                                     messageSnapsot.child("messageText").getValue() != null) {
 
                                 final long messageSentTime = Long.parseLong(messageSnapsot.child("messageTime").getValue().toString());
-                                Query lastVisitTimeQuery = mUsersRef.child(userID).child("lastTimeVisitedChats");
 
-                                lastVisitTimeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                Query lastVisitTimeForCurrentChat = mUsersRef.child(userID).child("userEvents").child(eventID);
+                                lastVisitTimeForCurrentChat.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(final DataSnapshot dataSnapshot) {
-                                         long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        long lastVisitTimeForCurrentChat;
+                                        lastVisitTimeForCurrentChat = new Date().getTime();
+                                        if (dataSnapshot.getValue().toString().equals("true")){
+                                            Date newDate = null;
+                                            try {
+                                                newDate = new SimpleDateFormat("yyyy-MM-dd").parse("2017-07-21");
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            lastVisitTimeForCurrentChat = newDate.getTime();
+                                            mUsersRef.child(userID).child("userEvents").child(eventID).setValue(lastVisitTimeForCurrentChat);
+                                            System.out.println("NEW DATE: " + lastVisitTimeForCurrentChat);
+                                        }
+                                        else {
+                                             lastVisitTimeForCurrentChat = Long.parseLong(dataSnapshot.getValue().toString());
+                                        }
                                         int position = userEvents.indexOf(event);
                                         View view = recycleView.getLayoutManager().findViewByPosition(position);
-                                        if (lastVisitTime < messageSentTime) {
+                                        if (lastVisitTimeForCurrentChat < messageSentTime) {
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
                                         }
-
-                                        if (event.equals(userEvents.get(userEvents.size() - 1))) {
-                                            lastVisitTime = new Date().getTime();
-                                            mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
-                                        }
-
-
+//                                        if (event.equals(userEvents.get(userEvents.size() - 1))) {
+//                                            lastVisitTime = new Date().getTime();
+//                                            mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
+//                                        }
                                     }
 
                                     @Override
@@ -164,6 +180,31 @@ public class UserChatsActivity extends AppCompatActivity {
 
                                     }
                                 });
+
+//                                Query lastVisitTimeQuery = mUsersRef.child(userID).child("lastTimeVisitedChats");
+//                                lastVisitTimeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(final DataSnapshot dataSnapshot) {
+//                                         long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
+//                                        int position = userEvents.indexOf(event);
+//                                        View view = recycleView.getLayoutManager().findViewByPosition(position);
+//                                        if (lastVisitTime < messageSentTime) {
+//                                            view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
+//                                        }
+//
+//                                        if (event.equals(userEvents.get(userEvents.size() - 1))) {
+//                                            lastVisitTime = new Date().getTime();
+//                                            mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
+//                                        }
+//
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(DatabaseError databaseError) {
+//
+//                                    }
+//                                });
                             }
                         }
 
