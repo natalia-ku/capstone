@@ -112,8 +112,6 @@
                         android:drawablePadding="3dp"
                         android:textSize="22sp" />
                 </GridLayout>
-
-
             </LinearLayout>
 
 
@@ -311,7 +309,7 @@
                     android:layout_marginRight="10dp"
                     android:numStars="5"
                     android:rating="3"
-                    android:stepSize="0.5"
+                    android:stepSize="0.1"
                     android:theme="@style/RatingBar" />
 
                 <Button
@@ -327,20 +325,20 @@
                     android:id="@+id/already_voted_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="You already voted"
                     android:layout_gravity="center_vertical"
+                    android:text="You already voted"
                     android:textSize="15dp"
                     android:visibility="gone" />
             </LinearLayout>
 
             <TextView
-                android:paddingLeft="15dp"
-                android:textColor="@color/accent"
                 android:id="@+id/txtRatingValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
                 android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/accent" />
         </LinearLayout>
 
 

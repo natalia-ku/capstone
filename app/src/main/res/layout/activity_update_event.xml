@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp">
+      android:layout_marginTop="20dp"
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/update_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingTop="30dp"
             android:text="UPDATE EVENT DETAILS"
             android:textSize="30dp" />
 
@@ -35,7 +35,7 @@
 
         <EditText
             android:id="@+id/et_sport_title_update"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:textSize="22sp" />
 
@@ -58,22 +58,25 @@
             <Button
                 android:id="@+id/select_date_button_update"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/corner_button_radius"
-                android:padding="3dp"
+                android:layout_height="36dp"
+                android:textColor="#FFFFFF"
+                android:minWidth="88dp"
+                android:padding="4dp"
+                android:background="@drawable/select_date_time"
+                android:layout_marginRight="30dp"
+                android:text="Select time" />
 
-                android:text="Select date"
-                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/show_time_picker_button_update"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:background="@drawable/corner_button_radius"
-                android:padding="3dp"
-                android:text="Select time"
-                android:textColor="#FFFFFF" />
+                android:layout_height="36dp"
+                android:textColor="#FFFFFF"
+                android:minWidth="88dp"
+                android:padding="4dp"
+                android:background="@drawable/select_date_time"
+                android:layout_marginRight="30dp"
+                android:text="Select time" />
 
         </LinearLayout>
 
@@ -105,7 +108,7 @@
 
         <EditText
             android:id="@+id/et_details_update"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:textSize="22sp" />
 
@@ -121,6 +124,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="horizontal">
 
             <Button
@@ -130,13 +134,14 @@
                 android:background="@drawable/corner_button_radius"
                 android:padding="3dp"
                 android:text="Update"
+                android:layout_marginRight="10dp"
                 android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/delete_event_button"
+                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
                 android:background="@drawable/corner_button_radius"
                 android:padding="3dp"
                 android:text="Delete Event"
