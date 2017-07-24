@@ -361,5 +361,11 @@ public class UpdateEventActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+        startActivity(intent);
+    }
 
 }

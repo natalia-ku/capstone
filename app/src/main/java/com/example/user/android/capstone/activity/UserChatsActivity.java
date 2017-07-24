@@ -85,7 +85,6 @@ public class UserChatsActivity extends AppCompatActivity {
 
     private void setUpAdapterForUserList(final List<String> userEventsList) {
         for (final String userEventKey : userEventsList) {
-            System.out.println("key" + userEventKey);
             Query eventQuery = mEventsRef.orderByKey().equalTo(userEventKey);
             eventQuery.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -102,29 +101,9 @@ public class UserChatsActivity extends AppCompatActivity {
                                     eventSnapshot.child("peopleNeeded").getValue().toString(),
                                     (String) eventSnapshot.child("creatorId").getValue());
                             userEvents.add(event);
-                            System.out.println("user events size:  " +userEvents.size());
-//
                         }
                     }
                     if (userEvents.size() == userEventsList.size()) {
-
-                        Set<Event> events = new HashSet<Event>();
-//                            events.addAll(userEvents);
-//                            userEvents.clear();
-//                            userEvents.addAll(events);
-
-                            List<Event> temp = new ArrayList<Event>();
-                            for (int i = 0; i <userEvents.size(); i++){
-                                if(!temp.contains(userEvents.get(i))) {
-                                    temp.add(userEvents.get(i));
-                                }
-                            }
-                            System.out.println("TEMP LIST: " );
-                            for (Event e : temp){
-                                System.out.println("Event in Temp : " + e);
-                            }
-                            userEvents = temp;
-
                         listenForNewMessagesInUserChats(userEvents);
                         myAdapter = new EventAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);
                         recycleView.setAdapter(myAdapter);
@@ -173,11 +152,7 @@ public class UserChatsActivity extends AppCompatActivity {
                                             System.out.println(" YOU HAVE NEW UNOPENED MESSAGE IN CHAT!!");
 
                                             int position = userEvents.indexOf(event);
-                                            System.out.println(position);
-//                                            myAdapter.notifyDataSetChanged();
-
                                             View view = recycleView.getLayoutManager().findViewByPosition(position);
-
                                             view.setBackgroundColor(getResources().getColor(R.color.accent));
                                         }
                                         if (event.equals(userEvents.get(userEvents.size() - 1))) {
