@@ -159,7 +159,6 @@ public class UserChatsActivity extends AppCompatActivity {
                                             }
                                             lastVisitTimeForCurrentChat = newDate.getTime();
                                             mUsersRef.child(userID).child("userEvents").child(eventID).setValue(lastVisitTimeForCurrentChat);
-                                            System.out.println("NEW DATE: " + lastVisitTimeForCurrentChat);
                                         }
                                         else {
                                              lastVisitTimeForCurrentChat = Long.parseLong(dataSnapshot.getValue().toString());
@@ -169,10 +168,6 @@ public class UserChatsActivity extends AppCompatActivity {
                                         if (lastVisitTimeForCurrentChat < messageSentTime) {
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
                                         }
-//                                        if (event.equals(userEvents.get(userEvents.size() - 1))) {
-//                                            lastVisitTime = new Date().getTime();
-//                                            mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
-//                                        }
                                     }
 
                                     @Override
@@ -181,30 +176,6 @@ public class UserChatsActivity extends AppCompatActivity {
                                     }
                                 });
 
-//                                Query lastVisitTimeQuery = mUsersRef.child(userID).child("lastTimeVisitedChats");
-//                                lastVisitTimeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(final DataSnapshot dataSnapshot) {
-//                                         long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
-//                                        int position = userEvents.indexOf(event);
-//                                        View view = recycleView.getLayoutManager().findViewByPosition(position);
-//                                        if (lastVisitTime < messageSentTime) {
-//                                            view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
-//                                        }
-//
-//                                        if (event.equals(userEvents.get(userEvents.size() - 1))) {
-//                                            lastVisitTime = new Date().getTime();
-//                                            mUsersRef.child(userID).child("lastTimeVisitedChats").setValue(lastVisitTime);
-//                                        }
-//
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(DatabaseError databaseError) {
-//
-//                                    }
-//                                });
                             }
                         }
 
@@ -219,12 +190,12 @@ public class UserChatsActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//        startActivity(intent);
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
 
 }
 

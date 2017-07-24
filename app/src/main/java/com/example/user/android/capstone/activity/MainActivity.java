@@ -36,6 +36,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -135,15 +137,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void listenToNewMessagesInChats(final User user){
-        final List <String> userEventsIdsList = new ArrayList<>();
+    private void listenToNewMessagesInChats(final User user) {
+        final List<String> userEventsIdsList = new ArrayList<>();
         Query findUserEventdQuery = mUsersRef.child(user.getId()).child("userEvents");
         findUserEventdQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                            userEventsIdsList.add(eventSnapshot.getKey().toString());
+                        userEventsIdsList.add(eventSnapshot.getKey().toString());
                     }
                     findUserEventsById(userEventsIdsList, user);
                 }
@@ -156,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void findUserEventsById(final List<String>userEventsIdsList,final  User user ) {
+    private void findUserEventsById(final List<String> userEventsIdsList, final User user) {
         final List<Event> userEvents = new ArrayList<>();
         for (final String userEventKey : userEventsIdsList) {
             Query eventQuery = mEventsRef.orderByKey().equalTo(userEventKey);
@@ -190,10 +192,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void listenForNewMessagesInUserChats(final List<Event> userEvents, final User user) {
         for (final Event event : userEvents) {
-            String eventID = event.getId();
+            final String eventID = event.getId();
             Query eventChat = mEventsRef.child(eventID).child("chat").limitToLast(1);
             eventChat.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -203,29 +204,31 @@ public class MainActivity extends AppCompatActivity {
                             if (messageSnapsot.child("messageUser").getValue() != null &&
                                     messageSnapsot.child("messageTime").getValue() != null &&
                                     messageSnapsot.child("messageText").getValue() != null) {
-
                                 final long messageSentTime = Long.parseLong(messageSnapsot.child("messageTime").getValue().toString());
-                                Query lastVisitTimeQuery = mUsersRef.child(user.getId()).child("lastTimeVisitedChats");
 
-                                lastVisitTimeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                Query lastVisitTimeForCurrentChat = mUsersRef.child(user.getId()).child("userEvents").child(eventID);
+                                lastVisitTimeForCurrentChat.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        long lastVisitTime = Long.parseLong(dataSnapshot.getValue().toString());
+                                        long lastVisitTimeForCurrentChat;
+                                        lastVisitTimeForCurrentChat = new Date().getTime();
+                                        if (dataSnapshot.getValue().toString().equals("true")) {
+                                            Date newDate = null;
+                                            try {
+                                                newDate = new SimpleDateFormat("yyyy-MM-dd").parse("2017-07-21");
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            lastVisitTimeForCurrentChat = newDate.getTime();
+                                            mUsersRef.child(user.getId()).child("userEvents").child(eventID).setValue(lastVisitTimeForCurrentChat);
+                                        } else {
+                                            lastVisitTimeForCurrentChat = Long.parseLong(dataSnapshot.getValue().toString());
+                                        }
                                         Menu navMenu = nvDrawer.getMenu();
-                                        if (lastVisitTime < messageSentTime) {
+                                        if (lastVisitTimeForCurrentChat < messageSentTime) {
                                             navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.envelope6);
-                                            navMenu.findItem(R.id.nav_user_chats).getIcon().setColorFilter(Color.parseColor("#FF8C00"), PorterDuff.Mode.SRC_ATOP);;
-
+                                            navMenu.findItem(R.id.nav_user_chats).getIcon().setColorFilter(Color.parseColor("#FF8C00"), PorterDuff.Mode.SRC_ATOP);
                                         }
-                                        else{
-                                            navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.chat_icon);
-                                        }
-//                                        if (event.equals(userEvents.get(userEvents.size() - 1))) {
-//                                            lastVisitTime = new Date().getTime();
-//                                            mUsersRef.child(user.getId()).child("lastTimeVisitedChats").setValue(lastVisitTime);
-//                                        }
-
-
                                     }
 
                                     @Override
@@ -238,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
@@ -245,17 +249,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter, final boolean listView) {
