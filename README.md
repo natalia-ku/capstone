@@ -10,23 +10,22 @@ Sportmate is created to match you sporting games that are organized by others, b
 Sportmate will help you stay active, have fun and make friends while  participating in sport activities.
 
 ## FEATURES
-* Search for activities near you
+* Search for activities in Seattle Area
 * Search by name/description/sport type etc.
 * Filter activities by sport type (more than 20 different sport types)
 * Filter by upcoming and past activities
 * See events on list and map
 * Singed in users can  easily create new sporting events
-* Sportmate can add activities to your calendar
-* Sportmate provides direction to sport events using Google Maps
+* App can add activities to your calendar
+* App provides direction to sport events using Google Maps
 * Easily Sign in / Sign up using email and password
-* For signed in users event Info page provides detailed info about event details and people who are attending event.
-* Event attendees can chat with others event’s participants in Event Chat
+* For signed in users Event Info page provides detailed information about event details and people who are attending event.
+* Event attendees can chat with other event’s participants in Event Chat
 * Event Chat may send you push notification, so you will never miss important information
 * Signed in users can see other people profile with user info and events, he/she organized and attended
-* User can rate your past events.
-* Event’s organized can get average rating of events he created
-* Event organizer can edit info or delete event
-
+* User can rate past events.
+* Event’s organizer can get average rating of events he created
+* Event organizer can edit infoabout event or delete event
 
 
 ### Personal Learning Goals
@@ -56,16 +55,17 @@ Sportmate will help you stay active, have fun and make friends while  participat
  
 
 
-## WIREFRAMES
+## SCREENSHOTS
+SCREENSHOTS WILL BE HERE SOON
 
 | MAIN PAGE - LIST VIEW   |      MAIN PAGE - MAP VIEW      |  SIGNIN / SIGN UP FORM |
 |----------|:-------------:|------:|
-| <img src="https://github.com/natalia-ku/Capstone/blob/master/wireframes/MainPage-ListOfAllEvents.png" alt="Mainpage" width= "200px"/> |  <img src="https://github.com/natalia-ku/Capstone/blob/master/wireframes/MainPage-MapOfAllEvent.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/wireframes/SignInSignUpForm.png" alt="Mainpage" width= "200px"/>|
+| <img src="" alt="Mainpage" width= "200px"/> |  <img src="" alt="Mainpage" width= "200px"/>  | <img src="" alt="Mainpage" width= "200px"/>|
 
 
 | USER PROFILE  |      EVENT DETAILS     |  LIST OF EVENT PARTICIPANTS |
 |----------|:-------------:|------:|
-| <img src="https://github.com/natalia-ku/Capstone/blob/master/wireframes/UserProfile.png" alt="Mainpage" width= "200px"/>  |  <img src="https://github.com/natalia-ku/Capstone/blob/master/wireframes/EventDetailPage.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/wireframes/ListOfEventParticipants.png" alt="Mainpage" width= "200px"/>|
+| <img src="" alt="Mainpage" width= "200px"/>  |  <img src="" alt="Mainpage" width= "200px"/>  | <img src="" alt="Mainpage" width= "200px"/>|
 
 ### CHAT WITH EVENT'S PARTICIPANTS
-<img src="https://github.com/natalia-ku/Capstone/blob/master/wireframes/ChatWithEventParticipants.png" alt="Mainpage" width= "200px"/> 
+<img src="" alt="Mainpage" width= "200px"/> 
