@@ -119,6 +119,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     Class destinationClass = EventInfoActivity.class;
                     Intent intentToStartEventInfoActivity = new Intent(context, destinationClass);
                     intentToStartEventInfoActivity.putExtra("event", (Parcelable) events.get(position));
+                    intentToStartEventInfoActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intentToStartEventInfoActivity);
                 }
             }

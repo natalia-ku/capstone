@@ -80,6 +80,7 @@ public class UserChatsAdapter extends RecyclerView.Adapter<UserChatsAdapter.View
                     view.findViewById(R.id.new_message_icon).setVisibility(View.GONE);
                     Intent intentToOpenChat = new Intent(context, ChatActivity.class);
                     intentToOpenChat.putExtra("event", (Parcelable) events.get(position));
+                    intentToOpenChat.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intentToOpenChat);
                 } else {
                     Class destinationClass = EventInfoActivity.class;
