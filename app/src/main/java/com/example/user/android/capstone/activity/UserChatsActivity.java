@@ -163,8 +163,6 @@ public class UserChatsActivity extends AppCompatActivity {
                                                 !messageSentUserEmail.equals(currentUserEmail)) {
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
                                             eventSportTitleTextView = (TextView) findViewById(R.id.event_sport_title);
-//                                            eventSportTitleTextView.setPadding(0,35,0,0);
-
                                         }
                                     }
 
