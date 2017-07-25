@@ -60,7 +60,7 @@ SCREENSHOTS WILL BE HERE SOON
 
 | MAIN PAGE - LIST VIEW   |      MAIN PAGE - MAP VIEW      |  SIGNIN / SIGN UP FORM |
 |----------|:-------------:|------:|
-| <img src="" alt="Mainpage" width= "200px"/> |  <img src="" alt="Mainpage" width= "200px"/>  | <img src="" alt="Mainpage" width= "200px"/>|
+| <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_List.png" alt="Mainpage" width= "200px"/> |  <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_Map.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_Drawer.png" alt="Mainpage" width= "200px"/>|
 
 
 | USER PROFILE  |      EVENT DETAILS     |  LIST OF EVENT PARTICIPANTS |
