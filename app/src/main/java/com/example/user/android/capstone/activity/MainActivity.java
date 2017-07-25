@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -100,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
     protected LinearLayout frameLayout;
     private MapUtils mapUtil;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
             intentTostartService.putExtra("currentUserEmail", currentUser.getEmail());
             startService(intentTostartService);
         }
+
+
     }
 
 

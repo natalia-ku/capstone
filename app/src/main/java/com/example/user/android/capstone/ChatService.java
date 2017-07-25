@@ -52,16 +52,11 @@ public class ChatService extends IntentService {
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        Log.d(TAG, "IN ON START  OLD COMMAND!!!!" );
         if (intent != null) {
-            Log.d(TAG, "INTENT IS NOT NULL HERE");
-            currentUserEmail =            intent.getStringExtra("currentUserEmail");
+            currentUserEmail = intent.getStringExtra("currentUserEmail");
             findAndlistenToUserChats(currentUserEmail);
         }
-
-
         return START_STICKY;
-//        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -71,9 +66,6 @@ public class ChatService extends IntentService {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        // TODO Auto-generated method stub
-        Log.d(TAG, "IN ONTASK REMOVED!!!!");
-
         Intent restartService = new Intent(getApplicationContext(),
                 this.getClass());
         restartService.putExtra("currentUserEmail", currentUserEmail);

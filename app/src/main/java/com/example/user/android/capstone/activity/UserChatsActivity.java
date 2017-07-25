@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.adapter.EventAdapter;
+import com.example.user.android.capstone.adapter.UserChatsAdapter;
 import com.example.user.android.capstone.model.ChatMessage;
 import com.example.user.android.capstone.model.Event;
 import com.example.user.android.capstone.model.User;
@@ -53,7 +54,8 @@ public class UserChatsActivity extends AppCompatActivity {
     RecyclerView recycleView;
     String userID;
     ImageView mNewMessageIcon;
-    EventAdapter myAdapter;
+//    EventAdapter myAdapter;
+    UserChatsAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,10 +118,15 @@ public class UserChatsActivity extends AppCompatActivity {
                     System.out.println(userEventsList.size());
                     if (userEvents.size() == userEventsList.size()) {
                         listenForNewMessagesInUserChats(userEvents);
-                        myAdapter = new EventAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);
+                        myAdapter = new UserChatsAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);
                         recycleView.setAdapter(myAdapter);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         recycleView.setLayoutManager(layoutManager);
+
+//                        myAdapter = new EventAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);
+//                        recycleView.setAdapter(myAdapter);
+//                        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                        recycleView.setLayoutManager(layoutManager);
                     }
                 }
 

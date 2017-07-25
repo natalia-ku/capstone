@@ -23,8 +23,8 @@
 
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
                 android:id="@+id/event_card"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
@@ -36,25 +36,27 @@
                     android:maxWidth="100dp"
                     android:scaleType="fitXY" />
 
-                <TextView
-                    android:id="@+id/event_sport_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:background="#8d000000"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/event_sport_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:background="#8d000000"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:id="@+id/new_message_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:paddingRight="10dp"
                     android:src="@drawable/envelope2"
                     android:visibility="gone" />

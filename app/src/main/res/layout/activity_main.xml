@@ -33,6 +33,7 @@
                 android:layout_height="fill_parent"
                 android:orientation="vertical">
 
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_gravity="center"
@@ -123,7 +124,8 @@
                     android:id="@+id/frameEvents"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#e9e7e7"></FrameLayout>
+                    android:background="#e9e7e7">
+                </FrameLayout>
 
 
                 <fragment
@@ -134,6 +136,7 @@
 
 
             </LinearLayout>
+
 
             <RelativeLayout
                 android:id="@+id/ly_bar_bottom"

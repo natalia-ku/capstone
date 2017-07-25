@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
@@ -16,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,14 +52,16 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference mEventsRef = mRootRef.child("events");
     private TextView chatTitleTextView;
     String eventID;
+//    ImageView userPhotoInChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         chatTitleTextView = (TextView) findViewById(R.id.chat_title);
+
         final Event event = getIntent().getParcelableExtra("event");
-        if (event == null){
+        if (event == null) {
             eventID = getIntent().getStringExtra("eventID");
             Query findEventQuery = mEventsRef.child(eventID);
             findEventQuery.addValueEventListener(new ValueEventListener() {
@@ -76,12 +81,12 @@ public class ChatActivity extends AppCompatActivity {
                         setUpSendMessageTextViewAndButton(event);
                     }
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
-        }
-        else {
+        } else {
             findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser(), event);
             setUpSendMessageTextViewAndButton(event);
         }
@@ -90,16 +95,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-
     private void displayChatMessages(Event event) {
         final ListView listOfMessages = (ListView) findViewById(R.id.list_of_messages);
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, mEventsRef.child(event.getId()).child("chat")) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
-                TextView messageText = (TextView) v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView) v.findViewById(R.id.message_user);
-                TextView messageTime = (TextView) v.findViewById(R.id.message_time);
+                final TextView messageText = (TextView) v.findViewById(R.id.message_text);
+                final TextView messageUser = (TextView) v.findViewById(R.id.message_user);
                 messageText.setText(model.getMessageText());
                 if (model.getMessageEmail() != null && model.getMessageEmail().equals(userEmail)) {
                     messageUser.setText("");
@@ -158,7 +161,7 @@ public class ChatActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void   setUpSendMessageTextViewAndButton(final Event event) {
+    private void setUpSendMessageTextViewAndButton(final Event event) {
         chatTitleTextView.setText(event.getTitle() + " chat");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
