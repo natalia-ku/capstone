@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -670,7 +669,7 @@ public class EventInfoActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                         mRateEventButton.setVisibility(View.GONE);
                         String formattedValue = String.format("%.2f", newRatingValue);
-                        txtRatingValue.setText("Current rating: " + formattedValue);
+                        txtRatingValue.setText("Current rating: " + ratingValue);
                     }
 
                     @Override

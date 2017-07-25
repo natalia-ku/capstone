@@ -4,9 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -31,6 +33,8 @@ import com.example.user.android.capstone.activity.MapsActivity;
 import com.example.user.android.capstone.activity.UserChatsActivity;
 import com.example.user.android.capstone.model.Event;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -156,10 +160,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public LatLng getLocationFromAddress(String strAddress) {
         Geocoder coder = new Geocoder(context);
         List<android.location.Address> address;
+
         LatLng p1 = null;
         try {
             if (strAddress != null) {
+                System.out.println("address: " + strAddress);
+
                 address = coder.getFromLocationName(strAddress, 5);
+                System.out.println("address 2: " + address);
+
                 if (address == null || address.size() == 0) {
                     return null;
                 }
@@ -170,14 +179,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return p1;
     }
 
 
-    public static void setImage(View view, String sportCategory) {
+    public static void setImage(final View view, String sportCategory) {
         switch (sportCategory) {
             case "Tennis":
                 view.setBackgroundResource(R.drawable.tennis);
+
                 break;
             case "Football":
                 view.setBackgroundResource(R.drawable.football);

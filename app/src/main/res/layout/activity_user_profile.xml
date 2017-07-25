@@ -60,6 +60,7 @@
                         android:layout_height="fill_parent"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="20dp"
+                        android:paddingLeft="6dp"
                         android:background="@drawable/border">
 
                         <TableRow
@@ -83,7 +84,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="Gender"
-
                                 android:textColor="#D3D3D3"
                                 android:textSize="20dp" />
 

@@ -47,13 +47,11 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mEventsRef = mRootRef.child("events");
     private DatabaseReference mUserRef = mRootRef.child("users");
-
     public String dayString;
     public String yearString;
     public String monthString;
     public static String hoursString;
     public static String minutesString;
-
     public String placeAddress;
     private String sportCategory;
     private String peopleNeeded;

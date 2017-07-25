@@ -64,6 +64,7 @@ public class UserChatsActivity extends AppCompatActivity {
         userEvents = new ArrayList<>();
         mNewMessageIcon = (ImageView) findViewById(R.id.new_message_icon);
         recycleView = (RecyclerView) findViewById(R.id.recycle_view_chat_list);
+
     }
 
 
@@ -111,6 +112,8 @@ public class UserChatsActivity extends AppCompatActivity {
                             userEvents.add(event);
                         }
                     }
+                    System.out.println(userEvents.size());
+                    System.out.println(userEventsList.size());
                     if (userEvents.size() == userEventsList.size()) {
                         listenForNewMessagesInUserChats(userEvents);
                         myAdapter = new EventAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);

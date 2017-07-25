@@ -6,8 +6,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
-      android:layout_marginTop="20dp"
         android:padding="15dp">
 
         <TextView
@@ -59,24 +59,24 @@
                 android:id="@+id/select_date_button_update"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:textColor="#FFFFFF"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/select_date_time"
                 android:minWidth="88dp"
                 android:padding="4dp"
-                android:background="@drawable/select_date_time"
-                android:layout_marginRight="30dp"
-                android:text="Select time" />
+                android:text="Select time"
+                android:textColor="#FFFFFF" />
 
 
             <Button
                 android:id="@+id/show_time_picker_button_update"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:textColor="#FFFFFF"
+                android:layout_height="40dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/select_date_time"
                 android:minWidth="88dp"
                 android:padding="4dp"
-                android:background="@drawable/select_date_time"
-                android:layout_marginRight="30dp"
-                android:text="Select time" />
+                android:text="Select time"
+                android:textColor="#FFFFFF" />
 
         </LinearLayout>
 
@@ -121,6 +121,7 @@
             android:id="@+id/people_needed_spinner_update"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -131,17 +132,17 @@
                 android:id="@+id/update_event_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/corner_button_radius"
                 android:padding="3dp"
                 android:text="Update"
-                android:layout_marginRight="10dp"
                 android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/delete_event_button"
-                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/corner_button_radius"
                 android:padding="3dp"
                 android:text="Delete Event"
