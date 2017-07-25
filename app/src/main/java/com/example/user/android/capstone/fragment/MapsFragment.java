@@ -84,7 +84,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
             LatLng address = mapUtils.getLocationFromAddress(event.getAddress());
             if (address != null) {
                 mMap.addMarker(new MarkerOptions().position(address)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         .title(event.getTitle()));
             }
         }

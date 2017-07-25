@@ -6,7 +6,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +18,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
@@ -50,17 +55,17 @@ public class ChatActivity extends AppCompatActivity {
     private String userName;
     private String userEmail;
     private DatabaseReference mEventsRef = mRootRef.child("events");
-    private TextView chatTitleTextView;
     String eventID;
-//    ImageView userPhotoInChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        chatTitleTextView = (TextView) findViewById(R.id.chat_title);
-
         final Event event = getIntent().getParcelableExtra("event");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (event != null) {
+            setToolbarIconAndTitle(toolbar, event.getTitle());
+        }
         if (event == null) {
             eventID = getIntent().getStringExtra("eventID");
             Query findEventQuery = mEventsRef.child(eventID);
@@ -90,7 +95,6 @@ public class ChatActivity extends AppCompatActivity {
             findUserIdForSignedInUser(FirebaseAuth.getInstance().getCurrentUser(), event);
             setUpSendMessageTextViewAndButton(event);
         }
-
 
     }
 
@@ -156,13 +160,31 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        System.out.println("ON BACK PRESSED");
         super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), UserChatsActivity.class);
         startActivity(intent);
     }
 
+    private void setToolbarIconAndTitle(Toolbar toolbar, String title) {
+        if (toolbar != null) {
+            System.out.println("TITLE" + title);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+            getSupportActionBar().setTitle(title);
+            toolbar.setNavigationIcon(R.drawable.back_arrow_white2);
+            Drawable drawable = getResources().getDrawable(R.drawable.back_arrow_white2);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 70, 70, true));
+            newdrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+        }
+    }
+
+
     private void setUpSendMessageTextViewAndButton(final Event event) {
-        chatTitleTextView.setText(event.getTitle() + " chat");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
                         LatLng address = mapUtil.getLocationFromAddress(event.getAddress());
                         if (address != null) {
                             mMap.addMarker(new MarkerOptions().position(address)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                                     .title(event.getTitle()));
                         }
                     }
@@ -509,13 +509,11 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_signin_signup).setVisible(false);
         navMenu.findItem(R.id.nav_user_chats).setVisible(true);
         navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.chat_icon);
-
         mCreateNewEventButton.setVisibility(View.VISIBLE);
         View headerLayout = nvDrawer.getHeaderView(0);
         headerLayout.setVisibility(View.VISIBLE);
         mImageProfileView = (ImageView) headerLayout.findViewById(imageView);
         mUserNameTextView = (TextView) headerLayout.findViewById(R.id.user_name_textview);
-
     }
 
     private void findUserByEmail(String email) {

@@ -2,18 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Your current chats"
-        android:textColor="@color/primary_text"
-        android:textSize="30dp" />
+        android:background="@color/primary_dark"
+        android:titleTextColor="#FFFFFF"
+        android:paddingTop="30dp">
+    </android.support.v7.widget.Toolbar>
+
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="20dp"
         android:id="@+id/recycle_view_chat_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,4 +25,13 @@
     </android.support.v7.widget.RecyclerView>
 
 
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nvView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/white"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_view" />
 </LinearLayout>

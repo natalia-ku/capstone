@@ -22,8 +22,6 @@
             android:icon="@drawable/chat_icon"
             android:title="Chats">
         </item>
-
-
         <item
             android:id="@+id/nav_signout"
             android:icon="@drawable/signout"

@@ -1,28 +1,23 @@
 package com.example.user.android.capstone.activity;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.android.capstone.R;
-import com.example.user.android.capstone.adapter.EventAdapter;
 import com.example.user.android.capstone.adapter.UserChatsAdapter;
-import com.example.user.android.capstone.model.ChatMessage;
 import com.example.user.android.capstone.model.Event;
-import com.example.user.android.capstone.model.User;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,18 +27,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 public class UserChatsActivity extends AppCompatActivity {
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -56,6 +44,7 @@ public class UserChatsActivity extends AppCompatActivity {
     String currentUserEmail;
     ImageView mNewMessageIcon;
     UserChatsAdapter myAdapter;
+    TextView eventSportTitleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +55,8 @@ public class UserChatsActivity extends AppCompatActivity {
         userEvents = new ArrayList<>();
         mNewMessageIcon = (ImageView) findViewById(R.id.new_message_icon);
         recycleView = (RecyclerView) findViewById(R.id.recycle_view_chat_list);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setToolbarIconAndTitle(toolbar, "Your current chats");
     }
 
 
@@ -155,7 +145,7 @@ public class UserChatsActivity extends AppCompatActivity {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         long lastVisitTimeForCurrentChat;
                                         lastVisitTimeForCurrentChat = new Date().getTime();
-                                        if (dataSnapshot.getValue().toString().equals("true")){
+                                        if (dataSnapshot.getValue().toString().equals("true")) {
                                             Date newDate = null;
                                             try {
                                                 newDate = new SimpleDateFormat("yyyy-MM-dd").parse("2017-07-21");
@@ -164,15 +154,17 @@ public class UserChatsActivity extends AppCompatActivity {
                                             }
                                             lastVisitTimeForCurrentChat = newDate.getTime();
                                             mUsersRef.child(userID).child("userEvents").child(eventID).setValue(lastVisitTimeForCurrentChat);
-                                        }
-                                        else {
-                                             lastVisitTimeForCurrentChat = Long.parseLong(dataSnapshot.getValue().toString());
+                                        } else {
+                                            lastVisitTimeForCurrentChat = Long.parseLong(dataSnapshot.getValue().toString());
                                         }
                                         int position = userEvents.indexOf(event);
                                         View view = recycleView.getLayoutManager().findViewByPosition(position);
                                         if (lastVisitTimeForCurrentChat < messageSentTime &&
                                                 !messageSentUserEmail.equals(currentUserEmail)) {
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
+                                            eventSportTitleTextView = (TextView) findViewById(R.id.event_sport_title);
+//                                            eventSportTitleTextView.setPadding(0,35,0,0);
+
                                         }
                                     }
 
@@ -187,6 +179,7 @@ public class UserChatsActivity extends AppCompatActivity {
 
                     }
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
@@ -195,6 +188,22 @@ public class UserChatsActivity extends AppCompatActivity {
         }
     }
 
+
+    private void setToolbarIconAndTitle(Toolbar toolbar, String title) {
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+            getSupportActionBar().setTitle(title);
+            toolbar.setNavigationIcon(R.drawable.back_arrow_white2);
+            Drawable drawable = getResources().getDrawable(R.drawable.back_arrow_white2);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 70, 70, true));
+            newdrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+        }
+    }
 
     @Override
     public void onBackPressed() {

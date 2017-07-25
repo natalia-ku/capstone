@@ -3,6 +3,9 @@ package com.example.user.android.capstone.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
@@ -13,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -115,6 +119,9 @@ public class EventInfoActivity extends AppCompatActivity {
         openChatListener(event);
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setToolbarIconAndTitle(toolbar, "Event info");
     } // end of onCreate method
 
     private void checkIfDisplayRating() {
@@ -681,5 +688,27 @@ public class EventInfoActivity extends AppCompatActivity {
 
         });
 
+    }
+    private void setToolbarIconAndTitle(Toolbar toolbar, String title) {
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+            getSupportActionBar().setTitle(title);
+            toolbar.setNavigationIcon(R.drawable.back_arrow_white2);
+            Drawable drawable = getResources().getDrawable(R.drawable.back_arrow_white2);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 70, 70, true));
+            newdrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 }

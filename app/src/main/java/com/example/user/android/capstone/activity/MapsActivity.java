@@ -68,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng address = mapUtil.getLocationFromAddress(event.getAddress());
             if (address != null) {
                 mMap.addMarker(new MarkerOptions().position(address)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         .title(event.getTitle()));
             }
         }

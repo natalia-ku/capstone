@@ -11,6 +11,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_dark"
+            android:titleTextColor="#FFFFFF"
+            android:paddingTop="30dp">
+        </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -60,7 +68,7 @@
                     android:columnCount="2"
                     android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:paddingLeft="16dp"
+                    android:paddingLeft="13dp"
                     android:paddingTop="15dp"
                     android:rowCount="3">
 
@@ -88,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|top"
                         android:drawableLeft="@drawable/calendar1"
-                        android:drawablePadding="3dp"
+                        android:drawablePadding="6dp"
                         android:paddingBottom="8dp"
                         android:paddingLeft="3dp"
                         android:textSize="22sp" />
@@ -100,7 +108,6 @@
                         android:layout_gravity="left|top"
                         android:paddingBottom="8dp"
                         android:textSize="22sp" />
-
 
                     <TextView
                         android:id="@+id/event_address_textview"
@@ -120,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:clickable="true"
                 android:src="@drawable/edit_white"
                 app:layout_anchor="@id/linearA"
