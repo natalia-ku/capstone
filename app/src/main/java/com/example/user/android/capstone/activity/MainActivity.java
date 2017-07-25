@@ -193,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void listenForNewMessagesInUserChats(final List<Event> userEvents, final User user) {
         for (final Event event : userEvents) {
             final String eventID = event.getId();
@@ -207,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                                     messageSnapsot.child("messageTime").getValue() != null &&
                                     messageSnapsot.child("messageText").getValue() != null) {
                                 final long messageSentTime = Long.parseLong(messageSnapsot.child("messageTime").getValue().toString());
-
+                                final String messageSentUserEmail = messageSnapsot.child("messageEmail").getValue().toString();
                                 Query lastVisitTimeForCurrentChat = mUsersRef.child(user.getId()).child("userEvents").child(eventID);
                                 lastVisitTimeForCurrentChat.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -227,9 +226,10 @@ public class MainActivity extends AppCompatActivity {
                                             lastVisitTimeForCurrentChat = Long.parseLong(dataSnapshot.getValue().toString());
                                         }
                                         Menu navMenu = nvDrawer.getMenu();
-                                        if (lastVisitTimeForCurrentChat < messageSentTime) {
+                                        if (lastVisitTimeForCurrentChat < messageSentTime &&
+                                                !messageSentUserEmail.equals(currentUser.getEmail())) {
                                             navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.envelope6);
-                                            navMenu.findItem(R.id.nav_user_chats).getIcon().setColorFilter(Color.parseColor("#FF8C00"), PorterDuff.Mode.SRC_ATOP);
+                                            navMenu.findItem(R.id.nav_user_chats).getIcon().setColorFilter(Color.parseColor("#00A6ED"), PorterDuff.Mode.SRC_ATOP);
                                         }
                                     }
 
@@ -251,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-
 
     private void displayListOfEvents(final boolean onlyFutureEventsFilter, final boolean categoryFilter, final boolean listView) {
         eventsListFromDatabase = new ArrayList<>();

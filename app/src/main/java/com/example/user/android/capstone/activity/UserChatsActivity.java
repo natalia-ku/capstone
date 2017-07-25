@@ -53,8 +53,8 @@ public class UserChatsActivity extends AppCompatActivity {
     List<Event> userEvents;
     RecyclerView recycleView;
     String userID;
+    String currentUserEmail;
     ImageView mNewMessageIcon;
-//    EventAdapter myAdapter;
     UserChatsAdapter myAdapter;
 
     @Override
@@ -78,6 +78,7 @@ public class UserChatsActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         userID = userSnapshot.getKey();
+                        currentUserEmail = userSnapshot.child("email").getValue().toString();
                         for (DataSnapshot userEvent : userSnapshot.child("userEvents").getChildren()) {
                             userEventsList.add(userEvent.getKey().toString());
                         }
@@ -114,19 +115,12 @@ public class UserChatsActivity extends AppCompatActivity {
                             userEvents.add(event);
                         }
                     }
-                    System.out.println(userEvents.size());
-                    System.out.println(userEventsList.size());
                     if (userEvents.size() == userEventsList.size()) {
                         listenForNewMessagesInUserChats(userEvents);
                         myAdapter = new UserChatsAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);
                         recycleView.setAdapter(myAdapter);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         recycleView.setLayoutManager(layoutManager);
-
-//                        myAdapter = new EventAdapter(getApplicationContext(), userEvents, UserChatsActivity.class);
-//                        recycleView.setAdapter(myAdapter);
-//                        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//                        recycleView.setLayoutManager(layoutManager);
                     }
                 }
 
@@ -153,6 +147,7 @@ public class UserChatsActivity extends AppCompatActivity {
                                     messageSnapsot.child("messageText").getValue() != null) {
 
                                 final long messageSentTime = Long.parseLong(messageSnapsot.child("messageTime").getValue().toString());
+                                final String messageSentUserEmail = messageSnapsot.child("messageEmail").getValue().toString();
 
                                 Query lastVisitTimeForCurrentChat = mUsersRef.child(userID).child("userEvents").child(eventID);
                                 lastVisitTimeForCurrentChat.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -175,7 +170,8 @@ public class UserChatsActivity extends AppCompatActivity {
                                         }
                                         int position = userEvents.indexOf(event);
                                         View view = recycleView.getLayoutManager().findViewByPosition(position);
-                                        if (lastVisitTimeForCurrentChat < messageSentTime) {
+                                        if (lastVisitTimeForCurrentChat < messageSentTime &&
+                                                !messageSentUserEmail.equals(currentUserEmail)) {
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
                                         }
                                     }

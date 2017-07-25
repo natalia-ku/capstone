@@ -51,7 +51,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:paddingRight="10dp"
-                android:src="@drawable/envelope2"
+                android:src="@drawable/envelope5"
                 android:visibility="gone" />
         </LinearLayout>
 
