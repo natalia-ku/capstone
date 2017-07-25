@@ -65,7 +65,9 @@ SCREENSHOTS WILL BE HERE SOON
 
 | USER PROFILE  |      EVENT DETAILS     |  LIST OF EVENT PARTICIPANTS |
 |----------|:-------------:|------:|
-| <img src="" alt="Mainpage" width= "200px"/>  |  <img src="" alt="Mainpage" width= "200px"/>  | <img src="" alt="Mainpage" width= "200px"/>|
+| <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Event_Info.png" alt="Mainpage" width= "200px"/>  |  <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Profile.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/User_Chats.png" alt="Mainpage" width= "200px"/>|
 
-### CHAT WITH EVENT'S PARTICIPANTS
-<img src="" alt="Mainpage" width= "200px"/> 
+| USER PROFILE  |      EVENT DETAILS     |  LIST OF EVENT PARTICIPANTS |
+|----------|:-------------:|------:|
+| <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Chat.png" alt="Mainpage" width= "200px"/>  |  <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Rate_Past_Trips.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Rating.png" alt="Mainpage" width= "200px"/>|
+
