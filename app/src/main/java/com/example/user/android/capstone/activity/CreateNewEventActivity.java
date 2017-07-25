@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -43,7 +44,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private Button mCreateNewEventButton;
     private TextView showDateTextView;
     private Button selectDateButton;
-    private Button selectTimeButton;
+    private static Button selectTimeButton;
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mEventsRef = mRootRef.child("events");
     private DatabaseReference mUserRef = mRootRef.child("users");
@@ -136,14 +137,13 @@ public class CreateNewEventActivity extends AppCompatActivity {
             public void onPlaceSelected(Place place) {
                 placeAddress = place.getAddress().toString();
             }
+
             @Override
             public void onError(Status status) {
                 System.out.println("An error occurred in get address from autocomplete form: " + status);
             }
         });
     }
-
-
 
 
     private void setUpDate() {
@@ -159,10 +159,10 @@ public class CreateNewEventActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         yearString = String.valueOf(i);
-                        monthString = String.valueOf(i1 + 1) ;
+                        monthString = String.valueOf(i1 + 1);
                         dayString = String.valueOf(i2);
-                        showDateTextView = (TextView) findViewById(R.id.show_date);
-                        showDateTextView.setText(monthString + "/" + dayString + "/" + yearString);
+                        selectDateButton.setText(monthString + "/" + dayString + "/" + yearString);
+//                        selectDateButton.setTextColor(Color.parseColor("#FFF"));
                     }
                 },
                         year, month, day);
@@ -206,7 +206,14 @@ public class CreateNewEventActivity extends AppCompatActivity {
             if (hourOfDay < 10) {
                 hoursString = "0" + hoursString;
             }
+            displayTime(hoursString, minutesString);
+
         }
+    }
+
+    private static void displayTime(String hour, String minute) {
+        selectTimeButton.setText(hour + ":" + minute);
+
     }
 
     private void setUpSpinnerForCategory() {

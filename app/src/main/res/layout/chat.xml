@@ -37,8 +37,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="20dp"
+                android:paddingLeft="6dp"
                 android:gravity="center_vertical"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textColor="#FFFFFF"
                 android:textSize="30sp"
                 android:textStyle="bold" />

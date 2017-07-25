@@ -165,11 +165,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         LatLng p1 = null;
         try {
             if (strAddress != null) {
-                System.out.println("address: " + strAddress);
-
                 address = coder.getFromLocationName(strAddress, 5);
-                System.out.println("address 2: " + address);
-
                 if (address == null || address.size() == 0) {
                     return null;
                 }

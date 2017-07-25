@@ -67,7 +67,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
 
     @Override
     public void updateList(final List<Event> events) {
-        System.out.println("MAPS UPDATE LIST");
         for (Event event : events) {
             LatLng address = mapUtils.getLocationFromAddress(event.getAddress());
             if (address != null) {
@@ -102,26 +101,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Events
     public boolean onMarkerClick(final Marker marker) {
         return false;
     }
-
-//    public LatLng getLocationFromAddress(String strAddress) {
-//        Geocoder coder = new Geocoder(getContext());
-//        List<android.location.Address> address;
-//        LatLng p1 = null;
-//        try {
-//            if (strAddress != null) {
-//                address = coder.getFromLocationName(strAddress, 5);
-//                if (address == null || address.size() == 0) {
-//                    return null;
-//                }
-//                double latit = address.get(0).getLatitude();
-//                double longit = address.get(0).getLongitude();
-//                p1 = new LatLng(latit, longit);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return p1;
-//    }
 
 
     @Override
