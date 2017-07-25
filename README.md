@@ -56,18 +56,18 @@ Sportmate will help you stay active, have fun and make friends while  participat
 
 
 ## SCREENSHOTS
-SCREENSHOTS WILL BE HERE SOON
 
-| MAIN PAGE - LIST VIEW   |      MAIN PAGE - MAP VIEW      |  SIGNIN / SIGN UP FORM |
+| MAIN - LIST VIEW  |      MAIN - MAP VIEW     |  MAIN - DRAWER |
 |----------|:-------------:|------:|
-| <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_List.png" alt="Mainpage" width= "200px"/> |  <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_Map.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_Drawer.png" alt="Mainpage" width= "200px"/>|
+| <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_List.png" alt="Mainpage" width= "200px"/>  |  <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_Map.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Main_Drawer.png" alt="Mainpage" width= "200px"/>|
 
 
-| USER PROFILE  |      EVENT DETAILS     |  LIST OF EVENT PARTICIPANTS |
+
+| EVENT INFO |      PROFILE    |  USER CHATS |
 |----------|:-------------:|------:|
 | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Event_Info.png" alt="Mainpage" width= "200px"/>  |  <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Profile.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/User_Chats.png" alt="Mainpage" width= "200px"/>|
 
-| USER PROFILE  |      EVENT DETAILS     |  LIST OF EVENT PARTICIPANTS |
+| CHAT  |     RATE PAST TRIP DIALOG    |  EVENT RATING |
 |----------|:-------------:|------:|
 | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Chat.png" alt="Mainpage" width= "200px"/>  |  <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Rate_Past_Trips.png" alt="Mainpage" width= "200px"/>  | <img src="https://github.com/natalia-ku/Capstone/blob/master/screenshots/Rating.png" alt="Mainpage" width= "200px"/>|
 
