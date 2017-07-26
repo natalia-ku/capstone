@@ -26,9 +26,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -137,10 +140,7 @@ public class MainActivity extends AppCompatActivity {
             intentTostartService.putExtra("currentUserEmail", currentUser.getEmail());
             startService(intentTostartService);
         }
-
-
     }
-
 
     private void listenToNewMessagesInChats(final User user) {
         final List<String> userEventsIdsList = new ArrayList<>();
@@ -385,24 +385,7 @@ public class MainActivity extends AppCompatActivity {
                 mEventsOnMapButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
                 listView = false;
 
-//                final ProgressDialog progressDialog =  new ProgressDialog(MainActivity.this,
-//                        R.style.CustomProgress);
-//                progressDialog.getWindow().setGravity(Gravity.CENTER);
-//                progressDialog.setIndeterminate(true);
-//                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                progressDialog.show();
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            setUpMap(eventsList);
-//                            Thread.sleep(9000);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                        progressDialog.dismiss();
-//                    }
-//                });
+
                 setUpMap(eventsList);
             }
         });
@@ -411,8 +394,8 @@ public class MainActivity extends AppCompatActivity {
     private void setUpMap(final List<Event> eventsList) {
         fl.setVisibility(View.GONE);
         SupportMapFragment map = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
-        map.getMapAsync(new OnMapReadyCallback() {
 
+        map.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 mMap.clear();
@@ -470,6 +453,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     private Event createEventFromSnapshot(DataSnapshot eventSnapshot) {

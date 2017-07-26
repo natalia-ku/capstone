@@ -689,6 +689,7 @@ public class EventInfoActivity extends AppCompatActivity {
         });
 
     }
+
     private void setToolbarIconAndTitle(Toolbar toolbar, String title) {
         if (toolbar != null) {
             setSupportActionBar(toolbar);

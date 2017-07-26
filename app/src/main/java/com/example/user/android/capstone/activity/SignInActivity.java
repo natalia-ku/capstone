@@ -66,8 +66,6 @@ public class SignInActivity extends AppCompatActivity implements
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         mSignUpButton = (TextView) findViewById(R.id.goto_signup_button_activity);
         mSignUpButton.setPaintFlags(mSignUpButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-
     }
 
     @Override
@@ -76,8 +74,6 @@ public class SignInActivity extends AppCompatActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
-
-
 
     private void signIn(String email, String password) {
         if (!validateForm("signIn")) {

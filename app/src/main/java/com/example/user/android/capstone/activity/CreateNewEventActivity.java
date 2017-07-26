@@ -3,11 +3,14 @@ package com.example.user.android.capstone.activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -73,7 +76,7 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private void createNewEvent() {
         mCreateNewEventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                System.out.println("CREATE EVENT");
+
                 mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 String userEmail = currentUser.getEmail();
@@ -162,7 +165,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
                         monthString = String.valueOf(i1 + 1);
                         dayString = String.valueOf(i2);
                         selectDateButton.setText(monthString + "/" + dayString + "/" + yearString);
-//                        selectDateButton.setTextColor(Color.parseColor("#FFF"));
                     }
                 },
                         year, month, day);

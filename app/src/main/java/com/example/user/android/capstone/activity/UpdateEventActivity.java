@@ -121,9 +121,6 @@ public class UpdateEventActivity extends AppCompatActivity {
                 deleteEventFromUsersEventList(event.getId());
                 mEventsRef.child(event.getId()).removeValue();
             }
-
-            // Query findParticipatedUsersQuery = mUsersRef.child("userEvents").getKey().equals(event.getId());
-
         });
     }
 

@@ -1,5 +1,6 @@
 package com.example.user.android.capstone.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,7 +12,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -162,6 +167,17 @@ public class UserChatsActivity extends AppCompatActivity {
                                         if (lastVisitTimeForCurrentChat < messageSentTime &&
                                                 !messageSentUserEmail.equals(currentUserEmail)) {
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
+//                                            final ImageView iv = (ImageView) findViewById(R.id.new_message_icon);
+//                                            iv.setOnHoverListener(new View.OnHoverListener() {
+//                                                @Override
+//                                                public boolean onHover(View view, MotionEvent motionEvent) {
+//                                                    System.out.println("IN HOVER!!");
+//                                                    Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation);
+//                                                    rotation.setRepeatCount(Animation.INFINITE);
+//                                                    iv.startAnimation(rotation);
+//                                                    return false;
+//                                                }
+//                                            });
                                             eventSportTitleTextView = (TextView) findViewById(R.id.event_sport_title);
                                         }
                                     }

@@ -169,6 +169,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
+
     private void getEventsUserParticipatedIn(final List<String> eventIdsList, final String currentUserId) {
         //TO GET EVENTS USER PARTICIPATED IN:
         final List<Event> notRatedEvents = new ArrayList<Event>();

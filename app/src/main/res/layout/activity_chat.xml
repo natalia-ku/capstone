@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -33,25 +35,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="30dp">
+
         <EditText
             android:id="@+id/input"
             android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:hint="Enter message"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            />
     </android.support.design.widget.TextInputLayout>
 
-
-    <ListView
-        android:id="@+id/list_of_messages"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/fab"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="100dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="26dp" />
+        <ListView
+            android:id="@+id/list_of_messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/fab"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="26dp"
+            android:layout_marginTop="100dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="26dp" />
 </RelativeLayout>
+

@@ -110,6 +110,7 @@ public class ChatActivity extends AppCompatActivity {
                 messageText.setText(model.getMessageText());
                 if (model.getMessageEmail() != null && model.getMessageEmail().equals(userEmail)) {
                     messageUser.setText("");
+                    messageText.setTextColor(Color.parseColor("#FF130202"));
                     messageText.setBackground(getResources().getDrawable(R.drawable.bubble_out));
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     params.setMargins(500, 0, 0, 0);

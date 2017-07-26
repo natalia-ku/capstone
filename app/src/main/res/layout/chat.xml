@@ -49,7 +49,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:paddingRight="10dp"
-                android:src="@drawable/envelope5"
+                android:src="@drawable/new_message_icon3"
                 android:visibility="gone" />
 
         </LinearLayout>

@@ -62,8 +62,8 @@
             <!--android:windowSoftInputMode="adjustPan" />-->
 
         <activity android:name=".activity.ChatActivity">
-            android:parentActivityName=".UserChatsActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".UserChatsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.UserChatsActivity" />
