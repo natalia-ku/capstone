@@ -409,9 +409,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpMap(final List<Event> eventsList) {
-
-
-
         fl.setVisibility(View.GONE);
         SupportMapFragment map = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
         map.getMapAsync(new OnMapReadyCallback() {
@@ -656,10 +653,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
