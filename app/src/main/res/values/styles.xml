@@ -15,8 +15,8 @@
 
 
     <style name="MyButtonJoin" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/primary_dark</item>
-        <item name="colorButtonNormal">@color/primary_dark</item>
+        <item name="colorControlHighlight">@color/accent</item>
+        <item name="colorButtonNormal">@color/accent</item>
     </style>
 
     <style name="MyButtonCancel" parent="Theme.AppCompat.Light">
@@ -61,6 +61,13 @@
 
     <style name="MyExpandedAppBar" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">25sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_marginTop">60dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyExpandedAppBarProfile" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">30sp</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:layout_marginTop">60dp</item>
         <item name="android:textStyle">bold</item>

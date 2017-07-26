@@ -1,5 +1,6 @@
 package com.example.user.android.capstone.activity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,12 +10,13 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,13 +24,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.example.user.android.capstone.adapter.EventAdapter;
 import com.example.user.android.capstone.R;
+import com.example.user.android.capstone.adapter.EventAdapter;
 import com.example.user.android.capstone.model.Event;
 import com.example.user.android.capstone.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,11 +50,11 @@ import java.util.List;
 
 public class UserProfileActivity extends AppCompatActivity {
 
+
     private RecyclerView recyclerView;
     private TextView mUserAge;
     private TextView mUserGender;
     private ImageView mUserPhotoImage;
-    private TextView mUserName;
     private TextView mUserEmail;
     private FloatingActionButton mEditProfileButton;
     private final int REQUEST_CODE = 23;
@@ -64,25 +68,35 @@ public class UserProfileActivity extends AppCompatActivity {
     View checkBoxView;
     CheckBox checkBox;
     final String DONT_SHOW_AGAIN = "DontShowAgain";
+    FirebaseUser currentUser;
+    CoordinatorLayout userInfoLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        String userEmail = getIntent().getStringExtra("userEmail"); // when clicked on other user profile
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        String userEmail = getIntent().getStringExtra("userEmail"); 
         mEditProfileButton = (FloatingActionButton) findViewById(R.id.edit_profile);
-        if (userEmail == null) { // to see  signed in user own profile
+        userInfoLayout = (CoordinatorLayout) findViewById(R.id.user_info_layout);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) userInfoLayout.getLayoutParams();
+        if (userEmail == null) {
             mAuth = FirebaseAuth.getInstance();
-            FirebaseUser currentUser = mAuth.getCurrentUser();
+            currentUser = mAuth.getCurrentUser();
             userEmail = currentUser.getEmail();
+            layoutParams.setMargins(0, 84, 0, 0);
+            userInfoLayout.setLayoutParams(layoutParams);
         } else {
+            layoutParams.setMargins(0, 0, 0, 0);
+            userInfoLayout.setLayoutParams(layoutParams);
+            currentUser = null;
             mEditProfileButton.setVisibility(View.GONE);
         }
         setUpProfileInfo(userEmail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setToolbarIconAndTitle(toolbar, "Profile");
-
     }
+
 
     private void setUpProfileInfo(String userEmail) {
         Query userProfileQuery = mUserRef.orderByChild("email").equalTo(userEmail);
@@ -198,8 +212,9 @@ public class UserProfileActivity extends AppCompatActivity {
                                 notRatedEvents.add(e1);
                             }
                         }
-                        if (eventID.equals(eventIdsList.get(eventIdsList.size()-1))) {
-                            if (notRatedEvents.size() > 0) {
+
+                        if (eventID.equals(eventIdsList.get(eventIdsList.size() - 1))) {
+                            if (notRatedEvents.size() > 0 && getIntent().getStringExtra("userEmail") == null) {
                                 AlertDialog.Builder builder;
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     builder = new AlertDialog.Builder(UserProfileActivity.this);
@@ -218,7 +233,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                                 checkBox = (CheckBox) layoutCheckbox.findViewById(R.id.skip);
                                 builder.setView(layoutCheckbox);
-                                builder.setTitle("Rate your past trips")
+                                builder.setTitle("Rate your past events")
                                         .setItems(charSequencesItems, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int item) {
                                                 Intent intentToEventDetails = new Intent(getApplicationContext(), EventInfoActivity.class);
@@ -316,7 +331,6 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void findTextViews() {
-        mUserName = (TextView) findViewById(R.id.name_profile_info);
         mUserEmail = (TextView) findViewById(R.id.email_profile_info);
         mUserAge = (TextView) findViewById(R.id.age_profile_info);
         mUserGender = (TextView) findViewById(R.id.gender_profile_info);
@@ -329,7 +343,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void setTextToViews(String email, String name, String age, String gender, String photo) {
         mUserEmail.setText(email);
-        mUserName.setText(name);
+        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbarLayout.setExpandedTitleTextAppearance(R.style.MyExpandedAppBarProfile);
+        toolbarLayout.setTitle(name);
         mUserAge.setText(age);
         mUserGender.setText(gender);
         Glide.with(getApplicationContext()).load(photo).asBitmap().centerCrop().into(new BitmapImageViewTarget(mUserPhotoImage) {
@@ -350,29 +366,14 @@ public class UserProfileActivity extends AppCompatActivity {
         } else {
             recyclerView = (RecyclerView) findViewById(R.id.recycle_view_events_user_participated_in);
         }
+//        EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents, UserProfileActivity.class);
         EventAdapter myAdapter = new EventAdapter(getApplicationContext(), userEvents, null);
         recyclerView.setAdapter(myAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-
-
     }
 
-    private void setToolbarIconAndTitle(Toolbar toolbar, String title) {
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
-            getSupportActionBar().setTitle(title);
-            toolbar.setNavigationIcon(R.drawable.back_arrow_white2);
-            Drawable drawable = getResources().getDrawable(R.drawable.back_arrow_white2);
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 70, 70, true));
-            newdrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-            getSupportActionBar().setHomeAsUpIndicator(newdrawable);
-        }
-    }
+
 
     @Override
     public void onBackPressed() {

@@ -51,7 +51,7 @@ public class UpdateEventActivity extends AppCompatActivity {
     private Button mUpdateEventButton;
     private Button mDeleteEventButton;
     private Button mSelectDateButton;
-    private Button selectTimeButton;
+    private static Button selectTimeButton;
     private TextView showDateTextView;
     private static TextView showTimeTextView;
     private String dayString;
@@ -245,6 +245,8 @@ public class UpdateEventActivity extends AppCompatActivity {
                         } else {
                             showDateTextView.setText(monthString + "/" + dayString + "/" + yearString);
                         }
+                        mSelectDateButton.setText(monthString + "/" + dayString + "/" + yearString);
+
                     }
                 },
                         year, month, day);
@@ -316,10 +318,13 @@ public class UpdateEventActivity extends AppCompatActivity {
             if (hourOfDay < 10) {
                 hoursString = "0" + hoursString;
             }
-            showTimeTextView.setText(hoursString + " : " + minutesString);
+            displayTime(hoursString, minutesString);
         }
     }
 
+    private static void displayTime(String hour, String minute) {
+        selectTimeButton.setText(hour + ":" + minute);
+    }
 
     private void setUpSpinnerForCategory() {
         adapter = ArrayAdapter.createFromResource(this,

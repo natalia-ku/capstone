@@ -45,7 +45,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
     private EditText mSportTitleEdit;
     private EditText mSportDetailsEdit;
     private Button mCreateNewEventButton;
-    private TextView showDateTextView;
     private Button selectDateButton;
     private static Button selectTimeButton;
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -215,7 +214,6 @@ public class CreateNewEventActivity extends AppCompatActivity {
 
     private static void displayTime(String hour, String minute) {
         selectTimeButton.setText(hour + ":" + minute);
-
     }
 
     private void setUpSpinnerForCategory() {

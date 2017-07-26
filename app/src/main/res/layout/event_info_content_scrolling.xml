@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.user.android.capstone.activity.EventInfoActivity"
-    tools:showIn="@layout/activity_scrolling">
+    tools:showIn="@layout/activity_event_info">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -23,75 +23,67 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <GridLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:columnCount="2"
-                        android:orientation="horizontal"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="13dp"
-                        android:paddingTop="15dp"
-                        android:rowCount="3">
-
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="12dp"
+                        android:orientation="horizontal">
                         <TextView
                             android:id="@+id/event_category_textview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="left|top"
                             android:drawableLeft="@drawable/sport_icon"
                             android:drawablePadding="3dp"
                             android:paddingBottom="8dp"
                             android:paddingLeft="3dp"
+                            android:paddingRight="70dp"
                             android:textSize="22sp" />
-
                         <TextView
                             android:id="@+id/event_people_needed_textview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="left|top"
                             android:textSize="22sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                        android:id="@+id/event_date_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/calendar1"
+                        android:drawablePadding="6dp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="3dp"
+                        android:textSize="22sp" />
 
                         <TextView
-                            android:id="@+id/event_date_textview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|top"
-                            android:drawableLeft="@drawable/calendar1"
-                            android:drawablePadding="6dp"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="3dp"
-                            android:textSize="22sp" />
+                        android:id="@+id/event_time_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:textSize="22sp" />
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_marginLeft="12dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
                         <TextView
-                            android:id="@+id/event_time_textview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|top"
-                            android:paddingBottom="8dp"
-                            android:textSize="22sp" />
-
-                        <TextView
-                            android:id="@+id/event_address_textview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_columnSpan="2"
-                            android:layout_gravity="fill"
-                            android:drawableLeft="@drawable/map"
-                            android:drawablePadding="3dp"
-                            android:textSize="22sp" />
-                    </GridLayout>
+                        android:id="@+id/event_address_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/map"
+                        android:drawablePadding="3dp"
+                        android:textSize="22sp" />
+                    </LinearLayout>
                 </LinearLayout>
-
-                <!--<android.support.design.widget.FloatingActionButton-->
-                    <!--android:id="@+id/update_event_button"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginRight="10dp"-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:clickable="true"-->
-                    <!--android:src="@drawable/edit_white"-->
-                    <!--app:layout_anchor="@id/linearA"-->
-                    <!--app:layout_anchorGravity="bottom|right|end" />-->
             </android.support.design.widget.CoordinatorLayout>
 
 
@@ -99,27 +91,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
-
+                <Button
+                    android:id="@+id/paticipate_in_event_button"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:text="JOIN"
+                    android:textColor="#FFFFFF"
+                    android:theme="@style/MyButtonJoin" />
                 <Button
                     android:id="@+id/get_directions_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_gravity="left|top"
+                    android:layout_height="50dp"
                     android:drawableLeft="@drawable/direct"
                     android:text="Directions"
                     android:textColor="#FFFFFF"
                     android:theme="@style/MyButtonMap" />
-
                 <Button
                     android:id="@+id/event_on_map_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_gravity="left|top"
+                    android:layout_height="50dp"
                     android:drawableLeft="@drawable/onmap"
                     android:text="MAP"
                     android:textColor="#FFFFFF"
                     android:theme="@style/MyButtonMap" />
-
             </LinearLayout>
 
             <View
@@ -127,21 +121,13 @@
                 android:layout_height="7dp"
                 android:background="#F2F2F7" />
 
-            <Button
-                android:id="@+id/paticipate_in_event_button"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="20dp"
-                android:text="JOIN"
-                android:textColor="#FFFFFF"
-                android:theme="@style/MyButtonJoin" />
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="30dp">
+                android:layout_gravity="center"
+                >
 
                 <Button
                     android:id="@+id/cancel_participation_in_event_button"

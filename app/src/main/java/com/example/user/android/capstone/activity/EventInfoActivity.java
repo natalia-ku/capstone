@@ -12,14 +12,12 @@ import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -92,11 +90,9 @@ public class EventInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scrolling);
+        setContentView(R.layout.activity_event_info);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-//        toolbarLayout.setTitle(" ");
 
         initializeTextViewsAndButtons();
         Event event = getIntent().getParcelableExtra("event");
@@ -477,7 +473,6 @@ public class EventInfoActivity extends AppCompatActivity {
         mEventInfoCategory.setText(e1.getSportCategory());
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbarLayout.setExpandedTitleTextAppearance(R.style.MyExpandedAppBar);
-
         toolbarLayout.setTitle(e1.getTitle());
 
         EventAdapter.setImage(mEventPhoto, e1.getSportCategory());
