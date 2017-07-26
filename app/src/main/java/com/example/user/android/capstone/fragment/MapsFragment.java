@@ -2,7 +2,6 @@ package com.example.user.android.capstone.fragment;
 
 
 import android.content.Intent;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -12,12 +11,10 @@ import android.view.ViewGroup;
 
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.activity.EventInfoActivity;
-import com.example.user.android.capstone.fragment.EventsFragmentInterface;
 import com.example.user.android.capstone.model.Event;
 import com.example.user.android.capstone.utils.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,7 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.util.List;
 
 

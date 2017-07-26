@@ -29,12 +29,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.EventInfoActivity">
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
         <activity android:name=".activity.SignInActivity">
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -57,9 +51,9 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".activity.UpdateProfileActivity" />
         <activity android:name=".activity.UpdateEventActivity" />
-        <!--<activity-->
-            <!--android:name=".activity.ChatActivity"-->
-            <!--android:windowSoftInputMode="adjustPan" />-->
+        <!-- <activity -->
+        <!-- android:name=".activity.ChatActivity" -->
+        <!-- android:windowSoftInputMode="adjustPan" /> -->
 
         <activity android:name=".activity.ChatActivity">
             android:windowSoftInputMode="adjustPan"
@@ -68,16 +62,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.UserChatsActivity" />
         </activity>
-
-
         <activity android:name=".activity.UserChatsActivity">
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-
-
         <activity android:name=".activity.SignUpActivity" />
 
         <service
@@ -98,6 +88,10 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".activity.EventInfoActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/MyAppTheme"></activity>
     </application>
 
 </manifest>

@@ -1,13 +1,11 @@
 package com.example.user.android.capstone.activity;
 
 import android.content.Intent;
-import android.location.Geocoder;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.example.user.android.capstone.R;
-import com.example.user.android.capstone.activity.EventInfoActivity;
 import com.example.user.android.capstone.model.Event;
 import com.example.user.android.capstone.utils.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {

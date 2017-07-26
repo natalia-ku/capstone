@@ -7,16 +7,19 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,9 +32,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.adapter.EventAdapter;
-import com.example.user.android.capstone.model.User;
 import com.example.user.android.capstone.adapter.UserAdapter;
 import com.example.user.android.capstone.model.Event;
+import com.example.user.android.capstone.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -48,7 +51,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 public class EventInfoActivity extends AppCompatActivity {
 
@@ -87,13 +89,16 @@ public class EventInfoActivity extends AppCompatActivity {
     private LinearLayout mRatingLayout;
     private TextView alreadyVotedTextView;
     private TextView ratingBarTitleTextView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_info);
-        initializeTextViewsAndButtons();
+        setContentView(R.layout.activity_scrolling);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+//        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+//        toolbarLayout.setTitle(" ");
 
+        initializeTextViewsAndButtons();
         Event event = getIntent().getParcelableExtra("event");
         eventId = event.getId();
         if (!event.checkIfDateInFuture(event.getDate())) {
@@ -120,9 +125,8 @@ public class EventInfoActivity extends AppCompatActivity {
         setUpParticipateInEventButton(event);
         cancelParticipationEvent(event);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setToolbarIconAndTitle(toolbar, "Event info");
-    } // end of onCreate method
+    }
+
 
     private void checkIfDisplayRating() {
         Query checkIfUserAttendsEventQuery = mEventsRef.child(eventId).child("attendees");
@@ -257,7 +261,7 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
     private void addEventToUserEventsList(String eventId, String userId) {
-        mUserRef.child(userId).child("userEvents").child(eventId).setValue("true");
+        mUserRef.child(userId).child("userEvents").child(eventId).setValue(Long.parseLong("1501092649146"));
     }
 
     private void removeAttendeeFromEvent(String eventId, String userId) {
@@ -471,7 +475,11 @@ public class EventInfoActivity extends AppCompatActivity {
 
     private void updateEventUI(Event e1) {
         mEventInfoCategory.setText(e1.getSportCategory());
-        mEventInfoTitle.setText(e1.getTitle());
+        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbarLayout.setExpandedTitleTextAppearance(R.style.MyExpandedAppBar);
+
+        toolbarLayout.setTitle(e1.getTitle());
+
         EventAdapter.setImage(mEventPhoto, e1.getSportCategory());
         mEventInfoAddress.setText(e1.getAddress());
         mEventInfoDate.setText(e1.getDataTime());

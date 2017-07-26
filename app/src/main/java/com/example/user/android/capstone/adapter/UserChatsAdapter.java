@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -19,15 +17,11 @@ import android.widget.TextView;
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.activity.ChatActivity;
 import com.example.user.android.capstone.activity.EventInfoActivity;
-import com.example.user.android.capstone.activity.MainActivity;
 import com.example.user.android.capstone.activity.UserChatsActivity;
 import com.example.user.android.capstone.model.Event;
-import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 /**

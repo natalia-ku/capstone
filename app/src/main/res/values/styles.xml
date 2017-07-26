@@ -1,11 +1,11 @@
 <resources>
+
     <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#03A9F4</item>
         <item name="colorPrimaryDark">#0288D1</item>
         <item name="colorAccent">#FF9800</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
-
 
 
     <attr name="sc_corner_radius" format="dimension" />
@@ -23,8 +23,6 @@
         <item name="colorControlHighlight">#E35754</item>
         <item name="colorButtonNormal">#D85251</item>
     </style>
-
-
 
 
     <style name="MyButtonEventInfo" parent="Theme.AppCompat.Light">
@@ -45,7 +43,7 @@
     </style>
 
     <style name="myDialog" parent="Theme.AppCompat.Dialog">
-       <item name="actionBarStyle">@color/primary_light</item>
+        <item name="actionBarStyle">@color/primary_light</item>
     </style>
 
     <style name="CustomProgress" parent="android:Theme.Material.Dialog">
@@ -57,5 +55,15 @@
         <item name="android:colorBackground">#FFFFFF</item>
     </style>
 
+    <style name="MyAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MyAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="MyExpandedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_marginTop">60dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>

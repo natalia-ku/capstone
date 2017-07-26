@@ -1,18 +1,11 @@
 package com.example.user.android.capstone.adapter;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -21,23 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.engine.Resource;
 import com.example.user.android.capstone.R;
 import com.example.user.android.capstone.activity.ChatActivity;
 import com.example.user.android.capstone.activity.EventInfoActivity;
 import com.example.user.android.capstone.activity.MainActivity;
-import com.example.user.android.capstone.activity.MapsActivity;
 import com.example.user.android.capstone.activity.UserChatsActivity;
 import com.example.user.android.capstone.model.Event;
 import com.google.android.gms.maps.model.LatLng;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
