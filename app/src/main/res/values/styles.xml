@@ -48,4 +48,14 @@
        <item name="actionBarStyle">@color/primary_light</item>
     </style>
 
+    <style name="CustomProgress" parent="android:Theme.Material.Dialog">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:colorBackground">#FFFFFF</item>
+    </style>
+
+
 </resources>

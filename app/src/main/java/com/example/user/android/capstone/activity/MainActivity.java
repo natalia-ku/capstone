@@ -1,5 +1,6 @@
 package com.example.user.android.capstone.activity;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -23,6 +25,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -381,12 +384,34 @@ public class MainActivity extends AppCompatActivity {
                 mEventOnListButton.setBackgroundResource(R.drawable.corner_radio_button);
                 mEventsOnMapButton.setBackgroundResource(R.drawable.corner_radio_button_blue);
                 listView = false;
+
+//                final ProgressDialog progressDialog =  new ProgressDialog(MainActivity.this,
+//                        R.style.CustomProgress);
+//                progressDialog.getWindow().setGravity(Gravity.CENTER);
+//                progressDialog.setIndeterminate(true);
+//                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                progressDialog.show();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            setUpMap(eventsList);
+//                            Thread.sleep(9000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        progressDialog.dismiss();
+//                    }
+//                });
                 setUpMap(eventsList);
             }
         });
     }
 
     private void setUpMap(final List<Event> eventsList) {
+
+
+
         fl.setVisibility(View.GONE);
         SupportMapFragment map = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
         map.getMapAsync(new OnMapReadyCallback() {
@@ -403,6 +428,7 @@ public class MainActivity extends AppCompatActivity {
                                     .title(event.getTitle()));
                         }
                     }
+
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.6101, -122.2015),
                             Math.max(10, mMap.getCameraPosition().zoom)));
 
