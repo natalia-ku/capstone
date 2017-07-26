@@ -167,17 +167,7 @@ public class UserChatsActivity extends AppCompatActivity {
                                         if (lastVisitTimeForCurrentChat < messageSentTime &&
                                                 !messageSentUserEmail.equals(currentUserEmail)) {
                                             view.findViewById(R.id.new_message_icon).setVisibility(View.VISIBLE);
-//                                            final ImageView iv = (ImageView) findViewById(R.id.new_message_icon);
-//                                            iv.setOnHoverListener(new View.OnHoverListener() {
-//                                                @Override
-//                                                public boolean onHover(View view, MotionEvent motionEvent) {
-//                                                    System.out.println("IN HOVER!!");
-//                                                    Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation);
-//                                                    rotation.setRepeatCount(Animation.INFINITE);
-//                                                    iv.startAnimation(rotation);
-//                                                    return false;
-//                                                }
-//                                            });
+//
                                             eventSportTitleTextView = (TextView) findViewById(R.id.event_sport_title);
                                         }
                                     }

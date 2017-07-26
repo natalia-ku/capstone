@@ -232,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
                                         if (lastVisitTimeForCurrentChat < messageSentTime &&
                                                 !messageSentUserEmail.equals(currentUser.getEmail())) {
                                             navMenu.findItem(R.id.nav_user_chats).setIcon(R.drawable.envelope5);
+//
                                             navMenu.findItem(R.id.nav_user_chats).getIcon().setColorFilter(Color.parseColor("#2C7BEA"), PorterDuff.Mode.SRC_ATOP);
                                         }
                                     }
