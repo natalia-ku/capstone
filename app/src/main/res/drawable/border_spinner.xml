@@ -6,10 +6,12 @@
             <solid android:color="@color/primary_light" />
         </shape>
     </item>
-    <item android:bottom="3dp">
+    <item android:bottom="2dp">
         <shape android:shape="rectangle" >
             <solid android:color="#FFFFFF" />
         </shape>
     </item>
+
+
 
 </layer-list>
