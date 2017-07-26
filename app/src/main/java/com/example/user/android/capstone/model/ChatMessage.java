@@ -11,6 +11,8 @@ public class ChatMessage {
     private String messageText;
     private String messageUser;
     private String messageEmail;
+    private String eventId;
+    private long messageTime;
 
     public String getEventId() {
         return eventId;
@@ -20,21 +22,18 @@ public class ChatMessage {
         this.eventId = eventId;
     }
 
-    private String eventId;
-    private long messageTime;
-
     public ChatMessage(String messageText, String messageUser, String messageEmail) {
         this.messageText = messageText;
         this.messageUser = messageUser;
         this.messageEmail = messageEmail;
         messageTime = new Date().getTime();
     }
-    public ChatMessage(String messageText, String messageUser, String messageEmail, String eventId) {
+    public ChatMessage(String messageText, String messageUser,  long messageTime, String messageEmail, String eventId) {
         this.messageText = messageText;
         this.messageUser = messageUser;
         this.messageEmail = messageEmail;
         this.eventId = eventId;
-        messageTime = new Date().getTime();
+        this.messageTime = messageTime;
     }
 
     public ChatMessage(){
