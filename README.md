@@ -50,11 +50,7 @@ Sportmate will help you stay active, have fun and make friends while  participat
  * Firebase Messanger 
  
  * Google Maps API
- 
- * Deployment to Google Play Store
- 
-
-
+  
 ## SCREENSHOTS
 
 | MAIN - LIST VIEW  |      MAIN - MAP VIEW     |  MAIN - DRAWER |
