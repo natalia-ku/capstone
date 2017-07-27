@@ -39,7 +39,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     Context context;
     Class currentActivity;
 
-
     public EventAdapter(Context context, List<Event> events, Class currentActivityClass) {
         this.events = removeDuplicates(events);
         this.context = context;
@@ -91,13 +90,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.eventTitleTextView.setTypeface(null, Typeface.NORMAL);
             holder.eventTitleTextView.setTextSize(20);
             holder.eventTitleTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)  holder.eventLinearLayout.getLayoutParams();
-            params.setMargins(0,0,0,0);
-            holder.eventLinearLayout.setLayoutParams(params);
-
         }
-
         holder.eventLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
