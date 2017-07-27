@@ -28,7 +28,7 @@ Sportmate will help you stay active, have fun and make friends while  participat
 * Event organizer can edit infoabout event or delete event
 
 
-### Personal Learning Goals
+## PERSONAL LEARNING GOALS
  *  improve knowledge of Java
  
  *  learn how to build app for mobile phones (android)
@@ -39,7 +39,7 @@ Sportmate will help you stay active, have fun and make friends while  participat
  
  * learn more about Google Maps API 
 
- __Technology selections__:
+ ## TECHNOLOGIES SELECTION
  
  * Android (using Java)
   
