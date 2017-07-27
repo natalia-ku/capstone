@@ -2,7 +2,7 @@
 ### This app is part of my Capstone Project at Ada Developers Academy (Cohort 7)
 
 ## MAIN GOAL
-Help people create their own or find sporting activities events (football game, basketball game, tennis or hiking) that was organized by other people, but need more players.
+Help people create their own or find sporting activities events (football game, basketball game, tennis or hiking etc.) that was organized by other people, but need more players.
 
 ## DESCRIPTION
 Looking for sport activities in your area? Sportmate is perfect in connecting you with people to play sporting games with. Need sport mate to play tennis with? Or you need 3 more players to complete a team for football game? Or maybe you like playing  basketball, but don’t have a friends to play with? Sportmate App is right here for you!
