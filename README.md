@@ -1,5 +1,5 @@
 # SPORTMATE ANDROID APP
-### This app is part of my Capstone Project at Ada Developers Academy (Cohort 7)
+
 
 ## MAIN GOAL
 Help people create their own or find sporting activities events (football game, basketball game, tennis or hiking etc.) that was organized by other people, but need more players.
